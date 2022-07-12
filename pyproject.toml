@@ -6,6 +6,7 @@ authors = ["Ruoqi Huang <huangruoqi374@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+black = "^22.6.0"
 
 [tool.poetry.dev-dependencies]
 
