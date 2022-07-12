@@ -22,8 +22,8 @@ jobs:
         with:
           python-version: 3.9
       
-      - name: Install Poetry
-        uses: dschep/install-poetry-action@v1.2
+      - name: Python Poetry Action
+        uses: abatilo/actions-poetry@v2.1.3
       
       - name: Set Poetry config
         run: |
