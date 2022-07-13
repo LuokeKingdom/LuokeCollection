@@ -1,4 +1,3 @@
-
 from .scenes.views.view import View
 from .scenes.controllers.controller import Controller
 
@@ -21,4 +20,4 @@ class Scene:
         self.view.display()
 
     def update(self):
-        self.controller.update()
+        self.controller.update(self.view)
