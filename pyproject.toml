@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "luokecollection"
-version = "0.2.0"
+version = "0.3.0"
 description = ""
 authors = ["Ruoqi Huang <huangruoqi374@gmail.com>"]
 
@@ -8,6 +8,7 @@ authors = ["Ruoqi Huang <huangruoqi374@gmail.com>"]
 python = "^3.9"
 black = "^22.6.0"
 pygame = "^2.1.2"
+typing-extensions = "^4.3.0"
 
 [tool.poetry.dev-dependencies]
 
