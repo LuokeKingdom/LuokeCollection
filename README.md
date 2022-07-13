@@ -4,6 +4,8 @@
 </a>
 </p>
 
+[![Projects](https://img.shields.io/badge/Projects-View-blue)](https://github.com/LuokeKingdom/LuokeCollection/projects/1)
+
 # LuokeCollection 洛克王國 寵物圖鑑
 This project aims to recreate a PET index of the game Roco Kingdom
 
