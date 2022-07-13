@@ -5,6 +5,8 @@
 </p>
 
 # LuokeCollection 洛克王國 寵物圖鑑
+![Tests](https://github.com/LuokeKingdom/LuokeCollection/actions/workflows/ci.yml/badge.svg)
+
 This project aims to recreate a PET index of the game Roco Kingdom
 
 ## In-game Screenshot
