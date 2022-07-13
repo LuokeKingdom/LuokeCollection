@@ -4,11 +4,11 @@ from .scenes.controllers.controller import Controller
 
 class Scene:
     VIEWS = {
-        'basic': View,
+        "basic": View,
     }
 
     CONTROLLERS = {
-        'basic': Controller,
+        "basic": Controller,
     }
 
     def __init__(self, scene_name=None):
