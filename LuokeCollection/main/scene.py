@@ -11,13 +11,12 @@ class Scene:
         "basic": Controller,
     }
 
-    def __init__(self, scene_name=None):
-        self.view = self.VIEWS.get(scene_name)
-        self.controller = self.CONTROLLERS.get(scene_name)
-        print("scene!!!!!")
+    def __init__(self, scene_name, app):
+        self.view = self.VIEWS[scene_name]()
+        self.controller = self.CONTROLLERS[scene_name](app, self.view)
 
     def display(self):
         self.view.display()
 
     def update(self):
-        self.controller.update(self.view)
+        self.controller.update()
