@@ -19,4 +19,4 @@ class Scene:
         self.view.display()
 
     def update(self):
-        self.controller.update()
+        self.view.update()

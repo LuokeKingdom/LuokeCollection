@@ -11,20 +11,31 @@ from LuokeCollection.settings.dev import (
 )
 
 class View:
+    BUTTONS = {
+        'test_button': Button(x=100,y=100)
+    }
+    OTHERS = {}
+
     def __init__(self):
         bg = pygame.Surface([WIDTH,HEIGHT])
         bg.fill(0,0,0)
         self.background = Background(bg)
-        self.items = {
-            'test_button': Button(x=100,y=100)
-        }
-        self.entities = pygame.sprite.Group()
+        self.buttons_group = pygame.sprite.Group()
+        self.others_group = pygame.sprite.Group()
 
     def display(self, screen):
         self.background.draw(screen)
-        self.entities.draw(screen)
+        self.others_group.draw(screen)
+        self.buttons_group.draw(screen)
+    
+    def update(self, click_pos):
+        for button in self.BUTTONS.values():
+            if button.is_click(click_pos):
+                button.click()
 
     def load_items(self):
-        self.entities.empty()
-        self.entities.add(list(self.items.values()))
+        self.others_group.empty()
+        self.buttons_group.empty()
+        self.others_group.add(list(self.others.values()))
+        self.buttons_group.add(list(self.buttons.values()))
     
