@@ -5,9 +5,10 @@ class Controller:
         self.actions = {
             'test_button': lambda : print("test button clicked!!")
         }
+        self.link()
         pass
 
     def link(self):
         for name, action in self.actions.items():
-            self.view.buttons[name].on_click = action
+            self.view.BUTTONS[name].on_click = action
 

@@ -16,17 +16,19 @@ class View:
     }
     OTHERS = {}
 
-    def __init__(self):
+    def __init__(self, screen):
         bg = pygame.Surface([WIDTH,HEIGHT])
-        bg.fill(0,0,0)
+        bg.fill((0,0,0))
+        self.screen = screen
         self.background = Background(bg)
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
+        self.load_items()
 
-    def display(self, screen):
-        self.background.draw(screen)
-        self.others_group.draw(screen)
-        self.buttons_group.draw(screen)
+    def display(self):
+        self.background.draw(self.screen)
+        self.others_group.draw(self.screen)
+        self.buttons_group.draw(self.screen)
     
     def update(self, click_pos):
         for button in self.BUTTONS.values():
@@ -36,6 +38,6 @@ class View:
     def load_items(self):
         self.others_group.empty()
         self.buttons_group.empty()
-        self.others_group.add(list(self.others.values()))
-        self.buttons_group.add(list(self.buttons.values()))
+        self.others_group.add(list(self.OTHERS.values()))
+        self.buttons_group.add(list(self.BUTTONS.values()))
     

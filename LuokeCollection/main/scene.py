@@ -3,20 +3,10 @@ from .scenes.controllers.controller import Controller
 
 
 class Scene:
-    VIEWS = {
-        "basic": View,
-    }
-
-    CONTROLLERS = {
-        "basic": Controller,
+    TABLE = {
+        "basic": (View, Controller),
     }
 
     def __init__(self, scene_name, app):
-        self.view = self.VIEWS[scene_name]()
-        self.controller = self.CONTROLLERS[scene_name](app, self.view)
-
-    def display(self):
-        self.view.display()
-
-    def update(self):
-        self.view.update()
+        self.view = self.TABLE[scene_name][0](app.screen)
+        self.controller = self.TABLE[scene_name][1](app, self.view)

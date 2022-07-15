@@ -1,17 +1,22 @@
+from .scene import Scene
 class App:
-    def __init__(self):
+    def __init__(self, screen):
         self.scene = None
         self.stack = []
+        self.screen = screen
 
-    def change_scene(self, scene):
+    def create_scene(self, scene_name):
+        return Scene(scene_name, self)
+
+    def change_scene(self, scene_name):
         if self.stack:
             self.stack.pop()
-        self.push_scene(scene)
+        self.push_scene(scene_name)
         pass
 
-    def push_scene(self, scene):
-        self.scene = scene
-        self.stack.append(scene)
+    def push_scene(self, scene_name):
+        self.scene = self.create_scene(scene_name)
+        self.stack.append(self.scene)
 
     def pop_scene(self):
         self.stack.pop()
@@ -19,7 +24,7 @@ class App:
             self.scene = self.stack[len(self.stack) - 1]
 
     def display(self):
-        self.scene.display()
+        self.scene.view.display()
 
-    def update(self):
-        self.scene.update()
+    def update(self, click_pos):
+        self.scene.view.update(click_pos)
