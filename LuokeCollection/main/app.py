@@ -1,4 +1,6 @@
 from .scene import Scene
+
+
 class App:
     def __init__(self, screen):
         self.scene = None

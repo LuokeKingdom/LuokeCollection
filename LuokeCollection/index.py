@@ -18,9 +18,9 @@ pygame.display.set_icon(Icon)
 positions = []
 
 app = App(screen)
-app.change_scene('basic')
+app.change_scene("basic")
 clock = pygame.time.Clock()
-click_pos = vec(-1000,-1000)
+click_pos = vec(-1000, -1000)
 pressing = False
 
 running = True
@@ -43,11 +43,9 @@ while running:
                 pressing = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             pressing = True
-        
 
     # for position in positions:
     #     screen.blit(pet, position)
-    
 
     app.update(click_pos)
     app.display()
