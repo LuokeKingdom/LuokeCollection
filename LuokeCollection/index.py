@@ -3,10 +3,7 @@ import pygame
 from pygame.locals import *
 from LuokeCollection.main.scenes.utils import vec
 from main.app import App
-from settings.dev import (
-    WIDTH,
-    HEIGHT
-)
+from settings.dev import WIDTH, HEIGHT
 
 pygame.init()
 GAME_RESOLUTION = (WIDTH, HEIGHT)
