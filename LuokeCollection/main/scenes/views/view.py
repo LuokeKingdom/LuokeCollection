@@ -9,17 +9,20 @@ from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 
 class View:
-    BUTTONS = {"test_button": Button(x=100, y=100)}
+    BUTTONS = {
+        "test_button": Button(x=100, y=100),
+        "pop": Button(x=200, y=100),
+    }
     OTHERS = {}
 
-    def __init__(self, screen):
-        bg = pygame.Surface([WIDTH, HEIGHT])
-        bg.fill((0, 0, 0))
-        self.screen = screen
+    def __init__(self, screen, bg=None):
+        if not bg:
+            bg = pygame.Surface([WIDTH, HEIGHT])
+            bg.fill((0, 0, 0))
         self.background = Background(bg)
+        self.screen = screen
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
-        self.load_items()
 
     def display(self):
         self.background.draw(self.screen)

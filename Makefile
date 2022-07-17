@@ -1,5 +1,6 @@
 # ensure cpython is not generated
 run:
+	poetry install
 	poetry run python -B LuokeCollection/index.py
 
 black:

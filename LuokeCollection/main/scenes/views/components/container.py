@@ -13,10 +13,10 @@ class Container(pygame.sprite.Sprite):
                 image, (int(image.get_width() * ratio), int(image.get_height() * ratio))
             )
         self.rect = self.image.get_rect()
-        self.rect.topleft = vec(x, y)
+        self.rect.center = vec(x, y)
 
     def set_pos(self, pos):
-        self.rect.topleft = pos
+        self.rect.center = pos
 
     def update(self):
         pass

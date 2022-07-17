@@ -2,11 +2,14 @@ from re import A
 import pygame
 from pygame.locals import *
 from LuokeCollection.main.scenes.utils import vec
-from main import *
 from main.app import App
+from settings.dev import (
+    WIDTH,
+    HEIGHT
+)
 
 pygame.init()
-GAME_RESOLUTION = (1080, 720)
+GAME_RESOLUTION = (WIDTH, HEIGHT)
 black = (0, 0, 0)
 screen = pygame.display.set_mode(GAME_RESOLUTION)
 Icon = pygame.image.load("assets\png\icon.png")
@@ -18,7 +21,7 @@ pygame.display.set_icon(Icon)
 positions = []
 
 app = App(screen)
-app.change_scene("basic")
+app.change_scene("init")
 clock = pygame.time.Clock()
 click_pos = vec(-1000, -1000)
 pressing = False
