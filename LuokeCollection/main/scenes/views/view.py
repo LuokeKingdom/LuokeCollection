@@ -10,8 +10,7 @@ from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 class View:
     BUTTONS = {
-        "test_button": Button(x=100, y=100),
-        "pop": Button(x=200, y=100),
+        "pop": Button(x=700, y=100),
     }
     OTHERS = {}
 
