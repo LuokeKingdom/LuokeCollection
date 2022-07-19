@@ -13,9 +13,7 @@ Icon = pygame.image.load("assets\png\icon.png")
 cursor_arrow = pygame.transform.scale(
     pygame.image.load("assets/png/cursor.png"), (36, 54)
 )
-cursor_hand = pygame.transform.scale(
-    pygame.image.load("assets/png/hand.png"), (48, 54)
-)
+cursor_hand = pygame.transform.scale(pygame.image.load("assets/png/hand.png"), (48, 54))
 
 pygame.display.set_caption("Roco Collection 洛克王國 寵物圖鑑")
 pygame.display.set_icon(Icon)
