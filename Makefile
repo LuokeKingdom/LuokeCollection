@@ -1,5 +1,7 @@
+# ensure cpython is not generated
 run:
-	poetry run python LuokeCollection/index.py
+	poetry install
+	poetry run python -B LuokeCollection/index.py
 
 black:
 	poetry run black ./LuokeCollection

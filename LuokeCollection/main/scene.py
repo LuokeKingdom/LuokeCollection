@@ -1,23 +1,17 @@
 from .scenes.views.view import View
 from .scenes.controllers.controller import Controller
+from .scenes.views.init_view import InitView
+from .scenes.controllers.init_controller import InitController
 
 
 class Scene:
-    VIEWS = {
-        "basic": View,
+    TABLE = {
+        "basic": (View, Controller),
+        "init": (InitView, InitController),
     }
 
-    CONTROLLERS = {
-        "basic": Controller,
-    }
-
-    def __init__(self, scene_name=None):
-        self.view = self.VIEWS.get(scene_name)
-        self.controller = self.CONTROLLERS.get(scene_name)
-        print("scene!!!!!")
-
-    def display(self):
-        self.view.display()
-
-    def update(self):
-        self.controller.update(self.view)
+    def __init__(self, scene_name, app):
+        self.view = self.TABLE[scene_name][0](app.screen)
+        self.view.load_items()
+        self.controller = self.TABLE[scene_name][1](app, self.view)
+        self.controller.link()
