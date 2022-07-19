@@ -1,21 +1,24 @@
-from re import A
 import pygame
 from pygame.locals import *
 from LuokeCollection.main.scenes.utils import vec
 from main.app import App
 from settings.dev import WIDTH, HEIGHT
 
+
 pygame.init()
-GAME_RESOLUTION = (WIDTH, HEIGHT)
 black = (0, 0, 0)
+GAME_RESOLUTION = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(GAME_RESOLUTION)
 Icon = pygame.image.load("assets\png\icon.png")
-pet = pygame.transform.scale(
-    pygame.image.load("assets/png/display.png"), (103.8, 148.9)
+cursor_arrow = pygame.transform.scale(
+    pygame.image.load("assets/png/cursor.png"), (36, 54)
 )
+cursor_hand = pygame.transform.scale(pygame.image.load("assets/png/hand.png"), (48, 54))
+
 pygame.display.set_caption("Roco Collection 洛克王國 寵物圖鑑")
 pygame.display.set_icon(Icon)
 positions = []
+pygame.mouse.set_visible(False)
 
 app = App(screen)
 app.change_scene("init")
@@ -50,8 +53,7 @@ while running:
     app.update(click_pos)
     app.display()
     clock.tick(60)
-
-    # Flip the display
+    screen.blit(cursor_arrow, pygame.mouse.get_pos())
     pygame.display.flip()
 
 # Done! Time to quit.
