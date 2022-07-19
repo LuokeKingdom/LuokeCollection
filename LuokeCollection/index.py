@@ -11,13 +11,10 @@ GAME_RESOLUTION = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(GAME_RESOLUTION)
 Icon = pygame.image.load("assets\png\icon.png")
 cursor_arrow = pygame.transform.scale(
-    pygame.image.load("assets/png/cursor.png"), (18.2, 27.2)
+    pygame.image.load("assets/png/cursor.png"), (36, 54)
 )
 cursor_hand = pygame.transform.scale(
-    pygame.image.load("assets/png/hand.png"), (24, 26.6)
-)
-pet = pygame.transform.scale(
-    pygame.image.load("assets/png/display.png"), (103.8, 148.9)
+    pygame.image.load("assets/png/hand.png"), (48, 54)
 )
 
 pygame.display.set_caption("Roco Collection 洛克王國 寵物圖鑑")
