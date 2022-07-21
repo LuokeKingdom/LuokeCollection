@@ -1,7 +1,6 @@
 from .scene import Scene
 
 
-
 class App:
     def __init__(self, screen):
         self.scene = None
@@ -28,8 +27,6 @@ class App:
 
     def display(self, mouse_pos, click_pos):
         self.scene.view.display(mouse_pos, click_pos)
-        
 
     def update(self, mouse_pos, click_pos):
         self.scene.view.update(mouse_pos, click_pos)
-        

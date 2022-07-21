@@ -6,6 +6,7 @@ from .components.background import Background
 from LuokeCollection.settings.dev import WIDTH, HEIGHT
 from ..mouse import Mouse
 
+
 class View:
     BUTTONS = {
         "pop": Button(x=700, y=100),

@@ -5,15 +5,16 @@ from main.app import App
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
 
+# pygame setup
 pygame.init()
 GAME_RESOLUTION = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(GAME_RESOLUTION)
-Icon = pygame.image.load(IMAGE('icon.png'))
+Icon = pygame.image.load(IMAGE("icon.png"))
 pygame.display.set_caption("Roco Collection 洛克王國 寵物圖鑑")
 pygame.display.set_icon(Icon)
-positions = []
 pygame.mouse.set_visible(False)
 
+# app settings
 app = App(screen)
 app.change_scene("init")
 clock = pygame.time.Clock()
@@ -21,6 +22,7 @@ click_pos = vec(-1000, -1000)
 mouse_pos = vec(0, 0)
 pressing = False
 
+# draw loop
 running = True
 while running:
     click_pos.x, click_pos.y = -1000, -1000
@@ -40,5 +42,5 @@ while running:
     clock.tick(60)
     pygame.display.flip()
 
-# Done! Time to quit.
+# app exit
 pygame.quit()
