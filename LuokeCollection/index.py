@@ -9,7 +9,7 @@ from settings.dev import WIDTH, HEIGHT, IMAGE
 pygame.init()
 GAME_RESOLUTION = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(GAME_RESOLUTION)
-Icon = pygame.image.load(IMAGE("icon.png"))
+Icon = IMAGE("icon.png")
 pygame.display.set_caption("Roco Collection 洛克王國 寵物圖鑑")
 pygame.display.set_icon(Icon)
 pygame.mouse.set_visible(False)
