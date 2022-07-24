@@ -1,4 +1,3 @@
-from threading import currentThread
 import pygame
 from pygame.locals import *
 
