@@ -7,11 +7,13 @@ from ..utils import vec
 from .container import Container
 import time
 
+
 class Button(Container):
     ANIMATIONS = {
-        'opacity': OpacityButtonAnimation,
+        "opacity": OpacityButtonAnimation,
     }
-    def __init__(self, animation='opacity', *args, **kwargs):
+
+    def __init__(self, animation="opacity", *args, **kwargs):
         # Default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
@@ -33,7 +35,8 @@ class Button(Container):
         current_time = time.time()
         if self.check_collide(mouse_pos):
             self.hovered = True
-            if clicked: self.click()
+            if clicked:
+                self.click()
         if self.hovered:
             self.animation.play(current_time)
         else:

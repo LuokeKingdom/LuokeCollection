@@ -5,6 +5,7 @@ from ..components.button import Button
 from ..components.background import Background
 from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
+
 class View:
     BUTTONS = {
         "pop": Button(x=700, y=100),
@@ -29,7 +30,7 @@ class View:
 
     def update(self, mouse_pos, clicked):
         btns = self.BUTTONS.values()
-        for button in btns: 
+        for button in btns:
             button.hovered = False
         for button in btns:
             button.update(mouse_pos, clicked)

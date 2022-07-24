@@ -3,5 +3,6 @@ class Mixin:
         pass
 
     def progress(self, current_time):
-        if not self.transition: return 1
-        return min(1,(current_time-self.start_time)/self.transition)
+        if not self.transition:
+            return 1
+        return min(1, (current_time - self.start_time) / self.transition)
