@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from ...utils import vec
+from ..utils import vec
 from .container import Container
 
 
