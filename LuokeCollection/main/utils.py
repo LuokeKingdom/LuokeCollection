@@ -66,6 +66,7 @@ class vec(list):
     def length(self):
         return (self[0] ** 2 + self[1] ** 2) ** 0.5
 
+
 class Mouse:
     cursor_arrow = pygame.transform.scale(IMAGE("cursor.png"), (36, 54))
     cursor_hand = pygame.transform.scale(IMAGE("hand.png"), (48, 54))
