@@ -1,10 +1,9 @@
 import pygame
 from pygame.locals import *
-from ..utils import vec
-from .components.button import Button
-from .components.background import Background
+from ..utils import Mouse
+from ..components.button import Button
+from ..components.background import Background
 from LuokeCollection.settings.dev import WIDTH, HEIGHT
-from ..mouse import Mouse
 
 
 class View:

@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from .view import View
-from .components.button import Button
+from ..components.button import Button
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
 
