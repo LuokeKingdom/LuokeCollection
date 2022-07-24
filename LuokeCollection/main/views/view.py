@@ -1,10 +1,8 @@
-from re import S
-from tkinter import W
 import pygame
 from pygame.locals import *
-from ..utils import vec
-from .components.button import Button
-from .components.background import Background
+from ..utils import Mouse
+from ..components.button import Button
+from ..components.background import Background
 from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 
@@ -20,15 +18,17 @@ class View:
             bg.fill((0, 0, 0))
         self.background = Background(bg)
         self.screen = screen
+        self.is_pointer = False
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
 
-    def display(self):
+    def display(self, mouse_pos, click_pos):
         self.background.draw(self.screen)
         self.others_group.draw(self.screen)
         self.buttons_group.draw(self.screen)
+        Mouse.draw(self.screen, mouse_pos, self.is_pointer)
 
-    def update(self, click_pos):
+    def update(self, mouse_pos, click_pos):
         for button in self.BUTTONS.values():
             if button.is_click(click_pos):
                 button.click()

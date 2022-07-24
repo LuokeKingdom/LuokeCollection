@@ -1,7 +1,7 @@
-from .scenes.views.view import View
-from .scenes.controllers.controller import Controller
-from .scenes.views.init_view import InitView
-from .scenes.controllers.init_controller import InitController
+from .views.view import View
+from .controllers.controller import Controller
+from .views.init_view import InitView
+from .controllers.init_controller import InitController
 
 
 class Scene:
