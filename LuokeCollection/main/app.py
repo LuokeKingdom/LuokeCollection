@@ -25,8 +25,8 @@ class App:
         if self.stack:
             self.scene = self.stack[len(self.stack) - 1]
 
-    def display(self, mouse_pos, click_pos):
-        self.scene.view.display(mouse_pos, click_pos)
+    def display(self, mouse_pos, clicked):
+        self.scene.view.display(mouse_pos, clicked)
 
-    def update(self, mouse_pos, click_pos):
-        self.scene.view.update(mouse_pos, click_pos)
+    def update(self, mouse_pos, clicked):
+        self.scene.view.update(mouse_pos, clicked)

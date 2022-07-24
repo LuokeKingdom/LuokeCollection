@@ -18,27 +18,27 @@ pygame.mouse.set_visible(False)
 app = App(screen)
 app.change_scene("init")
 clock = pygame.time.Clock()
-click_pos = vec(-1000, -1000)
+clicked = False
 mouse_pos = vec(0, 0)
 pressing = False
 
 # draw loop
 running = True
 while running:
-    click_pos.x, click_pos.y = -1000, -1000
+    clicked = False
     mouse_pos.x, mouse_pos.y = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONUP:
             if pressing:
-                click_pos.x, click_pos.y = event.pos
+                clicked = True
                 pressing = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             pressing = True
 
-    app.update(mouse_pos, click_pos)
-    app.display(mouse_pos, click_pos)
+    app.update(mouse_pos, clicked)
+    app.display(mouse_pos, clicked)
     clock.tick(60)
     pygame.display.flip()
 
