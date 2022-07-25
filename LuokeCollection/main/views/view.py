@@ -28,10 +28,12 @@ class View:
         self.buttons_group.draw(self.screen)
         Mouse.draw(self.screen, mouse_pos, self.is_pointer)
 
-    def update(self, mouse_pos, click_pos):
-        for button in self.BUTTONS.values():
-            if button.is_click(click_pos):
-                button.click()
+    def update(self, mouse_pos, clicked):
+        btns = self.BUTTONS.values()
+        for button in btns:
+            button.hovered = False
+        for button in btns:
+            button.update(mouse_pos, clicked)
 
     def load_items(self):
         self.others_group.empty()

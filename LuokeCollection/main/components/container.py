@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from ...utils import vec
+from ..utils import vec
 
 
 class Container(pygame.sprite.Sprite):
@@ -12,6 +12,7 @@ class Container(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(
                 image, (int(image.get_width() * ratio), int(image.get_height() * ratio))
             )
+        self.original_image = self.image.copy()
         self.rect = self.image.get_rect()
         self.rect.center = vec(x, y)
 
