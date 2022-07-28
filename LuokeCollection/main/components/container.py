@@ -16,8 +16,11 @@ class Container(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = vec(x, y)
 
-    def set_pos(self, pos):
-        self.rect.center = pos
+    def set_pos(self, x, y=None):
+        if y is None:
+            self.rect.center = vec(x[0], x[1])
+        else:
+            self.rect.center = vec(x, y)
 
     def update(self):
         pass

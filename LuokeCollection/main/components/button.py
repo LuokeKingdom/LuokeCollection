@@ -34,10 +34,6 @@ class Button(Container):
         if self.on_click:
             self.on_click()
 
-    def update(self):
-        # can be used for animation probably
-        pass
-
     def update(self, mouse_pos, clicked):
         current_time = time.time()
         if self.check_collide(mouse_pos):
