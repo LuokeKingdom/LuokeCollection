@@ -30,10 +30,13 @@ class View:
 
     def update(self, mouse_pos, clicked):
         btns = self.BUTTONS.values()
+        others = self.OTHERS.values()
         for button in btns:
             button.hovered = False
         for button in btns:
             button.update(mouse_pos, clicked)
+        for other in others:
+            other.update()
 
     def load_items(self):
         self.others_group.empty()
