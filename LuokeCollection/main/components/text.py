@@ -28,6 +28,6 @@ class Text(Container):
 
     def update(self):
         self.set_pos(self.get_pos() + vec(1, 1))
-        if self.get_pos().x%40==0:
-            self.change_text(self.text + '!')
+        if self.get_pos().x % 40 == 0:
+            self.change_text(self.text + "!")
         pass
