@@ -15,15 +15,17 @@ class Container(pygame.sprite.Sprite):
         self.original_image = self.image.copy()
         self.rect = self.image.get_rect()
         self.rect.center = vec(x, y)
-        self.align_mode = 'CENTER'
+        self.align_mode = "CENTER"
 
     def set_pos(self, x, y=None):
         pos = None
-        if y is None: pos = vec(x[0], x[1])
-        else: pos = vec(x, y)
-        if self.align_mode=='CENTER':
+        if y is None:
+            pos = vec(x[0], x[1])
+        else:
+            pos = vec(x, y)
+        if self.align_mode == "CENTER":
             self.rect.center = pos
-        elif self.align_mode=='TOPLEFT':
+        elif self.align_mode == "TOPLEFT":
             self.rect.topleft = pos
         else:
             raise Exception("align_mode not found")
