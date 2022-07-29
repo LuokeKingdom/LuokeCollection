@@ -30,5 +30,13 @@ class Container(pygame.sprite.Sprite):
         else:
             raise Exception("align_mode not found")
 
+    def get_pos(self):
+        if self.align_mode == "CENTER":
+            return vec(self.rect.center)
+        elif self.align_mode == "TOPLEFT":
+            return vec(self.rect.topleft)
+        else:
+            raise Exception("align_mode not found")
+
     def update(self):
         pass

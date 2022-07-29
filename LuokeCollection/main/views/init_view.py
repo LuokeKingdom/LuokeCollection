@@ -15,7 +15,7 @@ class InitView(View):
         )
     }
 
-    OTHERS = {"test": Text()}
+    OTHERS = {"test": Text("Hello world!")}
 
     def __init__(self, *args, **kwargs):
         kwargs["bg"] = IMAGE("init_bg.jpg")
