@@ -6,7 +6,6 @@ from .views.collection_view import CollectionView
 from .controllers.collection_controller import CollectionController
 
 
-
 class Scene:
     TABLE = {
         "basic": (View, Controller),
