@@ -1,5 +1,7 @@
+from tkinter import CENTER
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
+from .patterns.grow import GrowMixin
 
 
 class ButtonAnimation:
@@ -31,3 +33,9 @@ class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.opacity = 0.5
+
+class GrowButtonAnimation(ButtonAnimation, GrowMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.w, self.h = self.button.image.get_size()
+        self.scale = 1.5
