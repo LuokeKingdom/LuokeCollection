@@ -11,8 +11,12 @@ class Text(Container):
     fontsizes = {}
     pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", 64)
 
-    def __init__(self, text="test text", size=32, align_mode="TOPLEFT", *args, **kwargs):
-        super(Text, self).__init__(image=pygame.Surface([1, 1]), align_mode=align_mode, *args, **kwargs)
+    def __init__(
+        self, text="test text", size=32, align_mode="TOPLEFT", *args, **kwargs
+    ):
+        super(Text, self).__init__(
+            image=pygame.Surface([1, 1]), align_mode=align_mode, *args, **kwargs
+        )
         self.text = text
         self.size = size
         self.text_color = (0, 0, 0)
@@ -32,5 +36,5 @@ class Text(Container):
     def get_font(self):
         return self.fontsizes.get(
             self.size,
-            pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", self.size)
+            pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", self.size),
         )

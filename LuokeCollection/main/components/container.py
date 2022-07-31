@@ -5,20 +5,11 @@ from ..utils import vec
 
 class Container(pygame.sprite.Sprite):
     def __init__(
-        self, 
-        image, 
-        width=None,
-        height=None,
-        ratio=1, 
-        align_mode="CENTER",
-        x=0, 
-        y=0
+        self, image, width=None, height=None, ratio=1, align_mode="CENTER", x=0, y=0
     ):
         super().__init__()
         if width and height:
-            self.image = pygame.transform.smoothscale(
-                image, (width, height)
-            )
+            self.image = pygame.transform.smoothscale(image, (width, height))
         else:
             self.image = pygame.transform.smoothscale(
                 image, (int(image.get_width() * ratio), int(image.get_height() * ratio))
