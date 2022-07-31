@@ -4,29 +4,36 @@ from ..utils import vec
 
 
 class Container(pygame.sprite.Sprite):
-    def __init__(self, image, width=None, height=None, ratio=1, x=0, y=0):
+    def __init__(
+        self, 
+        image, 
+        ratio=1, 
+        align_mode="CENTER",
+        x=0, 
+        y=0
+    ):
         super().__init__()
-        if width and height:
-            self.image = pygame.transform.scale(image, (width, height))
-        else:
-            self.image = pygame.transform.scale(
-                image, (int(image.get_width() * ratio), int(image.get_height() * ratio))
-            )
-        self.original_image = self.image.copy()
+        self.image = pygame.transform.smoothscale(
+            image, (int(image.get_width() * ratio), int(image.get_height() * ratio))
+        )
         self.rect = self.image.get_rect()
-        self.rect.center = vec(x, y)
-        self.align_mode = "CENTER"
+        self.original_image = self.image.copy()
+        self.original_rect = self.original_image.get_rect()
+        self.align_mode = align_mode
+        self.set_pos(x, y)
 
     def set_pos(self, x, y=None):
         pos = None
         if y is None:
-            pos = vec(x[0], x[1])
+            pos = (x[0], x[1])
         else:
-            pos = vec(x, y)
+            pos = (x, y)
         if self.align_mode == "CENTER":
             self.rect.center = pos
+            self.original_rect.center = pos
         elif self.align_mode == "TOPLEFT":
             self.rect.topleft = pos
+            self.original_rect.topleft = pos
         else:
             raise Exception("align_mode not found")
 

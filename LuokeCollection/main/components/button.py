@@ -33,6 +33,8 @@ class Button(Container):
     def click(self):
         if self.on_click:
             self.on_click()
+        else:
+            raise NotImplementedError("Function: <on_click> not implemented!!")
 
     def update(self, mouse_pos, clicked):
         current_time = time.time()

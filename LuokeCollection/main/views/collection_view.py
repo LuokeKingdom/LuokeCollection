@@ -8,27 +8,21 @@ from settings.dev import WIDTH, HEIGHT, IMAGE
 
 
 class CollectionView(View):
-    BUTTONS = {
-        "collection": Button(
-            image=IMAGE("collection_button.png"),
-            x=WIDTH / 5,
-            y=HEIGHT / 2,
-        )
-    }
+    BUTTONS = {}
 
-    OTHERS = {"test": Text("Hello world!")}
+    OTHERS = {}
 
     def __init__(self, *args, **kwargs):
-        kwargs["bg"] = IMAGE("collectionFinal4.png")
+        kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionView, self).__init__(*args, **kwargs)
-        new_buttons = {"pop": Button(x=600, y=100)}
+        new_buttons = {"pop": Button(x=1057, y=85)}
         new_others = {}
         info_compoments = {
-            "pet_name": Text("Name"),
-            "pet_image": Sprite(IMAGE("display.png")),
-            "pet_element": Text("2"),
+            "pet_name": Text("Name",x=750,y=130),
+            "pet_image": Sprite(IMAGE("display.png"),ratio=0.2,x=900,y=330),
+            "pet_element": Sprite(IMAGE("place_holder.png"),x=700,y=130),
             "pet_id": Text("1"),
-            "pet_description": Text("It is too lazy to leave anything."),
+            "pet_description": Text("It is too lazy to leave anything.",x=700,y=200),
             "talent_icon_AD": Sprite(IMAGE("place_holder.png")),
             "talent_icon_AP": Sprite(IMAGE("place_holder.png")),
             "talent_icon_DF": Sprite(IMAGE("place_holder.png")),
