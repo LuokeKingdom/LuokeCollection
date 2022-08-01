@@ -1,6 +1,6 @@
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
-from .patterns.grow import GrowMixin
+from .patterns.scale import ScaleMixin
 
 
 class ButtonAnimation:
@@ -33,7 +33,7 @@ class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
         super().__init__(*args, **kwargs)
         self.opacity = 0.5
 
-class GrowButtonAnimation(ButtonAnimation, GrowMixin):
+class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.scale = 1.2
