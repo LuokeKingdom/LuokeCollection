@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from ..animation.button.button_animations import OpacityButtonAnimation, ScaleButtonAnimation, BounceButtonAnimation
+from ..animation.button.button_animations import JumpButtonAnimation, OpacityButtonAnimation, ScaleButtonAnimation, JumpButtonAnimation
 from ..utils import vec
 from .container import Container
 
@@ -12,10 +12,10 @@ class Button(Container):
     ANIMATIONS = {
         "opacity": OpacityButtonAnimation,
         "scale": ScaleButtonAnimation,
-        "bounce": BounceButtonAnimation
+        "jump": JumpButtonAnimation
     }
 
-    def __init__(self, animation="scale", *args, **kwargs):
+    def __init__(self, animation="jump", *args, **kwargs):
         # Default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])

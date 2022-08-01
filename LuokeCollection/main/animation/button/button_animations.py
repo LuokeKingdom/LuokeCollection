@@ -1,11 +1,11 @@
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
 from .patterns.scale import ScaleMixin
-from .patterns.bounce import BounceMixin
+from .patterns.jump import JumpMixin
 
 
 class ButtonAnimation:
-    def __init__(self, button, transition=None):
+    def __init__(self, button, transition=0.15):
         self.button = button
         self.startTime = 0
         self.is_playing = False
@@ -37,10 +37,10 @@ class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
 class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.scale = 0.8
+        self.scale = 1.2
         self.w, self.h = self.button.image.get_size()
 
-class BounceButtonAnimation(ButtonAnimation, BounceMixin):
+class JumpButtonAnimation(ButtonAnimation, JumpMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.bounce_height = 5
+        self.jump_height = 10
