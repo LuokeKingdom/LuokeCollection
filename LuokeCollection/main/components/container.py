@@ -18,6 +18,7 @@ class Container(pygame.sprite.Sprite):
         self.original_image = self.image.copy()
         self.original_rect = self.original_image.get_rect()
         self.align_mode = align_mode
+        self.check_collide_original_rect = False
         self.set_pos(x, y)
 
     def set_pos(self, x, y=None):

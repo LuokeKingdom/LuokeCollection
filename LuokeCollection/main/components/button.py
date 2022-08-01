@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from ..animation.button.button_animations import OpacityButtonAnimation, ScaleButtonAnimation
+from ..animation.button.button_animations import OpacityButtonAnimation, ScaleButtonAnimation, BounceButtonAnimation
 from ..utils import vec
 from .container import Container
 
@@ -11,7 +11,8 @@ import time
 class Button(Container):
     ANIMATIONS = {
         "opacity": OpacityButtonAnimation,
-        "scale": ScaleButtonAnimation
+        "scale": ScaleButtonAnimation,
+        "bounce": BounceButtonAnimation
     }
 
     def __init__(self, animation="scale", *args, **kwargs):
@@ -29,7 +30,11 @@ class Button(Container):
         return self.rect.collidepoint(click_pos)
 
     def check_collide(self, mouse_pos):
-        return self.rect.collidepoint(mouse_pos)
+        if self.check_collide_original_rect:
+            return self.original_rect.collidepoint(mouse_pos)
+        else:
+            return self.rect.collidepoint(mouse_pos)
+            
 
     def click(self):
         if self.on_click:
