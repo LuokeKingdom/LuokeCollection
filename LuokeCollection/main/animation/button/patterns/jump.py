@@ -7,10 +7,10 @@ from pygame.locals import *
 class JumpMixin(Mixin):
     def effect(self, current_time):
         self.button.check_collide_original_rect = True
-        self.button.image.rect[1] -= self.jump_height
-        print(self.button.rect)
+        self.button.set_pos(self.x, self.y - self.jump_height * self.progress(current_time))
+        self.button.original_rect = self.og_rect
+        print(self.button.original_rect)
 
     def reset(self):
-        self.button.image = self.button.original_image
-        self.button.rect = self.button.original_rect
+        self.button.set_pos(self.x ,self.y)
         print(self.button.original_rect)

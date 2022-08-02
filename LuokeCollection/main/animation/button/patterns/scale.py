@@ -14,7 +14,6 @@ class ScaleMixin(Mixin):
 
         self.button.image = pygame.transform.smoothscale(self.button.original_image, (self.w + x_grow * self.progress(current_time), self.h + y_grow * self.progress(current_time)))
         self.button.rect = self.button.image.get_rect(center = self.button.original_rect.center)
-        print(self.progress(current_time))
 
     def reset(self):
         self.button.image = self.button.original_image
