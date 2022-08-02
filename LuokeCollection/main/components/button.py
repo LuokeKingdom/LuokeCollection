@@ -1,7 +1,12 @@
 import pygame
 from pygame.locals import *
 
-from ..animation.button.button_animations import JumpButtonAnimation, OpacityButtonAnimation, ScaleButtonAnimation, JumpButtonAnimation
+from ..animation.button.button_animations import (
+    JumpButtonAnimation,
+    OpacityButtonAnimation,
+    ScaleButtonAnimation,
+    JumpButtonAnimation,
+)
 from ..utils import vec
 from .container import Container
 
@@ -12,10 +17,10 @@ class Button(Container):
     ANIMATIONS = {
         "opacity": OpacityButtonAnimation,
         "scale": ScaleButtonAnimation,
-        "jump": JumpButtonAnimation
+        "jump": JumpButtonAnimation,
     }
 
-    def __init__(self, animation="jump", *args, **kwargs):
+    def __init__(self, animation="scale", *args, **kwargs):
         # Default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
@@ -34,7 +39,6 @@ class Button(Container):
             return self.original_rect.collidepoint(mouse_pos)
         else:
             return self.rect.collidepoint(mouse_pos)
-            
 
     def click(self):
         if self.on_click:
