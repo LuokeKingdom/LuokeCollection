@@ -20,8 +20,8 @@ class Button(Container):
         "jump": JumpButtonAnimation,
     }
 
-    def __init__(self, animation="scale", *args, **kwargs):
-        # Default button
+    def __init__(self, animation="jump", *args, **kwargs):
+        # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
             image.fill((255, 255, 255))

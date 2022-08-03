@@ -5,7 +5,7 @@ from .patterns.jump import JumpMixin
 
 
 class ButtonAnimation:
-    def __init__(self, button, transition=0.15):
+    def __init__(self, button, transition=None):
         self.button = button
         self.startTime = 0
         self.is_playing = False
@@ -38,6 +38,7 @@ class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
 class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.transition = 0.15
         self.scale = 0.8
         self.w, self.h = self.button.image.get_size()
 
@@ -45,6 +46,7 @@ class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
 class JumpButtonAnimation(ButtonAnimation, JumpMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.transition = 1
         self.og_rect = self.button.image.get_rect()
         self.x, self.y = self.button.get_pos()
         self.jump_height = 10
