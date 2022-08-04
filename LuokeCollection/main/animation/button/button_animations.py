@@ -46,7 +46,9 @@ class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
 class JumpButtonAnimation(ButtonAnimation, JumpMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.transition = 1
-        self.og_rect = self.button.image.get_rect()
+        self.button.align_mode = "TOPLEFT"
+        self.transition = 0.3
+        self.w, self.h = self.button.image.get_size()
         self.x, self.y = self.button.get_pos()
+        self.y_temp = self.y
         self.jump_height = 10
