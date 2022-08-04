@@ -9,7 +9,9 @@ class JumpMixin(Mixin):
         if self.progress(current_time) < 0.5:
             self.y_temp -= self.jump_height * self.progress(current_time) * 2
         else:
-            self.y_temp = (self.y - self.jump_height) - self.jump_height * (1 - self.progress(current_time) * 2)
+            self.y_temp = (self.y - self.jump_height) - self.jump_height * (
+                1 - self.progress(current_time) * 2
+            )
         self.button.rect = pygame.Rect(
             self.x,
             self.y_temp,
