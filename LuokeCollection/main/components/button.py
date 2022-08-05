@@ -6,6 +6,7 @@ from ..animation.button.button_animations import (
     OpacityButtonAnimation,
     ScaleButtonAnimation,
     JumpButtonAnimation,
+    RotateButtonAnimation,
 )
 from ..utils import vec
 from .container import Container
@@ -18,9 +19,10 @@ class Button(Container):
         "opacity": OpacityButtonAnimation,
         "scale": ScaleButtonAnimation,
         "jump": JumpButtonAnimation,
+        "rotate": RotateButtonAnimation,
     }
 
-    def __init__(self, animation="opacity", *args, **kwargs):
+    def __init__(self, animation="rotate", *args, **kwargs):
         # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])

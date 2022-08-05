@@ -2,6 +2,7 @@ from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
 from .patterns.scale import ScaleMixin
 from .patterns.jump import JumpMixin
+from .patterns.rotate import RotateMixin
 
 
 class ButtonAnimation:
@@ -52,3 +53,7 @@ class JumpButtonAnimation(ButtonAnimation, JumpMixin):
         self.x, self.y = self.button.get_pos()
         self.y_temp = self.y
         self.jump_height = 10
+
+class RotateButtonAnimation(ButtonAnimation, RotateMixin):
+    def __int__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
