@@ -22,7 +22,7 @@ class Button(Container):
         "rotate": RotateButtonAnimation,
     }
 
-    def __init__(self, animation="rotate", *args, **kwargs):
+    def __init__(self, animation="jump", *args, **kwargs):
         # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
