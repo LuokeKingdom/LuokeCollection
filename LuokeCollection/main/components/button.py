@@ -1,7 +1,13 @@
 import pygame
 from pygame.locals import *
 
-from ..animation.button.button_animations import OpacityButtonAnimation, GrowButtonAnimation
+from ..animation.button.button_animations import (
+    JumpButtonAnimation,
+    OpacityButtonAnimation,
+    ScaleButtonAnimation,
+    JumpButtonAnimation,
+    RotateButtonAnimation,
+)
 from ..utils import vec
 from .container import Container
 
@@ -11,11 +17,13 @@ import time
 class Button(Container):
     ANIMATIONS = {
         "opacity": OpacityButtonAnimation,
-        "grow": GrowButtonAnimation,
+        "scale": ScaleButtonAnimation,
+        "jump": JumpButtonAnimation,
+        "rotate": RotateButtonAnimation,
     }
 
-    def __init__(self, animation="grow", *args, **kwargs):
-        # Default button
+    def __init__(self, animation="rotate", *args, **kwargs):
+        # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
             image.fill((255, 255, 255))
@@ -29,11 +37,16 @@ class Button(Container):
         return self.rect.collidepoint(click_pos)
 
     def check_collide(self, mouse_pos):
-        return self.rect.collidepoint(mouse_pos)
+        if self.check_collide_original_rect:
+            return self.original_rect.collidepoint(mouse_pos)
+        else:
+            return self.rect.collidepoint(mouse_pos)
 
     def click(self):
         if self.on_click:
             self.on_click()
+        else:
+            raise NotImplementedError("Function: <on_click> not implemented!!")
 
     def update(self, mouse_pos, clicked):
         current_time = time.time()
