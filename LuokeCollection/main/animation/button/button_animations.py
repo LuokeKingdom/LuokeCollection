@@ -49,13 +49,14 @@ class JumpButtonAnimation(ButtonAnimation, JumpMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.button.align_mode = "TOPLEFT"
-        self.transition = 1
-        self.jump_height = 25
+        self.transition = 0.6
+        self.jump_height = 15
         self.a = self.jump_height / (self.transition / 2) / (self.transition / 2)
         self.w, self.h = self.button.image.get_size()
         self.x, self.y = self.button.get_pos()
         self.y_temp = self.y
         print(self.a)
+
 
 class RotateButtonAnimation(ButtonAnimation, RotateMixin):
     def __int__(self, *args, **kwargs):
