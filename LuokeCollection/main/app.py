@@ -1,4 +1,5 @@
 from .scene import Scene
+from .model.model import Model
 
 
 class App:
@@ -6,6 +7,7 @@ class App:
         self.scene = None
         self.stack = []
         self.screen = screen
+        self.model = Model()
 
     def create_scene(self, scene_name):
         return Scene(scene_name, self)
