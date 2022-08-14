@@ -1,19 +1,23 @@
 import pygame
 from pygame.locals import *
 from settings.dev import WIDTH, HEIGHT, IMAGE
-from collections import namedtuple 
+from collections import namedtuple
 
-PetInfo = namedtuple('PetInfo', [
-    'name',
-    'element',
-    'secondary_element',
-    'number',
-    'weight',
-    'height',
-    'desc', 
-    'stats',
-    'skills', 
-])
+PetInfo = namedtuple(
+    "PetInfo",
+    [
+        "name",
+        "element",
+        "secondary_element",
+        "number",
+        "weight",
+        "height",
+        "desc",
+        "stats",
+        "skills",
+    ],
+)
+
 
 class vec(list):
     def __init__(self, x, y=0):

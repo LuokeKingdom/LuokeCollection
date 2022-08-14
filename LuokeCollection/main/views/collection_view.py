@@ -6,20 +6,21 @@ from ..components.text import Text
 from ..components.sprite import Sprite
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
-EMPTY = pygame.Surface([0,0])
+EMPTY = pygame.Surface([0, 0])
+
 
 class CollectionView(View):
     BUTTONS = {
         "close": Button(x=1100, y=70),
-        "next_page": Button(x=420,y=730),
-        "previous_page": Button(x=300,y=730),
+        "next_page": Button(x=420, y=730),
+        "previous_page": Button(x=300, y=730),
     }
+
     def __init__(self, *args, **kwargs):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionView, self).__init__(*args, **kwargs)
         self.init_info()
         self.init_page()
-        
 
     def init_info(self):
         new_buttons = {}
@@ -61,23 +62,23 @@ class CollectionView(View):
             self.BUTTONS[name] = comp
         for name, comp in new_others.items():
             self.OTHERS[name] = comp
-        
+
     def init_page(self):
         index = 0
         new_others = {}
         for i in range(3):
             for j in range(3):
-                new_others[f'slot_{index+1}'] = Text(
-                    '', x=202+j*163,y=316+i*146,align_mode='CENTER',size=24
+                new_others[f"slot_{index+1}"] = Text(
+                    "", x=202 + j * 163, y=316 + i * 146, align_mode="CENTER", size=24
                 )
-                index+=1
+                index += 1
         for name, comp in new_others.items():
             self.OTHERS[name] = comp
 
     def set_page(self, pet_page):
         index = 0
         for pet_info in pet_page:
-            self.OTHERS[f'slot_{index+1}'].change_text(pet_info.name)
-            index+=1
+            self.OTHERS[f"slot_{index+1}"].change_text(pet_info.name)
+            index += 1
         for i in range(index, 9):
-            self.OTHERS[f'slot_{i+1}'].change_text('')
+            self.OTHERS[f"slot_{i+1}"].change_text("")

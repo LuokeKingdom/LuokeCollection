@@ -18,7 +18,7 @@ class Scene:
         self.controller = self.TABLE[scene_name][1](app.model, self.view)
 
     def side_effect(self):
-        ''' this will be called after Scene is initialized '''
+        """this will be called after Scene is initialized"""
         self.view.load_items()
         self.controller.link()
         self.controller.side_effect()

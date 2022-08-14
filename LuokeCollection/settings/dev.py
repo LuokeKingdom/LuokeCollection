@@ -10,8 +10,10 @@ IMAGE = lambda name: pygame.image.load(
 )
 SOUND = lambda name: os.path.join("LuokeCollection/assets/sounds/", name)
 
-def load_json(name):
-    with open(os.path.join("LuokeCollection/assets/data/", name), encoding='utf8') as f:
-        return json.load(f)
-JSON = lambda name: load_json(name)
 
+def load_json(name):
+    with open(os.path.join("LuokeCollection/assets/data/", name), encoding="utf8") as f:
+        return json.load(f)
+
+
+JSON = lambda name: load_json(name)
