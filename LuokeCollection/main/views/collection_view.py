@@ -68,7 +68,7 @@ class CollectionView(View):
         for i in range(3):
             for j in range(3):
                 new_others[f'slot_{index+1}'] = Text(
-                    '', x=200+j*100,y=300+i*100,align_mode='CENTER'
+                    '', x=202+j*163,y=316+i*146,align_mode='CENTER',size=24
                 )
                 index+=1
         for name, comp in new_others.items():

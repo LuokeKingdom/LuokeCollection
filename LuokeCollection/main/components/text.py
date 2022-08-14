@@ -6,13 +6,15 @@ from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 pygame.font.init()
 
+DEFAULT_SIZE = 32
+
 
 class Text(Container):
     fontsizes = {}
-    pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", 64)
+    pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", DEFAULT_SIZE)
 
     def __init__(
-        self, text="test text", size=32, align_mode="TOPLEFT", *args, **kwargs
+        self, text="test text", size=DEFAULT_SIZE, align_mode="TOPLEFT", *args, **kwargs
     ):
         super(Text, self).__init__(
             image=pygame.Surface([1, 1]), align_mode=align_mode, *args, **kwargs
