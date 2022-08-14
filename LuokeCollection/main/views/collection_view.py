@@ -6,17 +6,28 @@ from ..components.text import Text
 from ..components.sprite import Sprite
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
+EMPTY = pygame.Surface([0,0])
 
 class CollectionView(View):
+    BUTTONS = {
+        "close": Button(x=1100, y=70),
+        "next_page": Button(x=420,y=730),
+        "previous_page": Button(x=300,y=730),
+    }
     def __init__(self, *args, **kwargs):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionView, self).__init__(*args, **kwargs)
-        new_buttons = {"pop": Button(x=1100, y=70)}
+        self.init_info()
+        self.init_page()
+        
+
+    def init_info(self):
+        new_buttons = {}
         new_others = {}
         info_compoments = {
-            "pet_name": Text("Name", x=750, y=130),
-            "pet_image": Sprite(IMAGE("display.png"), ratio=0.2, x=900, y=330),
-            "pet_element": Sprite(IMAGE("place_holder.png"), x=700, y=130),
+            "pet_name": Text("", x=750, y=130),
+            "pet_image": Sprite(EMPTY, ratio=0.2, x=900, y=330),
+            "pet_element": Sprite(EMPTY, x=700, y=130),
             "pet_id": Text("1"),
             "pet_description": Text("Description.....", x=700, y=200),
             "talent_icon_AD": Sprite(
@@ -50,3 +61,23 @@ class CollectionView(View):
             self.BUTTONS[name] = comp
         for name, comp in new_others.items():
             self.OTHERS[name] = comp
+        
+    def init_page(self):
+        index = 0
+        new_others = {}
+        for i in range(3):
+            for j in range(3):
+                new_others[f'slot_{index+1}'] = Text(
+                    '', x=200+j*100,y=300+i*100,align_mode='CENTER'
+                )
+                index+=1
+        for name, comp in new_others.items():
+            self.OTHERS[name] = comp
+
+    def set_page(self, pet_page):
+        index = 0
+        for pet_info in pet_page:
+            self.OTHERS[f'slot_{index+1}'].change_text(pet_info.name)
+            index+=1
+        for i in range(index, 9):
+            self.OTHERS[f'slot_{i+1}'].change_text('')

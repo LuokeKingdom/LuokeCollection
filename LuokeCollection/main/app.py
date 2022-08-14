@@ -7,7 +7,7 @@ class App:
         self.scene = None
         self.stack = []
         self.screen = screen
-        self.model = Model()
+        self.model = Model(self)
 
     def create_scene(self, scene_name):
         return Scene(scene_name, self)
@@ -20,6 +20,7 @@ class App:
 
     def push_scene(self, scene_name):
         self.scene = self.create_scene(scene_name)
+        self.scene.side_effect()
         self.stack.append(self.scene)
 
     def pop_scene(self):

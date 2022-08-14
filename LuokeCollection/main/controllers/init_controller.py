@@ -2,6 +2,6 @@ from .controller import Controller
 
 
 class InitController(Controller):
-    def __init__(self, app, view):
-        super(InitController, self).__init__(app, view)
-        self.actions = {"collection": lambda: app.push_scene("collection")}
+    def __init__(self, model, view):
+        super(InitController, self).__init__(model, view)
+        self.actions = {"collection": lambda: model.open("collection")}
