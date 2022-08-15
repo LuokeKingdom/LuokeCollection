@@ -73,5 +73,5 @@ class RotateButtonAnimation(ButtonAnimation, RotateMixin):
 class FrameButtonAnimation(ButtonAnimation, FrameMixin):
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.i = 1
-        self.frame_path = self.parameter
+        self.current_frame = 1
+        self.frame_path = pygame.image.load(self.parameter + str(self.current_frame) + ".png")

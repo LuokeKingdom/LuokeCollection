@@ -25,7 +25,7 @@ class Button(Container):
     }
 
     def __init__(
-        self, animation="scale", transition=None, parameter=0, *args, **kwargs
+        self, animation="scale", transition=0.2, parameter=1.2, *args, **kwargs
     ):
         # default button
         if len(args) < 1 and not kwargs.get("image"):

@@ -17,7 +17,6 @@ class JumpMixin(Mixin):
             self.w,
             self.h,
         )
-        print(self.y_temp)
 
     def reset(self):
         self.button.rect = self.button.original_rect
