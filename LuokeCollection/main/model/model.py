@@ -41,7 +41,6 @@ class Model:
     def load_current_data(self):
         self.DATA = JSON("LuokeCollection/main/model/data.json", False)
 
-
     # collection
     def set_page(self, page_number):
         temp = self.page_number
@@ -68,15 +67,16 @@ class Model:
     def next_page(self):
         self.set_page(self.page_number + 1)
 
-
-# select_rect
+    # select_rect
     def set_pet_select_rect(self, pet_number):
         self.pet_select_rect = self.PETS[pet_number]
-        image_path = os.path.join("LuokeCollection/assets/data/", self.pet_select_rect.path, 'display.png')
+        image_path = os.path.join(
+            "LuokeCollection/assets/data/", self.pet_select_rect.path, "display.png"
+        )
         self.get_view().set_pet_image(IMAGE(image_path, False))
-        
-    def save_rect(self, pet_number, x,y,w,h):
-        rects = self.DATA.get('pet_rects', {})
-        rects[pet_number] = [x,y,w,h]
+
+    def save_rect(self, pet_number, x, y, w, h):
+        rects = self.DATA.get("pet_rects", {})
+        rects[pet_number] = [x, y, w, h]
         content = json.dumps(self.DATA, ensure_ascii=False)
         save_file("LuokeCollection/main/model/data.json", content)
