@@ -7,6 +7,7 @@ from ..animation.button.button_animations import (
     ScaleButtonAnimation,
     JumpButtonAnimation,
     RotateButtonAnimation,
+    FrameButtonAnimation
 )
 from ..utils import vec
 from .container import Container
@@ -20,9 +21,10 @@ class Button(Container):
         "scale": ScaleButtonAnimation,
         "jump": JumpButtonAnimation,
         "rotate": RotateButtonAnimation,
+        "frame": FrameButtonAnimation
     }
 
-    def __init__(self, animation="jump", *args, **kwargs):
+    def __init__(self, animation="scale", *args, **kwargs):
         # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])

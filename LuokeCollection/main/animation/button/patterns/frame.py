@@ -3,9 +3,10 @@ import pygame
 from pygame.locals import *
 
 
-class RotateMixin(Mixin):
+class FrameMixin(Mixin):
     def effect(self, current_time):
         pass
 
     def reset(self):
-        self.button.rect = self.button.original_rect
+        self.button.image = self.button.original_image
+
