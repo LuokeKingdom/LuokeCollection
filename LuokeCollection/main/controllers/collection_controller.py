@@ -16,5 +16,4 @@ class CollectionController(Controller):
         }
     
     def side_effect(self):
-        print("try me")
         self.model.set_page(1)

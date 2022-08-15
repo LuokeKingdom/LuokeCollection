@@ -36,7 +36,6 @@ class Model:
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
             except:
-                print(i)
                 continue
 
     def load_current_data(self):
@@ -58,7 +57,6 @@ class Model:
             if self.PETS.get(pet_number) is None:
                 break
             pet_page.append(self.PETS[pet_number])
-        print(self.get_view())
         self.get_view().set_page(pet_page)
 
     def set_info(self):
