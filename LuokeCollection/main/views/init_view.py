@@ -1,3 +1,4 @@
+from turtle import width
 import pygame
 from pygame.locals import *
 from .view import View
@@ -12,10 +13,14 @@ class InitView(View):
             image=IMAGE("collection_button.png"),
             x=WIDTH / 5,
             y=HEIGHT / 2,
+        ),
+        "select_rect": Button(
+            x=WIDTH / 5,
+            y=HEIGHT / 2 + 100
         )
     }
 
-    OTHERS = {"test": Text("Hello world!")}
+    OTHERS = {}
 
     def __init__(self, *args, **kwargs):
         kwargs["bg"] = IMAGE("init_bg.jpg")
