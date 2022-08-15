@@ -1,15 +1,20 @@
 from LuokeCollection.main.utils import PetInfo
 import os
+import json
 from LuokeCollection.settings.dev import IMAGE, JSON
+from ..utils import save_file
 
 
 class Model:
     PETS = {}
+    DATA = None
 
     def __init__(self, app):
         self.page_number = -1
         self.app = app
         self.load_pets()
+        self.load_current_data()
+        self.pet_select_rect = None
 
     def close(self):
         self.app.pop_scene()
@@ -28,11 +33,17 @@ class Model:
                 info = JSON(info_path)
                 info["skills"] = JSON(skill_path)
                 info["secondary_element"] = info.get("secondary_element")
+                info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
             except:
                 print(i)
                 continue
 
+    def load_current_data(self):
+        self.DATA = JSON("LuokeCollection/main/model/data.json", False)
+
+
+    # collection
     def set_page(self, page_number):
         temp = self.page_number
         self.page_number = min(
@@ -57,3 +68,16 @@ class Model:
 
     def next_page(self):
         self.set_page(self.page_number + 1)
+
+
+# select_rect
+    def set_pet_select_rect(self, pet_number):
+        self.pet_select_rect = self.PETS[pet_number]
+        image_path = os.path.join("LuokeCollection/assets/data/", self.pet_select_rect.path, 'display.png')
+        self.get_view().set_pet_image(IMAGE(image_path, False))
+        
+    def save_rect(self, pet_number, x,y,w,h):
+        rects = self.DATA.get('pet_rects', {})
+        rects[pet_number] = [x,y,w,h]
+        content = json.dumps(self.DATA, ensure_ascii=False)
+        save_file("LuokeCollection/main/model/data.json", content)

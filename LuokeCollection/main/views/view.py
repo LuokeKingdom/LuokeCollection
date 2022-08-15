@@ -22,7 +22,7 @@ class View:
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
 
-    def display(self, mouse_pos, click_pos):
+    def display(self, mouse_pos, clicked):
         self.background.draw(self.screen)
         self.others_group.draw(self.screen)
         self.buttons_group.draw(self.screen)

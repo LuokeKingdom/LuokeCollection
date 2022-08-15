@@ -1,3 +1,5 @@
+from .controllers.select_rect_controller import SelectRectController
+from .views.select_rect_view import SelectRectView
 from .views.view import View
 from .controllers.controller import Controller
 from .views.init_view import InitView
@@ -11,6 +13,7 @@ class Scene:
         "basic": (View, Controller),
         "init": (InitView, InitController),
         "collection": (CollectionView, CollectionController),
+        "select_rect": (SelectRectView, SelectRectController),
     }
 
     def __init__(self, scene_name, app):

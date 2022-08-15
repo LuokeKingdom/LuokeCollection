@@ -6,7 +6,7 @@ from ..components.text import Text
 from ..components.sprite import Sprite
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
-EMPTY = pygame.Surface([0, 0])
+EMPTY = pygame.Surface([1, 1])
 
 
 class CollectionView(View):
