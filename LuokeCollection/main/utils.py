@@ -1,6 +1,29 @@
 import pygame
 from pygame.locals import *
 from settings.dev import WIDTH, HEIGHT, IMAGE
+from collections import namedtuple
+import os
+
+def save_file(pathname, content):
+    f = open(os.path.join(pathname), 'w', encoding='utf8')
+    f.write(content)
+    f.close()
+
+PetInfo = namedtuple(
+    "PetInfo",
+    [
+        "name",
+        "element",
+        "secondary_element",
+        "number",
+        "weight",
+        "height",
+        "desc",
+        "stats",
+        "skills",
+        "path",
+    ],
+)
 
 
 class vec(list):

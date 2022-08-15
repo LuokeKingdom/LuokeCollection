@@ -7,6 +7,12 @@ from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 
 class View:
+    INSTANCE = None
+    def get_instance(*args, **kwargs):
+        if __class__.INSTANCE is None:
+            __class__.INSTANCE = __class__(*args, **kwargs)
+        return __class__.INSTANCE
+
     BUTTONS = {
         "pop": Button(x=700, y=100),
     }
@@ -22,7 +28,7 @@ class View:
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
 
-    def display(self, mouse_pos, click_pos):
+    def display(self, mouse_pos, clicked):
         self.background.draw(self.screen)
         self.others_group.draw(self.screen)
         self.buttons_group.draw(self.screen)

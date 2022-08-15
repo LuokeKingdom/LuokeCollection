@@ -1,3 +1,5 @@
+from .controllers.select_rect_controller import SelectRectController
+from .views.select_rect_view import SelectRectView
 from .views.view import View
 from .controllers.controller import Controller
 from .views.init_view import InitView
@@ -11,10 +13,15 @@ class Scene:
         "basic": (View, Controller),
         "init": (InitView, InitController),
         "collection": (CollectionView, CollectionController),
+        "select_rect": (SelectRectView, SelectRectController),
     }
 
     def __init__(self, scene_name, app):
-        self.view = self.TABLE[scene_name][0](app.screen)
+        self.view = self.TABLE[scene_name][0].get_instance(app.screen)
+        self.controller = self.TABLE[scene_name][1].get_instance(app.model, self.view)
+
+    def side_effect(self):
+        """this will be called after Scene is initialized"""
         self.view.load_items()
-        self.controller = self.TABLE[scene_name][1](app, self.view)
         self.controller.link()
+        self.controller.side_effect()
