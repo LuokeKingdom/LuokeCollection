@@ -8,6 +8,11 @@ from settings.dev import WIDTH, HEIGHT, IMAGE
 
 
 class InitView(View):
+    def get_instance(*args, **kwargs):
+        if __class__.INSTANCE is None:
+            __class__.INSTANCE = __class__(*args, **kwargs)
+        return __class__.INSTANCE
+
     BUTTONS = {
         "collection": Button(
             image=IMAGE("collection_button.png"),

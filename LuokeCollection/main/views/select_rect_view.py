@@ -9,6 +9,11 @@ from settings.dev import WIDTH, HEIGHT, IMAGE
 EMPTY = pygame.Surface([1, 1])
 
 class SelectRectView(View):
+    def get_instance(*args, **kwargs):
+        if __class__.INSTANCE is None:
+            __class__.INSTANCE = __class__(*args, **kwargs)
+        return __class__.INSTANCE
+
     BUTTONS = {
         "close": Button(x=1100, y=70),
         "save": Button(x=1100, y=700),
