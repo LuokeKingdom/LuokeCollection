@@ -12,7 +12,9 @@ class InitView(View):
             image=IMAGE("collection_button.png"),
             x=WIDTH / 5,
             y=HEIGHT / 2,
-            animation="frame",
+            animation="opacity",
+            transition=1,
+            parameter=0.5,
         )
     }
 

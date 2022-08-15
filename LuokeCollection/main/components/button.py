@@ -7,7 +7,7 @@ from ..animation.button.button_animations import (
     ScaleButtonAnimation,
     JumpButtonAnimation,
     RotateButtonAnimation,
-    FrameButtonAnimation
+    FrameButtonAnimation,
 )
 from ..utils import vec
 from .container import Container
@@ -21,10 +21,12 @@ class Button(Container):
         "scale": ScaleButtonAnimation,
         "jump": JumpButtonAnimation,
         "rotate": RotateButtonAnimation,
-        "frame": FrameButtonAnimation
+        "frame": FrameButtonAnimation,
     }
 
-    def __init__(self, animation="scale", *args, **kwargs):
+    def __init__(
+        self, animation="scale", transition=None, parameter=0, *args, **kwargs
+    ):
         # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
@@ -33,7 +35,9 @@ class Button(Container):
         super().__init__(*args, **kwargs)
         self.on_click = None
         self.hovered = False
-        self.animation = self.ANIMATIONS[animation](self)
+        self.transition = transition
+        self.parameter = parameter
+        self.animation = self.ANIMATIONS[animation](self, transition, parameter)
 
     def is_click(self, click_pos):
         return self.rect.collidepoint(click_pos)

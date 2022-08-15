@@ -1,3 +1,6 @@
+import pygame
+from pygame.locals import *
+from lib2to3 import pygram
 from tkinter import CENTER
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
@@ -11,8 +14,12 @@ class ButtonAnimation:
     def __init__(
         self,
         button,
+        transition,
+        parameter,
     ):
         self.button = button
+        self.transition = transition
+        self.parameter = parameter
         self.startTime = 0
         self.is_playing = False
 
@@ -37,14 +44,13 @@ class ButtonAnimation:
 class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.opacity = 0.5
+        self.opacity = self.parameter
 
 
 class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.transition = 0.15
-        self.scale = 1.2
+        self.scale = self.parameter
         self.w, self.h = self.button.image.get_size()
 
 
@@ -52,8 +58,7 @@ class JumpButtonAnimation(ButtonAnimation, JumpMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.button.align_mode = "TOPLEFT"
-        self.transition = 0.6
-        self.jump_height = 15
+        self.jump_height = self.parameter
         self.a = self.jump_height / (self.transition / 2) / (self.transition / 2)
         self.w, self.h = self.button.image.get_size()
         self.x, self.y = self.button.get_pos()
@@ -64,6 +69,9 @@ class RotateButtonAnimation(ButtonAnimation, RotateMixin):
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+
 class FrameButtonAnimation(ButtonAnimation, FrameMixin):
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.i = 1
+        self.frame_path = self.parameter
