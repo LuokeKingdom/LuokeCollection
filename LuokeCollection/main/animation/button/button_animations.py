@@ -1,3 +1,5 @@
+import imp
+from multiprocessing.spawn import old_main_modules
 import pygame
 from pygame.locals import *
 from lib2to3 import pygram
@@ -6,6 +8,7 @@ from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
 from .patterns.scale import ScaleMixin
 from .patterns.jump import JumpMixin
+from .patterns.rotate import RotateMixin
 from .patterns.frame import FrameMixin
 
 
@@ -62,6 +65,15 @@ class JumpButtonAnimation(ButtonAnimation, JumpMixin):
         self.w, self.h = self.button.image.get_size()
         self.x, self.y = self.button.get_pos()
         self.y_temp = self.y
+        self.angle = 0
+
+
+class RotateButtonAnimation(ButtonAnimation, RotateMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.w, self.h = self.button.image.get_size()
+        self.x, self.y = self.button.get_pos()
+        self.rotation = self.parameter
 
 
 class FrameButtonAnimation(ButtonAnimation, FrameMixin):

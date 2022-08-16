@@ -1,5 +1,4 @@
 from turtle import width
-import pygame
 from pygame.locals import *
 from .view import View
 from ..components.button import Button
@@ -18,9 +17,9 @@ class InitView(View):
             image=IMAGE("collection_button.png"),
             x=WIDTH / 5,
             y=HEIGHT / 2,
-            animation="frame",
-            transition=18,
-            parameter="LuokeCollection/assets/images/frames/",
+            animation="rotate",
+            transition=1,
+            parameter=1,
         ),
         "select_rect": Button(x=WIDTH / 5, y=HEIGHT / 2 + 100),
     }

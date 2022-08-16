@@ -19,4 +19,6 @@ class JumpMixin(Mixin):
         )
 
     def reset(self):
+        self.button.image = self.button.original_image
         self.button.rect = self.button.original_rect
+        self.angle = 0
