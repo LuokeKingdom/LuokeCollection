@@ -6,7 +6,6 @@ from ..animation.button.button_animations import (
     OpacityButtonAnimation,
     ScaleButtonAnimation,
     JumpButtonAnimation,
-    RotateButtonAnimation,
     FrameButtonAnimation,
 )
 from ..utils import vec
@@ -20,7 +19,6 @@ class Button(Container):
         "opacity": OpacityButtonAnimation,
         "scale": ScaleButtonAnimation,
         "jump": JumpButtonAnimation,
-        "rotate": RotateButtonAnimation,
         "frame": FrameButtonAnimation,
     }
 

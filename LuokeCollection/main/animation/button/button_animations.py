@@ -6,7 +6,6 @@ from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
 from .patterns.scale import ScaleMixin
 from .patterns.jump import JumpMixin
-from .patterns.rotate import RotateMixin
 from .patterns.frame import FrameMixin
 
 
@@ -63,11 +62,6 @@ class JumpButtonAnimation(ButtonAnimation, JumpMixin):
         self.w, self.h = self.button.image.get_size()
         self.x, self.y = self.button.get_pos()
         self.y_temp = self.y
-
-
-class RotateButtonAnimation(ButtonAnimation, RotateMixin):
-    def __int__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class FrameButtonAnimation(ButtonAnimation, FrameMixin):
