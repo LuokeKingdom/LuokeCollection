@@ -1,8 +1,5 @@
-import imp
 from multiprocessing.spawn import old_main_modules
-import pygame
 from pygame.locals import *
-from lib2to3 import pygram
 from tkinter import CENTER
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
