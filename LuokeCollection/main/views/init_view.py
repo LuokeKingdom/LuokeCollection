@@ -20,7 +20,7 @@ class InitView(View):
             y=HEIGHT / 2,
             animation="frame",
             transition=18,
-            parameter="LuokeCollection/assets/images/frames",
+            parameter="LuokeCollection/assets/images/frames/",
         ),
         "select_rect": Button(x=WIDTH / 5, y=HEIGHT / 2 + 100),
     }
