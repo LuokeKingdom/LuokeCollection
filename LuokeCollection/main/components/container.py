@@ -8,8 +8,22 @@ class Container(pygame.sprite.Sprite):
         self, image, width=None, height=None, ratio=1, align_mode="CENTER", x=0, y=0
     ):
         super().__init__()
+        self.set_image(image, width, height, ratio)
+        self.align_mode = align_mode
+        self.set_pos(x, y)
+        self.check_collide_original_rect = False
+
+    def set_image(self, image, width=None, height=None, ratio=1):
         if width and height:
             self.image = pygame.transform.smoothscale(image, (width, height))
+        elif width:
+            self.image = pygame.transform.smoothscale(
+                image, (width, int(image.get_height() * width / image.get_width()))
+            )
+        elif height:
+            self.image = pygame.transform.smoothscale(
+                image, (int(image.get_width() * height / image.get_height()), height)
+            )
         else:
             self.image = pygame.transform.smoothscale(
                 image, (int(image.get_width() * ratio), int(image.get_height() * ratio))
@@ -17,8 +31,6 @@ class Container(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.original_image = self.image.copy()
         self.original_rect = self.original_image.get_rect()
-        self.align_mode = align_mode
-        self.set_pos(x, y)
 
     def set_pos(self, x, y=None):
         pos = None
