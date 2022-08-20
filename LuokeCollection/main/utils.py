@@ -27,6 +27,9 @@ PetInfo = namedtuple(
     ],
 )
 
+ELEMENT_MAP = {
+    '草': "elements/grass.png",
+}
 
 class vec(list):
     def __init__(self, x, y=0):

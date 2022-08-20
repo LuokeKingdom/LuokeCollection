@@ -9,6 +9,7 @@ from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
 from settings.dev import WIDTH, HEIGHT, IMAGE
+from ..utils import ELEMENT_MAP
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
@@ -67,7 +68,9 @@ class CollectionScene(Scene):
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
-        pet_image = IMAGE("display.png")
+        pet_image = IMAGE(
+            os.path.join("LuokeCollection/assets/data/", pet.path, "display.png"), False
+        )
         max_width, max_height = 300, 250
         w, h = pet_image.get_size()
         if h / max_height < w / max_width:
@@ -80,7 +83,7 @@ class CollectionScene(Scene):
                 image=pet_image, height=max_height
             ).set_pos(780, 340)
         self.OTHERS["pet_element"].set_image(
-            image=IMAGE("grass.png"), width=100
+            image=IMAGE(ELEMENT_MAP.get(pet.element, 'place_holder.png')), width=100
         ).set_pos(700, 110)
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
