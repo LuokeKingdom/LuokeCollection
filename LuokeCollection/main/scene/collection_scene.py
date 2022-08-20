@@ -32,10 +32,10 @@ class CollectionScene(Scene):
 
     def init_info(self):
         info_compoments = {
-            "pet_name": Text("", x=750, y=100),
-            "pet_image": Sprite(EMPTY, ratio=0.2, x=900, y=330),
-            "pet_element": Sprite(EMPTY, x=700, y=130),
-            "pet_id": Text("1",),
+            "pet_name": Text("", x=760, y=100),
+            "pet_image": Sprite(EMPTY),
+            "pet_element": Sprite(EMPTY),
+            "pet_id": Text(text="",size=150,x=780,y=60,color=(200,150,100),opacity=100),
             "pet_description": Text("", x=700, y=160,size=20),
             "talent_icon_HP": Sprite(
                 EMPTY,  x=700, y=500
@@ -72,21 +72,23 @@ class CollectionScene(Scene):
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
-        pet_image = IMAGE('display.png')
+        pet_image = IMAGE('place_holder.png')
         max_width, max_height = 300, 250
         w,h = pet_image.get_size()
         if h/max_height < w/max_width:
             self.OTHERS["pet_image"].set_image(
                 image=pet_image,
                 width=max_width
-            )
+            ).set_pos(780,340)
+
         else:
             self.OTHERS["pet_image"].set_image(
                 image=pet_image,
                 height=max_height
-            )
-        self.OTHERS["pet_image"].set_pos(780,340)
-        self.OTHERS["pet_element"].image=EMPTY
+            ).set_pos(780,340)
+        self.OTHERS["pet_element"].set_image(
+            image=IMAGE('place_holder.png')
+        ).set_pos(700,110)
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
         self.OTHERS["talent_icon_HP"]
