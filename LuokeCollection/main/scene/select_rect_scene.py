@@ -106,6 +106,7 @@ class SelectRectScene(Scene):
             ),
             2,
         )
+        # if self.model.DATA["pet_rects"][self.model.pet_number_select_rect] is None:
         if self.rect is not None:
             pygame.draw.rect(
                 self.screen,
@@ -121,7 +122,7 @@ class SelectRectScene(Scene):
             self.rate += 1
             self.shrink_rate = 1
         if clicked == 4:
-            self.rect_side = min(500, self.rect_side + self.rate)
+            self.rect_side = min(self.image_rect_h, self.image_rect_w, self.rect_side + self.rate)
             self.rate += 1
             self.shrink_rate = 1
         self.rate = 1 if not self.shrink_rate else self.rate
