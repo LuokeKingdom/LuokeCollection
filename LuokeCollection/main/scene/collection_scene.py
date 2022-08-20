@@ -1,3 +1,4 @@
+import os
 import pygame
 from pygame.locals import *
 from .scene import Scene
@@ -71,8 +72,12 @@ class CollectionScene(Scene):
     def init_page(self):
         index = 0
         new_others = {}
+        new_buttons = {}
         for i in range(3):
             for j in range(3):
+                new_buttons[f"slot_{index+1}"] = Button(
+                    'none',EMPTY, x=202 + j * 163, y=290 + i * 146, align_mode="CENTER", width=100
+                )
                 new_others[f"slot_{index+1}"] = Text(
                     "", x=202 + j * 163, y=316 + i * 146, align_mode="CENTER", size=24
                 )
@@ -83,6 +88,8 @@ class CollectionScene(Scene):
     def set_page(self, pet_page):
         index = 0
         for pet_info in pet_page:
+            pet_image = IMAGE(os.path.join('LuokeCollection/assets/data/',pet_info.path,'display.png'), False)
+            self.BUTTONS[f"slot_{index+1}"].set_image(pet_image, width=100)
             self.OTHERS[f"slot_{index+1}"].change_text(pet_info.name)
             index += 1
         for i in range(index, 9):

@@ -1,6 +1,4 @@
-from multiprocessing.spawn import old_main_modules
 from pygame.locals import *
-from tkinter import CENTER
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
 from .patterns.scale import ScaleMixin
@@ -38,7 +36,6 @@ class ButtonAnimation:
     def stop(self):
         self.is_playing = False
         self.reset()
-
 
 class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
     def __init__(self, *args, **kwargs):

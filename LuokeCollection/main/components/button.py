@@ -22,6 +22,7 @@ class Button(Container):
         "rotate": RotateButtonAnimation,
         "jump": JumpButtonAnimation,
         "frame": FrameButtonAnimation,
+        "none": None
     }
 
     def __init__(
@@ -66,6 +67,7 @@ class Button(Container):
             self.hovered = True
             if clicked:
                 self.click()
+        if self.animation is None: return 
         if self.hovered:
             self.animation.play(current_time)
         else:
