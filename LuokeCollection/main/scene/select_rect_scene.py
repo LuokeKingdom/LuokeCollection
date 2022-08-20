@@ -63,11 +63,20 @@ class SelectRectScene(Scene):
         super().display(mouse_pos, clicked)
 
         if self.model.DATA["pet_rects"][self.model.pet_number_select_rect] is not None:
-            self.saved_rect_x = self.model.DATA["pet_rects"][self.model.pet_number_select_rect][0] // self.ratio
-            self.saved_rect_y = self.model.DATA["pet_rects"][self.model.pet_number_select_rect][1] // self.ratio
-            self.saved_rect_side = self.model.DATA["pet_rects"][self.model.pet_number_select_rect][2] // self.ratio
+            self.saved_rect_x = (
+                self.model.DATA["pet_rects"][self.model.pet_number_select_rect][0]
+                // self.ratio
+            )
+            self.saved_rect_y = (
+                self.model.DATA["pet_rects"][self.model.pet_number_select_rect][1]
+                // self.ratio
+            )
+            self.saved_rect_side = (
+                self.model.DATA["pet_rects"][self.model.pet_number_select_rect][2]
+                // self.ratio
+            )
             self.saved_rect = True
-        
+
         if mouse_pos.x < self.rect_side // 2:
             if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
                 self.rect_x = 0
@@ -103,6 +112,7 @@ class SelectRectScene(Scene):
         else:  # when mouse_pos is not touching any edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = mouse_pos.y - self.rect_side // 2
+
         pygame.draw.rect(
             self.screen,
             (0, 0, 0),
@@ -114,6 +124,7 @@ class SelectRectScene(Scene):
             ),
             2,
         )
+
         if self.rect is not None:
             pygame.draw.rect(
                 self.screen,
@@ -125,8 +136,13 @@ class SelectRectScene(Scene):
             pygame.draw.rect(
                 self.screen,
                 (100, 200, 100),
-                pygame.Rect(self.saved_rect_x, self.saved_rect_y, self.saved_rect_side, self.saved_rect_side),
-                2
+                pygame.Rect(
+                    self.saved_rect_x,
+                    self.saved_rect_y,
+                    self.saved_rect_side,
+                    self.saved_rect_side,
+                ),
+                2,
             )
             self.saved_rect = False
 
@@ -137,7 +153,9 @@ class SelectRectScene(Scene):
             self.rate += 1
             self.shrink_rate = 1
         if clicked == 4:
-            self.rect_side = min(self.image_rect_h, self.image_rect_w, self.rect_side + self.rate)
+            self.rect_side = min(
+                self.image_rect_h, self.image_rect_w, self.rect_side + self.rate
+            )
             self.rate += 1
             self.shrink_rate = 1
         self.rate = 1 if not self.shrink_rate else self.rate
