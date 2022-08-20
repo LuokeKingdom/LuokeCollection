@@ -1,3 +1,4 @@
+import copy
 from LuokeCollection.main.utils import PetInfo
 import os
 import json
@@ -15,6 +16,7 @@ class Model:
         self.load_pets()
         self.load_current_data()
         self.pet_select_rect = None
+        self.pet_number_select_rect = 1
 
     def close(self):
         self.app.pop_scene()
@@ -22,8 +24,8 @@ class Model:
     def open(self, name):
         self.app.push_scene(name)
 
-    def get_view(self):
-        return self.app.scene.view
+    def get_scene(self):
+        return self.app.scene
 
     def load_pets(self):
         for i in range(201):
@@ -40,6 +42,12 @@ class Model:
 
     def load_current_data(self):
         self.DATA = JSON("LuokeCollection/main/model/data.json", False)
+        a = copy.copy(self.DATA.get("pet_rects"))
+        if a is None:
+            return
+        for i in a:
+            del self.DATA["pet_rects"][i]
+            self.DATA["pet_rects"][int(i)] = a[i]
 
     # collection
     def set_page(self, page_number):
@@ -56,10 +64,10 @@ class Model:
             if self.PETS.get(pet_number) is None:
                 break
             pet_page.append(self.PETS[pet_number])
-        self.get_view().set_page(pet_page)
+        self.get_scene().set_page(pet_page)
 
-    def set_info(self):
-        self.get_view().set_info()
+    def set_info(self, offset):
+        self.get_scene().set_info(self.PETS[(self.page_number - 1) * 9 + offset])
 
     def previous_page(self):
         self.set_page(self.page_number - 1)
@@ -73,10 +81,28 @@ class Model:
         image_path = os.path.join(
             "LuokeCollection/assets/data/", self.pet_select_rect.path, "display.png"
         )
-        self.get_view().set_pet_image(IMAGE(image_path, False))
+        self.get_scene().set_pet_image(IMAGE(image_path, False))
 
-    def save_rect(self, pet_number, x, y, w, h):
-        rects = self.DATA.get("pet_rects", {})
-        rects[pet_number] = [x, y, w, h]
+    def previous_pet(self):
+        self.pet_number_select_rect = max(1, self.pet_number_select_rect - 1)
+        self.set_pet_select_rect(self.pet_number_select_rect)
+
+    def next_pet(self):
+        self.pet_number_select_rect = min(200, self.pet_number_select_rect + 1)
+        self.set_pet_select_rect(self.pet_number_select_rect)
+
+    def save_rect(self, ratio, x, y, w, h):
+        self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
+        pet_num = int(self.pet_number_select_rect)
+
+        def convert(n):
+            return int(n * ratio)
+
+        if self.DATA["pet_rects"].get(pet_num) is None:
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w, h]))
+        else:
+            del self.DATA["pet_rects"][pet_num]
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w, h]))
+
         content = json.dumps(self.DATA, ensure_ascii=False)
         save_file("LuokeCollection/main/model/data.json", content)
