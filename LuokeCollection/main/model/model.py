@@ -66,8 +66,8 @@ class Model:
             pet_page.append(self.PETS[pet_number])
         self.get_scene().set_page(pet_page)
 
-    def set_info(self):
-        self.get_scene().set_info()
+    def set_info(self, offset):
+        self.get_scene().set_info(self.PETS[(self.page_number-1)*9+offset])
 
     def previous_page(self):
         self.set_page(self.page_number - 1)
