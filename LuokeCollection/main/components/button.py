@@ -37,11 +37,12 @@ class Button(Container):
         **kwargs
     ):
         self.text_color = (0, 0, 0)
+        self.color = (150,200,100)
         self.text = text
         # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
-            image.fill((255, 255, 255))
+            image.fill(self.color)
             if text is None: self.text = "button"
             temp = Text.get_font(24).render(self.text, True, self.text_color)
             rect = temp.get_rect(center=(50,50))

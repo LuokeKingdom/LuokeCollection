@@ -28,7 +28,7 @@ class ScaleMixin(Mixin):
                     self.h + y_grow * self.progress(current_time),
                 ),
             )
-            self.button.image.fill((255, 255, 255))
+            self.button.image.fill(self.button.color)
             temp = Text.get_font(24).render(self.button.text, True, self.button.text_color)
             rect = temp.get_rect(center=self.button.image.get_rect().center)
             self.button.image.blit(temp,rect)
