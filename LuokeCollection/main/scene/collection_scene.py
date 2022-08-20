@@ -1,6 +1,8 @@
 import os
 import pygame
 from pygame.locals import *
+
+from LuokeCollection.main.components.container import Container
 from .scene import Scene
 from ..components.button import Button
 from ..components.text import Text
@@ -71,26 +73,59 @@ class CollectionScene(Scene):
 
     def init_page(self):
         index = 0
+        new_texts = {}
         new_others = {}
         new_buttons = {}
         for i in range(3):
             for j in range(3):
                 new_buttons[f"slot_{index+1}"] = Button(
-                    'none',EMPTY, x=202 + j * 163, y=290 + i * 146, align_mode="CENTER", width=100
+                    animation="none",
+                    image=EMPTY,
+                    x=205 + j * 161,
+                    y=257 + i * 146,
+                    align_mode="CENTER",
+                    width=100,
                 )
-                new_others[f"slot_{index+1}"] = Text(
-                    "", x=202 + j * 163, y=316 + i * 146, align_mode="CENTER", size=24
+                new_others[f"slot_{index+1}"] = Container(
+                    image=IMAGE('tag.png'),
+                    x=210 + j * 161,
+                    y=313 + i * 146,
+                    align_mode="CENTER",
+                )
+                new_texts[f"slot_{index+1}"] = Text(
+                    text="",
+                    x=202 + j * 163,
+                    y=316 + i * 146,
+                    align_mode="CENTER",
+                    size=24,
                 )
                 index += 1
+        for name, comp in new_texts.items():
+            self.TEXTS[name] = comp
+        for name, comp in new_buttons.items():
+            self.BUTTONS[name] = comp
         for name, comp in new_others.items():
             self.OTHERS[name] = comp
+
 
     def set_page(self, pet_page):
         index = 0
         for pet_info in pet_page:
-            pet_image = IMAGE(os.path.join('LuokeCollection/assets/data/',pet_info.path,'display.png'), False)
-            self.BUTTONS[f"slot_{index+1}"].set_image(pet_image, width=100)
-            self.OTHERS[f"slot_{index+1}"].change_text(pet_info.name)
+            pet_image = IMAGE(
+                os.path.join(
+                    "LuokeCollection/assets/data/", pet_info.path, "display.png"
+                ),
+                False,
+            )
+            rect = self.model.DATA["pet_rects"].get(pet_info.number)
+            if rect:
+                canvas = pygame.Surface([rect[2],rect[2]], pygame.SRCALPHA)
+                canvas.blit(pet_image.subsurface(*rect), (0,0))
+                pet_image = pygame.transform.smoothscale(
+                    canvas, (100,100)
+                )
+            self.BUTTONS[f"slot_{index+1}"].image = pet_image if rect else EMPTY
+            self.TEXTS[f"slot_{index+1}"].change_text(pet_info.name)
             index += 1
         for i in range(index, 9):
-            self.OTHERS[f"slot_{i+1}"].change_text("")
+            self.TEXTS[f"slot_{i+1}"].change_text("")

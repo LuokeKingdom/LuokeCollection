@@ -43,7 +43,8 @@ class Model:
     def load_current_data(self):
         self.DATA = JSON("LuokeCollection/main/model/data.json", False)
         a = copy.copy(self.DATA.get("pet_rects"))
-        if a is None: return
+        if a is None:
+            return
         for i in a:
             del self.DATA["pet_rects"][i]
             self.DATA["pet_rects"][int(i)] = a[i]
@@ -81,23 +82,24 @@ class Model:
             "LuokeCollection/assets/data/", self.pet_select_rect.path, "display.png"
         )
         self.get_scene().set_pet_image(IMAGE(image_path, False))
-    def previous_pet(self): 
-        self.pet_number_select_rect = max(1, self.pet_number_select_rect-1)
-        self.set_pet_select_rect(self.pet_number_select_rect)
-    def next_pet(self): 
-        self.pet_number_select_rect = min(200, self.pet_number_select_rect+1)
+
+    def previous_pet(self):
+        self.pet_number_select_rect = max(1, self.pet_number_select_rect - 1)
         self.set_pet_select_rect(self.pet_number_select_rect)
 
-    def save_rect(self, x, y, w, h):
+    def next_pet(self):
+        self.pet_number_select_rect = min(200, self.pet_number_select_rect + 1)
+        self.set_pet_select_rect(self.pet_number_select_rect)
+
+    def save_rect(self, ratio, x, y, w, h):
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
         pet_num = int(self.pet_number_select_rect)
+        def convert(n): return int(n*ratio)
         if self.DATA["pet_rects"].get(pet_num) is None:
-            self.DATA["pet_rects"][pet_num] = [x, y, h]
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y,w, h]))
         else:
             del self.DATA["pet_rects"][pet_num]
-            print(self.DATA)
-            self.DATA["pet_rects"][pet_num] = [x, y, h]
-            
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w,h]))
+
         content = json.dumps(self.DATA, ensure_ascii=False)
-        print(content)
         save_file("LuokeCollection/main/model/data.json", content)

@@ -37,6 +37,7 @@ class ButtonAnimation:
         self.is_playing = False
         self.reset()
 
+
 class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
