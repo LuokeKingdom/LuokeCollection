@@ -1,4 +1,3 @@
-    
 import pygame
 from pygame.locals import *
 from ..utils import Mouse
@@ -19,11 +18,7 @@ class Scene:
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
         self.BUTTONS = {
-            "pop": Button(
-                x=700, 
-                y=100, 
-                on_click=lambda:self.model.close()
-            )
+            "pop": Button(x=700, y=100, on_click=lambda: self.model.close())
         }
         self.OTHERS = {}
 

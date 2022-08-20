@@ -10,13 +10,12 @@ EMPTY = pygame.Surface([1, 1])
 
 
 class SelectRectScene(Scene):
-
-    def __init__(self,screen, model ,*args, **kwargs):
+    def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = pygame.Surface([1, 1])
         kwargs["bg"].fill((200, 200, 245))
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
-            "close": Button(x=1100, y=70, on_click=lambda:model.close()),
+            "close": Button(x=1100, y=70, on_click=lambda: model.close()),
             "save": Button(x=1100, y=700),
         }
         self.OTHERS = {

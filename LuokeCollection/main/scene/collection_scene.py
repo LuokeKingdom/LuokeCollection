@@ -10,14 +10,15 @@ EMPTY = pygame.Surface([1, 1])
 
 
 class CollectionScene(Scene):
-
     def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
-            "close": Button(x=1100, y=70, on_click=lambda:model.close()),
-            "next_page": Button(x=420, y=730, on_click=lambda:model.next_page()),
-            "previous_page": Button(x=300, y=730, on_click=lambda:model.previous_page()),
+            "close": Button(x=1100, y=70, on_click=lambda: model.close()),
+            "next_page": Button(x=420, y=730, on_click=lambda: model.next_page()),
+            "previous_page": Button(
+                x=300, y=730, on_click=lambda: model.previous_page()
+            ),
         }
         self.init_info()
         self.init_page()
