@@ -50,32 +50,38 @@ class SelectRectScene(Scene):
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
         if mouse_pos.x < self.rect_side // 2:
-            if mouse_pos.y < self.rect_side // 2:                           # when mouse_pos is at top left
+            if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
                 self.rect_x = 0
                 self.rect_y = 0
-            elif mouse_pos.y > self.image_rect_h - self.rect_side // 2:     # when mouse_pos is at bottom left
+            elif (
+                mouse_pos.y > self.image_rect_h - self.rect_side // 2
+            ):  # when mouse_pos is at bottom left
                 self.rect_x = 0
                 self.rect_y = self.image_rect_h - self.rect_side
-            else:                                                           # when mouse_pos is along left edge
+            else:  # when mouse_pos is along left edge
                 self.rect_x = 0
                 self.rect_y = mouse_pos.y - self.rect_side // 2
         elif mouse_pos.x > self.image_rect_w - self.rect_side // 2:
-            if mouse_pos.y < self.rect_side // 2:                           # when mouse_pos is at top right
+            if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top right
                 self.rect_x = self.image_rect_w - self.rect_side
                 self.rect_y = 0
-            elif mouse_pos.y > self.image_rect_h - self.rect_side // 2:     # when mouse_pos is at bottom right
+            elif (
+                mouse_pos.y > self.image_rect_h - self.rect_side // 2
+            ):  # when mouse_pos is at bottom right
                 self.rect_x = self.image_rect_w - self.rect_side
                 self.rect_y = self.image_rect_h - self.rect_side
-            else:                                                           # when mouse_pos is along right edge
+            else:  # when mouse_pos is along right edge
                 self.rect_x = self.image_rect_w - self.rect_side
                 self.rect_y = mouse_pos.y - self.rect_side // 2
-        elif mouse_pos.y < self.rect_side // 2:                             # when mouse_pos is along top edge
+        elif mouse_pos.y < self.rect_side // 2:  # when mouse_pos is along top edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = 0
-        elif mouse_pos.y > self.image_rect_h - self.rect_side // 2:         # when mouse_pos is along bottom edge
+        elif (
+            mouse_pos.y > self.image_rect_h - self.rect_side // 2
+        ):  # when mouse_pos is along bottom edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = self.image_rect_h - self.rect_side
-        else:                                                               # when mouse_pos is not touching any edge
+        else:  # when mouse_pos is not touching any edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = mouse_pos.y - self.rect_side // 2
         pygame.draw.rect(
