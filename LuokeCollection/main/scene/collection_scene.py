@@ -32,11 +32,11 @@ class CollectionScene(Scene):
 
     def init_info(self):
         info_compoments = {
-            "pet_name": Text("", x=750, y=130),
+            "pet_name": Text("", x=750, y=100),
             "pet_image": Sprite(EMPTY, ratio=0.2, x=900, y=330),
             "pet_element": Sprite(EMPTY, x=700, y=130),
             "pet_id": Text("1",),
-            "pet_description": Text("", x=700, y=200),
+            "pet_description": Text("", x=700, y=160,size=20),
             "talent_icon_HP": Sprite(
                 EMPTY,  x=700, y=500
             ),
@@ -72,7 +72,20 @@ class CollectionScene(Scene):
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
-        self.OTHERS["pet_image"].image=IMAGE("place_holder.png")
+        pet_image = IMAGE('display.png')
+        max_width, max_height = 300, 250
+        w,h = pet_image.get_size()
+        if h/max_height < w/max_width:
+            self.OTHERS["pet_image"].set_image(
+                image=pet_image,
+                width=max_width
+            )
+        else:
+            self.OTHERS["pet_image"].set_image(
+                image=pet_image,
+                height=max_height
+            )
+        self.OTHERS["pet_image"].set_pos(780,340)
         self.OTHERS["pet_element"].image=EMPTY
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
