@@ -18,8 +18,12 @@ class CollectionScene(Scene):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
-            "close": Button(x=1100, y=70, on_click=lambda: model.close(), text="X",text_fontsize=80),
-            "next_page": Button(x=420, y=730, on_click=lambda: model.next_page() ,text="下一页"),
+            "close": Button(
+                x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
+            ),
+            "next_page": Button(
+                x=420, y=730, on_click=lambda: model.next_page(), text="下一页"
+            ),
             "previous_page": Button(
                 x=300, y=730, on_click=lambda: model.previous_page(), text="上一页"
             ),
@@ -36,26 +40,16 @@ class CollectionScene(Scene):
             "pet_name": Text("", x=760, y=100),
             "pet_image": Sprite(EMPTY),
             "pet_element": Sprite(EMPTY),
-            "pet_id": Text(text="",size=150,x=780,y=60,color=(200,150,100),opacity=100),
-            "pet_description": Text("", x=700, y=160,size=20),
-            "talent_icon_HP": Sprite(
-                EMPTY,  x=700, y=500
+            "pet_id": Text(
+                text="", size=150, x=780, y=60, color=(200, 150, 100), opacity=100
             ),
-            "talent_icon_AD": Sprite(
-                EMPTY,  x=700, y=570
-            ),
-            "talent_icon_DF": Sprite(
-                EMPTY,  x=700, y=640
-            ),
-            "talent_icon_SP": Sprite(
-                EMPTY,  x=900, y=500
-            ),
-            "talent_icon_AP": Sprite(
-                EMPTY, x=900, y=570
-            ),
-            "talent_icon_MD": Sprite(
-                EMPTY, x=900, y=640
-            ),
+            "pet_description": Text("", x=700, y=160, size=20),
+            "talent_icon_HP": Sprite(EMPTY, x=700, y=500),
+            "talent_icon_AD": Sprite(EMPTY, x=700, y=570),
+            "talent_icon_DF": Sprite(EMPTY, x=700, y=640),
+            "talent_icon_SP": Sprite(EMPTY, x=900, y=500),
+            "talent_icon_AP": Sprite(EMPTY, x=900, y=570),
+            "talent_icon_MD": Sprite(EMPTY, x=900, y=640),
             "pet_talent_HP": Text("", x=730, y=490),
             "pet_talent_AD": Text("", x=730, y=560),
             "pet_talent_DF": Text("", x=730, y=630),
@@ -73,24 +67,21 @@ class CollectionScene(Scene):
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
-        pet_image = IMAGE('display.png')
+        pet_image = IMAGE("display.png")
         max_width, max_height = 300, 250
-        w,h = pet_image.get_size()
-        if h/max_height < w/max_width:
+        w, h = pet_image.get_size()
+        if h / max_height < w / max_width:
             self.OTHERS["pet_image"].set_image(
-                image=pet_image,
-                width=max_width
-            ).set_pos(780,340)
+                image=pet_image, width=max_width
+            ).set_pos(780, 340)
 
         else:
             self.OTHERS["pet_image"].set_image(
-                image=pet_image,
-                height=max_height
-            ).set_pos(780,340)
+                image=pet_image, height=max_height
+            ).set_pos(780, 340)
         self.OTHERS["pet_element"].set_image(
-            image=IMAGE('grass.png'),
-            width=100
-        ).set_pos(700,110)
+            image=IMAGE("grass.png"), width=100
+        ).set_pos(700, 110)
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
         self.OTHERS["talent_icon_HP"]

@@ -14,7 +14,14 @@ class Text(Container):
     pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", DEFAULT_SIZE)
 
     def __init__(
-        self, text="test text", size=DEFAULT_SIZE, align_mode="TOPLEFT", color=(0,0,0),opacity=255,*args, **kwargs
+        self,
+        text="test text",
+        size=DEFAULT_SIZE,
+        align_mode="TOPLEFT",
+        color=(0, 0, 0),
+        opacity=255,
+        *args,
+        **kwargs
     ):
         super(Text, self).__init__(
             image=pygame.Surface([1, 1]), align_mode=align_mode, *args, **kwargs

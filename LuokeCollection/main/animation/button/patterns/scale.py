@@ -22,16 +22,18 @@ class ScaleMixin(Mixin):
             )
         else:
             self.button.image = pygame.transform.smoothscale(
-                pygame.Surface([100, 100]), 
+                pygame.Surface([100, 100]),
                 (
                     self.w + x_grow * self.progress(current_time),
                     self.h + y_grow * self.progress(current_time),
                 ),
             )
             self.button.image.fill(self.button.color)
-            temp = Text.get_font(self.button.text_fontsize).render(self.button.text, True, self.button.text_color)
+            temp = Text.get_font(self.button.text_fontsize).render(
+                self.button.text, True, self.button.text_color
+            )
             rect = temp.get_rect(center=self.button.image.get_rect().center)
-            self.button.image.blit(temp,rect)
+            self.button.image.blit(temp, rect)
         self.button.rect = self.button.image.get_rect(
             center=self.button.original_rect.center
         )
