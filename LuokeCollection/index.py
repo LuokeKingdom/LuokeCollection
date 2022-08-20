@@ -35,7 +35,7 @@ while running:
                 clicked = event.button
                 pressing = False
                 # development purpose
-                if clicked==1:
+                if clicked == 1:
                     print(str(mouse_pos) + " is clicked!")
         if event.type == pygame.MOUSEBUTTONDOWN:
             pressing = True

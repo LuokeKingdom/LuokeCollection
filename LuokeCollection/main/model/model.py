@@ -67,7 +67,7 @@ class Model:
         self.get_scene().set_page(pet_page)
 
     def set_info(self, offset):
-        self.get_scene().set_info(self.PETS[(self.page_number-1)*9+offset])
+        self.get_scene().set_info(self.PETS[(self.page_number - 1) * 9 + offset])
 
     def previous_page(self):
         self.set_page(self.page_number - 1)
@@ -94,12 +94,15 @@ class Model:
     def save_rect(self, ratio, x, y, w, h):
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
         pet_num = int(self.pet_number_select_rect)
-        def convert(n): return int(n*ratio)
+
+        def convert(n):
+            return int(n * ratio)
+
         if self.DATA["pet_rects"].get(pet_num) is None:
-            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y,w, h]))
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w, h]))
         else:
             del self.DATA["pet_rects"][pet_num]
-            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w,h]))
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w, h]))
 
         content = json.dumps(self.DATA, ensure_ascii=False)
         save_file("LuokeCollection/main/model/data.json", content)

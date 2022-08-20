@@ -22,7 +22,7 @@ class Button(Container):
         "rotate": RotateButtonAnimation,
         "jump": JumpButtonAnimation,
         "frame": FrameButtonAnimation,
-        "none": lambda *args, **kwargs:None,
+        "none": lambda *args, **kwargs: None,
     }
 
     def __init__(

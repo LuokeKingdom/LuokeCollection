@@ -63,9 +63,12 @@ class CollectionScene(Scene):
             "pet_talent_MD": Text("40", x=930, y=630),
         }
         for name, comp in info_compoments.items():
-            if isinstance(comp, Button): self.BUTTONS[name] = comp
-            elif isinstance(comp, Text): self.TEXTS[name] = comp
-            else: self.OTHERS[name] = comp
+            if isinstance(comp, Button):
+                self.BUTTONS[name] = comp
+            elif isinstance(comp, Text):
+                self.TEXTS[name] = comp
+            else:
+                self.OTHERS[name] = comp
 
     def set_info(self, pet):
         print(self.OTHERS)
@@ -95,7 +98,7 @@ class CollectionScene(Scene):
         new_on_clicks = {}
         for i in range(3):
             for j in range(3):
-                offset = int(str(i*3+j+1))
+                offset = int(str(i * 3 + j + 1))
                 new_on_clicks[f"slot_{index+1}"] = offset
                 new_buttons[f"slot_{index+1}"] = Button(
                     animation="none",
@@ -106,7 +109,7 @@ class CollectionScene(Scene):
                     width=100,
                 )
                 new_others[f"slot_{index+1}"] = Container(
-                    image=IMAGE('tag.png'),
+                    image=IMAGE("tag.png"),
                     x=210 + j * 161,
                     y=313 + i * 146,
                     align_mode="CENTER",
@@ -135,7 +138,6 @@ class CollectionScene(Scene):
         self.BUTTONS["slot_8"].on_click = lambda: self.model.set_info(8)
         self.BUTTONS["slot_9"].on_click = lambda: self.model.set_info(9)
 
-
     def set_page(self, pet_page):
         index = 0
         for pet_info in pet_page:
@@ -147,11 +149,9 @@ class CollectionScene(Scene):
             )
             rect = self.model.DATA["pet_rects"].get(pet_info.number)
             if rect:
-                canvas = pygame.Surface([rect[2],rect[2]], pygame.SRCALPHA)
-                canvas.blit(pet_image.subsurface(*rect), (0,0))
-                pet_image = pygame.transform.smoothscale(
-                    canvas, (100,100)
-                )
+                canvas = pygame.Surface([rect[2], rect[2]], pygame.SRCALPHA)
+                canvas.blit(pet_image.subsurface(*rect), (0, 0))
+                pet_image = pygame.transform.smoothscale(canvas, (100, 100))
             self.BUTTONS[f"slot_{index+1}"].image = pet_image if rect else EMPTY
             self.TEXTS[f"slot_{index+1}"].change_text(pet_info.name)
             index += 1

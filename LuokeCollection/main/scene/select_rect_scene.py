@@ -16,7 +16,9 @@ class SelectRectScene(Scene):
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
             "close": Button(x=1100, y=70, on_click=lambda: model.close()),
-            "save": Button(x=1100, y=700, on_click=lambda: model.save_rect(self.ratio, *self.rect)),
+            "save": Button(
+                x=1100, y=700, on_click=lambda: model.save_rect(self.ratio, *self.rect)
+            ),
             "previous_pet": Button(
                 x=1030, y=300, on_click=lambda: model.previous_pet()
             ),
@@ -34,8 +36,8 @@ class SelectRectScene(Scene):
         self.rect = None
 
     def set_pet_image(self, image):
-        w,h = image.get_size()
-        self.ratio = h / int(HEIGHT*0.9)
+        w, h = image.get_size()
+        self.ratio = h / int(HEIGHT * 0.9)
         self.OTHERS["image"].set_image(image, height=int(HEIGHT * 0.9))
 
     def side_effect(self):
