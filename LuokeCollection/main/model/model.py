@@ -43,7 +43,6 @@ class Model:
 
     # collection
     def set_page(self, page_number):
-        print('a')
         temp = self.page_number
         self.page_number = min(
             len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1),
