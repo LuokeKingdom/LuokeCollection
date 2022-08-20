@@ -27,7 +27,7 @@ class Text(Container):
 
     def change_text(self, text):
         self.text = text
-        self.image = self.get_font().render(text, True, self.text_color)
+        self.image = Text.get_font(self.size).render(text, True, self.text_color)
         temp_pos = self.get_pos()
         self.rect = self.image.get_rect()
         self.set_pos(temp_pos)
@@ -35,8 +35,8 @@ class Text(Container):
     def update(self):
         pass
 
-    def get_font(self):
-        return self.fontsizes.get(
-            self.size,
-            pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", self.size),
+    def get_font(size):
+        return __class__.fontsizes.get(
+            size,
+            pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", size),
         )
