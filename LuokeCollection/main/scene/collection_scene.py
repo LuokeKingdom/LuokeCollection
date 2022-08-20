@@ -1,4 +1,5 @@
 import os
+from turtle import width
 import pygame
 from pygame.locals import *
 
@@ -72,7 +73,7 @@ class CollectionScene(Scene):
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
-        pet_image = IMAGE('place_holder.png')
+        pet_image = IMAGE('display.png')
         max_width, max_height = 300, 250
         w,h = pet_image.get_size()
         if h/max_height < w/max_width:
@@ -87,7 +88,8 @@ class CollectionScene(Scene):
                 height=max_height
             ).set_pos(780,340)
         self.OTHERS["pet_element"].set_image(
-            image=IMAGE('place_holder.png')
+            image=IMAGE('grass.png'),
+            width=100
         ).set_pos(700,110)
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
