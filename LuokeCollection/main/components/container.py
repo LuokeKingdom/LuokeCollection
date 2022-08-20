@@ -31,6 +31,7 @@ class Container(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.original_image = self.image.copy()
         self.original_rect = self.original_image.get_rect()
+        return self
 
     def set_pos(self, x, y=None):
         pos = None

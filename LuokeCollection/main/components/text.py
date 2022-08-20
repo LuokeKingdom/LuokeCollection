@@ -14,20 +14,29 @@ class Text(Container):
     pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", DEFAULT_SIZE)
 
     def __init__(
-        self, text="test text", size=DEFAULT_SIZE, align_mode="TOPLEFT", *args, **kwargs
+        self,
+        text="test text",
+        size=DEFAULT_SIZE,
+        align_mode="TOPLEFT",
+        color=(0, 0, 0),
+        opacity=255,
+        *args,
+        **kwargs
     ):
         super(Text, self).__init__(
             image=pygame.Surface([1, 1]), align_mode=align_mode, *args, **kwargs
         )
         self.text = text
         self.size = size
-        self.text_color = (0, 0, 0)
+        self.color = color
+        self.opacity = opacity
         self.change_text(text)
         self.align_mode = align_mode
 
     def change_text(self, text):
         self.text = text
-        self.image = self.get_font().render(text, True, self.text_color)
+        self.image = Text.get_font(self.size).render(text, True, self.color)
+        self.image.set_alpha(self.opacity)
         temp_pos = self.get_pos()
         self.rect = self.image.get_rect()
         self.set_pos(temp_pos)
@@ -35,8 +44,8 @@ class Text(Container):
     def update(self):
         pass
 
-    def get_font(self):
-        return self.fontsizes.get(
-            self.size,
-            pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", self.size),
+    def get_font(size):
+        return __class__.fontsizes.get(
+            size,
+            pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", size),
         )

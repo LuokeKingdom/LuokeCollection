@@ -20,6 +20,7 @@ class InitScene(Scene):
                 x=WIDTH / 5,
                 y=HEIGHT / 2 + 100,
                 on_click=lambda: model.open("select_rect"),
+                text="修改头像",
             ),
         }
 

@@ -1,4 +1,5 @@
 import os
+from turtle import width
 import pygame
 from pygame.locals import *
 
@@ -8,8 +9,9 @@ from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
 from settings.dev import WIDTH, HEIGHT, IMAGE
+from ..utils import ELEMENT_MAP
 
-EMPTY = pygame.Surface([1, 1])
+EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 
 class CollectionScene(Scene):
@@ -17,10 +19,14 @@ class CollectionScene(Scene):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
-            "close": Button(x=1100, y=70, on_click=lambda: model.close()),
-            "next_page": Button(x=420, y=730, on_click=lambda: model.next_page()),
+            "close": Button(
+                x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
+            ),
+            "next_page": Button(
+                x=420, y=730, on_click=lambda: model.next_page(), text="下一页"
+            ),
             "previous_page": Button(
-                x=300, y=730, on_click=lambda: model.previous_page()
+                x=300, y=730, on_click=lambda: model.previous_page(), text="上一页"
             ),
         }
         self.init_info()
@@ -32,35 +38,25 @@ class CollectionScene(Scene):
 
     def init_info(self):
         info_compoments = {
-            "pet_name": Text("", x=750, y=130),
-            "pet_image": Sprite(EMPTY, ratio=0.2, x=900, y=330),
-            "pet_element": Sprite(EMPTY, x=700, y=130),
-            "pet_id": Text("1"),
-            "pet_description": Text("Description.....", x=700, y=200),
-            "talent_icon_HP": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=700, y=500
+            "pet_name": Text("", x=760, y=100),
+            "pet_image": Sprite(EMPTY),
+            "pet_element": Sprite(EMPTY),
+            "pet_id": Text(
+                text="", size=150, x=780, y=60, color=(200, 150, 100), opacity=100
             ),
-            "talent_icon_AD": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=700, y=570
-            ),
-            "talent_icon_DF": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=700, y=640
-            ),
-            "talent_icon_SP": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=900, y=500
-            ),
-            "talent_icon_AP": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=900, y=570
-            ),
-            "talent_icon_MD": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=900, y=640
-            ),
-            "pet_talent_HP": Text("40", x=730, y=490),
-            "pet_talent_AD": Text("40", x=730, y=560),
-            "pet_talent_DF": Text("40", x=730, y=630),
-            "pet_talent_SP": Text("40", x=930, y=490),
-            "pet_talent_AP": Text("40", x=930, y=560),
-            "pet_talent_MD": Text("40", x=930, y=630),
+            "pet_description": Text("", x=700, y=160, size=20),
+            "talent_icon_HP": Sprite(EMPTY, x=700, y=500),
+            "talent_icon_AD": Sprite(EMPTY, x=700, y=570),
+            "talent_icon_DF": Sprite(EMPTY, x=700, y=640),
+            "talent_icon_SP": Sprite(EMPTY, x=900, y=500),
+            "talent_icon_AP": Sprite(EMPTY, x=900, y=570),
+            "talent_icon_MD": Sprite(EMPTY, x=900, y=640),
+            "pet_talent_HP": Text("", x=730, y=490),
+            "pet_talent_AD": Text("", x=730, y=560),
+            "pet_talent_DF": Text("", x=730, y=630),
+            "pet_talent_SP": Text("", x=930, y=490),
+            "pet_talent_AP": Text("", x=930, y=560),
+            "pet_talent_MD": Text("", x=930, y=630),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -71,10 +67,24 @@ class CollectionScene(Scene):
                 self.OTHERS[name] = comp
 
     def set_info(self, pet):
-        print(self.OTHERS)
         self.TEXTS["pet_name"].change_text(pet.name)
-        self.OTHERS["pet_image"]
-        self.OTHERS["pet_element"]
+        pet_image = IMAGE(
+            os.path.join("LuokeCollection/assets/data/", pet.path, "display.png"), False
+        )
+        max_width, max_height = 300, 250
+        w, h = pet_image.get_size()
+        if h / max_height < w / max_width:
+            self.OTHERS["pet_image"].set_image(
+                image=pet_image, width=max_width
+            ).set_pos(780, 340)
+
+        else:
+            self.OTHERS["pet_image"].set_image(
+                image=pet_image, height=max_height
+            ).set_pos(780, 340)
+        self.OTHERS["pet_element"].set_image(
+            image=IMAGE(ELEMENT_MAP.get(pet.element, "place_holder.png")), width=100
+        ).set_pos(700, 110)
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
         self.OTHERS["talent_icon_HP"]
@@ -109,7 +119,7 @@ class CollectionScene(Scene):
                     width=100,
                 )
                 new_others[f"slot_{index+1}"] = Container(
-                    image=IMAGE("tag.png"),
+                    image=IMAGE("tag2.png"),
                     x=210 + j * 161,
                     y=313 + i * 146,
                     align_mode="CENTER",

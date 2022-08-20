@@ -1,4 +1,3 @@
-from logging import raiseExceptions
 from pydoc import ModuleScanner
 import pygame
 from pygame.locals import *
@@ -8,7 +7,7 @@ from ..components.container import Container
 from ..components.text import Text
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
-EMPTY = pygame.Surface([1, 1])
+EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 
 class SelectRectScene(Scene):
@@ -17,14 +16,21 @@ class SelectRectScene(Scene):
         kwargs["bg"].fill((200, 200, 245))
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
-            "close": Button(x=1100, y=70, on_click=lambda: model.close()),
+            "close": Button(
+                x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
+            ),
             "save": Button(
-                x=1100, y=700, on_click=lambda: model.save_rect(self.ratio, *self.rect) if self.rect is not None else print("Select first")
+                x=1100,
+                y=700,
+                on_click=lambda: model.save_rect(self.ratio, *self.rect),
+                text="保存",
             ),
             "previous_pet": Button(
-                x=1030, y=300, on_click=lambda: model.previous_pet()
+                x=1030, y=300, on_click=lambda: model.previous_pet(), text="上一个"
             ),
-            "next_pet": Button(x=1170, y=300, on_click=lambda: model.next_pet()),
+            "next_pet": Button(
+                x=1170, y=300, on_click=lambda: model.next_pet(), text="下一个"
+            ),
         }
         self.OTHERS = {
             "image": Container(
@@ -55,38 +61,38 @@ class SelectRectScene(Scene):
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
         if mouse_pos.x < self.rect_side // 2:
-            if mouse_pos.y < self.rect_side // 2:  # when rect is at top left
+            if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
                 self.rect_x = 0
                 self.rect_y = 0
             elif (
                 mouse_pos.y > self.image_rect_h - self.rect_side // 2
-            ):  # when rect is at bottom left
+            ):  # when mouse_pos is at bottom left
                 self.rect_x = 0
                 self.rect_y = self.image_rect_h - self.rect_side
-            else:  # when rect is along left edge
+            else:  # when mouse_pos is along left edge
                 self.rect_x = 0
                 self.rect_y = mouse_pos.y - self.rect_side // 2
         elif mouse_pos.x > self.image_rect_w - self.rect_side // 2:
-            if mouse_pos.y < self.rect_side // 2:  # when rect is at top right
+            if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top right
                 self.rect_x = self.image_rect_w - self.rect_side
                 self.rect_y = 0
             elif (
                 mouse_pos.y > self.image_rect_h - self.rect_side // 2
-            ):  # when rect is at bottom right
+            ):  # when mouse_pos is at bottom right
                 self.rect_x = self.image_rect_w - self.rect_side
                 self.rect_y = self.image_rect_h - self.rect_side
-            else:  # when rect is along right edge
+            else:  # when mouse_pos is along right edge
                 self.rect_x = self.image_rect_w - self.rect_side
                 self.rect_y = mouse_pos.y - self.rect_side // 2
-        elif mouse_pos.y < self.rect_side // 2:  # when rect is along top edge
+        elif mouse_pos.y < self.rect_side // 2:  # when mouse_pos is along top edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = 0
         elif (
             mouse_pos.y > self.image_rect_h - self.rect_side // 2
-        ):  # when rect is along bottom edge
+        ):  # when mouse_pos is along bottom edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = self.image_rect_h - self.rect_side
-        else:  # when rect is not touching any edge
+        else:  # when mouse_pos is not touching any edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = mouse_pos.y - self.rect_side // 2
         pygame.draw.rect(

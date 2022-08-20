@@ -11,6 +11,7 @@ from ..animation.button.button_animations import (
 )
 from ..utils import vec
 from .container import Container
+from .text import Text
 
 import time
 
@@ -31,13 +32,28 @@ class Button(Container):
         transition=0.2,
         parameter=1.2,
         on_click=None,
+        text=None,
+        text_fontsize=24,
+        text_color=(0, 0, 0),
+        color=(150, 200, 100),
         *args,
         **kwargs
     ):
+        self.text = text
+        self.text_color = text_color
+        self.text_fontsize = text_fontsize
+        self.color = color
         # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
-            image.fill((255, 255, 255))
+            image.fill(self.color)
+            if text is None:
+                self.text = "button"
+            temp = Text.get_font(self.text_fontsize).render(
+                self.text, True, self.text_color
+            )
+            rect = temp.get_rect(center=(50, 50))
+            image.blit(temp, rect)
             kwargs["image"] = image
         super().__init__(*args, **kwargs)
         self.on_click = on_click
