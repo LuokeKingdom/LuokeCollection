@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 from pydoc import ModuleScanner
 import pygame
 from pygame.locals import *
@@ -18,7 +19,7 @@ class SelectRectScene(Scene):
         self.BUTTONS = {
             "close": Button(x=1100, y=70, on_click=lambda: model.close()),
             "save": Button(
-                x=1100, y=700, on_click=lambda: model.save_rect(self.ratio, *self.rect)
+                x=1100, y=700, on_click=lambda: model.save_rect(self.ratio, *self.rect) if self.rect is not None else print("Select first")
             ),
             "previous_pet": Button(
                 x=1030, y=300, on_click=lambda: model.previous_pet()
