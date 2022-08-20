@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from .view import View
+from .scene import Scene
 from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
@@ -9,23 +9,22 @@ from settings.dev import WIDTH, HEIGHT, IMAGE
 EMPTY = pygame.Surface([1, 1])
 
 
-class CollectionView(View):
-    def get_instance(*args, **kwargs):
-        if __class__.INSTANCE is None:
-            __class__.INSTANCE = __class__(*args, **kwargs)
-        return __class__.INSTANCE
+class CollectionScene(Scene):
 
-    BUTTONS = {
-        "close": Button(x=1100, y=70),
-        "next_page": Button(x=420, y=730),
-        "previous_page": Button(x=300, y=730),
-    }
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = IMAGE("temp_bg.png")
-        super(CollectionView, self).__init__(*args, **kwargs)
+        super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
+        self.BUTTONS = {
+            "close": Button(x=1100, y=70, on_click=lambda:model.close()),
+            "next_page": Button(x=420, y=730, on_click=lambda:model.next_page()),
+            "previous_page": Button(x=300, y=730, on_click=lambda:model.previous_page()),
+        }
         self.init_info()
         self.init_page()
+
+    def side_effect(self):
+        super().side_effect()
+        self.model.set_page(1)
 
     def init_info(self):
         new_buttons = {}

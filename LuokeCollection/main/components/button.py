@@ -25,7 +25,7 @@ class Button(Container):
     }
 
     def __init__(
-        self, animation="scale", transition=0.2, parameter=1.2, *args, **kwargs
+        self, animation="scale", transition=0.2, parameter=1.2, on_click=None, *args, **kwargs
     ):
         # default button
         if len(args) < 1 and not kwargs.get("image"):
@@ -33,7 +33,7 @@ class Button(Container):
             image.fill((255, 255, 255))
             kwargs["image"] = image
         super().__init__(*args, **kwargs)
-        self.on_click = None
+        self.on_click = on_click
         self.hovered = False
         self.transition = transition
         self.parameter = parameter

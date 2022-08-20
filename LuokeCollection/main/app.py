@@ -1,4 +1,4 @@
-from .scene import Scene
+from LuokeCollection.main.scene_factory import SceneFactory
 from .model.model import Model
 
 
@@ -8,9 +8,10 @@ class App:
         self.stack = []
         self.screen = screen
         self.model = Model(self)
+        self.factory = SceneFactory(self.screen, self.model)
 
     def create_scene(self, scene_name):
-        return Scene(scene_name, self)
+        return self.factory.get_scene(scene_name)
 
     def change_scene(self, scene_name):
         if self.stack:
@@ -29,7 +30,7 @@ class App:
             self.scene = self.stack[len(self.stack) - 1]
 
     def display(self, mouse_pos, clicked):
-        self.scene.view.display(mouse_pos, clicked)
+        self.scene.display(mouse_pos, clicked)
 
     def update(self, mouse_pos, clicked):
-        self.scene.view.update(mouse_pos, clicked)
+        self.scene.update(mouse_pos, clicked)

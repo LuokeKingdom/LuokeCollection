@@ -22,8 +22,8 @@ class Model:
     def open(self, name):
         self.app.push_scene(name)
 
-    def get_view(self):
-        return self.app.scene.view
+    def get_scene(self):
+        return self.app.scene
 
     def load_pets(self):
         for i in range(201):
@@ -43,6 +43,7 @@ class Model:
 
     # collection
     def set_page(self, page_number):
+        print('a')
         temp = self.page_number
         self.page_number = min(
             len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1),
@@ -56,10 +57,10 @@ class Model:
             if self.PETS.get(pet_number) is None:
                 break
             pet_page.append(self.PETS[pet_number])
-        self.get_view().set_page(pet_page)
+        self.get_scene().set_page(pet_page)
 
     def set_info(self):
-        self.get_view().set_info()
+        self.get_scene().set_info()
 
     def previous_page(self):
         self.set_page(self.page_number - 1)
@@ -73,7 +74,7 @@ class Model:
         image_path = os.path.join(
             "LuokeCollection/assets/data/", self.pet_select_rect.path, "display.png"
         )
-        self.get_view().set_pet_image(IMAGE(image_path, False))
+        self.get_scene().set_pet_image(IMAGE(image_path, False))
 
     def save_rect(self, pet_number, x, y, w, h):
         rects = self.DATA.get("pet_rects", {})
