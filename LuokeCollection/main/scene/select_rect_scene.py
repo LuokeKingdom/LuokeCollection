@@ -121,7 +121,7 @@ class SelectRectScene(Scene):
                 pygame.Rect(*self.rect),
                 2,
             )
-        if self.saved_rect:
+        elif self.saved_rect:
             pygame.draw.rect(
                 self.screen,
                 (100, 200, 100),
