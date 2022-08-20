@@ -66,8 +66,8 @@ class Model:
             pet_page.append(self.PETS[pet_number])
         self.get_scene().set_page(pet_page)
 
-    def set_info(self):
-        self.get_scene().set_info()
+    def set_info(self, offset):
+        self.get_scene().set_info(self.PETS[(self.page_number - 1) * 9 + offset])
 
     def previous_page(self):
         self.set_page(self.page_number - 1)
@@ -91,16 +91,18 @@ class Model:
         self.pet_number_select_rect = min(200, self.pet_number_select_rect + 1)
         self.set_pet_select_rect(self.pet_number_select_rect)
 
-    def save_rect(self, x, y, w, h):
+    def save_rect(self, ratio, x, y, w, h):
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
         pet_num = int(self.pet_number_select_rect)
+
+        def convert(n):
+            return int(n * ratio)
+
         if self.DATA["pet_rects"].get(pet_num) is None:
-            self.DATA["pet_rects"][pet_num] = [x, y, h]
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w, h]))
         else:
             del self.DATA["pet_rects"][pet_num]
-            print(self.DATA)
-            self.DATA["pet_rects"][pet_num] = [x, y, h]
+            self.DATA["pet_rects"][pet_num] = list(map(convert, [x, y, w, h]))
 
         content = json.dumps(self.DATA, ensure_ascii=False)
-        print(content)
         save_file("LuokeCollection/main/model/data.json", content)
