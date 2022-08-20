@@ -12,7 +12,11 @@ SOUND = lambda name: os.path.join("LuokeCollection/assets/sounds/", name)
 
 
 def load_json(name, relative):
-    with open(os.path.join("LuokeCollection/assets/data/", name) if relative else name, encoding="utf8") as f:
+    with open(
+        os.path.join("LuokeCollection/assets/data/", name) if relative else name,
+        encoding="utf8",
+    ) as f:
         return json.load(f)
+
 
 JSON = lambda name, relative=True: load_json(name, relative)

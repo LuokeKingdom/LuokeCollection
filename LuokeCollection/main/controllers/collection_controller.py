@@ -14,6 +14,6 @@ class CollectionController(Controller):
             "next_page": lambda: model.next_page(),
             "previous_page": lambda: model.previous_page(),
         }
-    
+
     def side_effect(self):
         self.model.set_page(1)

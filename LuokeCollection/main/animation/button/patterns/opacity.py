@@ -1,5 +1,4 @@
 from ...mixin import Mixin
-import pygame
 from pygame.locals import *
 
 

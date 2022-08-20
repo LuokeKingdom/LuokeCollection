@@ -8,6 +8,7 @@ from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 class View:
     INSTANCE = None
+
     def get_instance(*args, **kwargs):
         if __class__.INSTANCE is None:
             __class__.INSTANCE = __class__(*args, **kwargs)

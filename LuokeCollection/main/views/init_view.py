@@ -1,5 +1,3 @@
-from turtle import width
-import pygame
 from pygame.locals import *
 from .view import View
 from ..components.button import Button
