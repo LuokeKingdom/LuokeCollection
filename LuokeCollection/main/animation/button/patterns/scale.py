@@ -29,7 +29,7 @@ class ScaleMixin(Mixin):
                 ),
             )
             self.button.image.fill(self.button.color)
-            temp = Text.get_font(24).render(self.button.text, True, self.button.text_color)
+            temp = Text.get_font(self.button.text_fontsize).render(self.button.text, True, self.button.text_color)
             rect = temp.get_rect(center=self.button.image.get_rect().center)
             self.button.image.blit(temp,rect)
         self.button.rect = self.button.image.get_rect(

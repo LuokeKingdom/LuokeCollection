@@ -16,14 +16,14 @@ class SelectRectScene(Scene):
         kwargs["bg"].fill((200, 200, 245))
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
-            "close": Button(x=1100, y=70, on_click=lambda: model.close()),
+            "close": Button(x=1100, y=70, on_click=lambda: model.close(),text="X",text_fontsize=80),
             "save": Button(
-                x=1100, y=700, on_click=lambda: model.save_rect(self.ratio, *self.rect)
+                x=1100, y=700, on_click=lambda: model.save_rect(self.ratio, *self.rect),text="保存"
             ),
             "previous_pet": Button(
-                x=1030, y=300, on_click=lambda: model.previous_pet()
+                x=1030, y=300, on_click=lambda: model.previous_pet(),text="上一个"
             ),
-            "next_pet": Button(x=1170, y=300, on_click=lambda: model.next_pet()),
+            "next_pet": Button(x=1170, y=300, on_click=lambda: model.next_pet(),text="下一个"),
         }
         self.OTHERS = {
             "image": Container(

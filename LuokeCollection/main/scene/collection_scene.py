@@ -17,10 +17,10 @@ class CollectionScene(Scene):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
-            "close": Button(x=1100, y=70, on_click=lambda: model.close()),
-            "next_page": Button(x=420, y=730, on_click=lambda: model.next_page()),
+            "close": Button(x=1100, y=70, on_click=lambda: model.close(), text="X",text_fontsize=80),
+            "next_page": Button(x=420, y=730, on_click=lambda: model.next_page() ,text="下一页"),
             "previous_page": Button(
-                x=300, y=730, on_click=lambda: model.previous_page()
+                x=300, y=730, on_click=lambda: model.previous_page(), text="上一页"
             ),
         }
         self.init_info()
@@ -108,7 +108,7 @@ class CollectionScene(Scene):
                     width=100,
                 )
                 new_others[f"slot_{index+1}"] = Container(
-                    image=IMAGE("tag.png"),
+                    image=IMAGE("tag2.png"),
                     x=210 + j * 161,
                     y=313 + i * 146,
                     align_mode="CENTER",
