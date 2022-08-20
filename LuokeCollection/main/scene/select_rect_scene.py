@@ -42,6 +42,7 @@ class SelectRectScene(Scene):
         self.rate = 1
         self.shrink_rate = False
         self.rect = None
+        self.saved_rect = False
 
     def set_pet_image(self, image):
         w, h = image.get_size()
@@ -60,6 +61,13 @@ class SelectRectScene(Scene):
 
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
+
+        if self.model.DATA["pet_rects"][self.model.pet_number_select_rect] is not None:
+            self.saved_rect_x = self.model.DATA["pet_rects"][self.model.pet_number_select_rect][0] // self.ratio
+            self.saved_rect_y = self.model.DATA["pet_rects"][self.model.pet_number_select_rect][1] // self.ratio
+            self.saved_rect_side = self.model.DATA["pet_rects"][self.model.pet_number_select_rect][2] // self.ratio
+            self.saved_rect = True
+        
         if mouse_pos.x < self.rect_side // 2:
             if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
                 self.rect_x = 0
@@ -106,7 +114,6 @@ class SelectRectScene(Scene):
             ),
             2,
         )
-        # if self.model.DATA["pet_rects"][self.model.pet_number_select_rect] is None:
         if self.rect is not None:
             pygame.draw.rect(
                 self.screen,
@@ -114,6 +121,14 @@ class SelectRectScene(Scene):
                 pygame.Rect(*self.rect),
                 2,
             )
+        if self.saved_rect:
+            pygame.draw.rect(
+                self.screen,
+                (100, 200, 100),
+                pygame.Rect(self.saved_rect_x, self.saved_rect_y, self.saved_rect_side, self.saved_rect_side),
+                2
+            )
+            self.saved_rect = False
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
