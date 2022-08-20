@@ -83,7 +83,7 @@ class CollectionScene(Scene):
                 image=pet_image, height=max_height
             ).set_pos(780, 340)
         self.OTHERS["pet_element"].set_image(
-            image=IMAGE(ELEMENT_MAP.get(pet.element, 'place_holder.png')), width=100
+            image=IMAGE(ELEMENT_MAP.get(pet.element, "place_holder.png")), width=100
         ).set_pos(700, 110)
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
