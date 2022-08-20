@@ -30,6 +30,7 @@ class SelectRectScene(Scene):
         self.rate = 1
         self.shrink_rate = False
         self.rect = None
+        self.exit_point = 0
 
     def set_pet_image(self, image):
         self.OTHERS["image"].set_image(image, height=int(HEIGHT * 0.9))
@@ -40,12 +41,31 @@ class SelectRectScene(Scene):
 
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
+        if mouse_pos.x < self.rect_side // 2:
+            if mouse_pos.y < self.rect_side // 2:
+                self.rect_x = 0
+                self.rect_y = 0
+            elif mouse_pos.y > self.screen.get_size()[1] - self.rect_side // 2:
+                self.rect_x = 0
+                self.rect_y = self.screen.get_size()[1] - self.rect_side
+            else:
+                self.rect_x = 0
+                self.rect_y = mouse_pos.y - self.rect_side // 2
+        elif mouse_pos.y < self.rect_side // 2:
+            self.rect_x = mouse_pos.x - self.rect_side // 2
+            self.rect_y = 0
+        elif mouse_pos.y > self.screen.get_size()[1] - self.rect_side // 2:
+            self.rect_x = mouse_pos.x - self.rect_side // 2
+            self.rect_y = self.screen.get_size()[1] - self.rect_side
+        else:
+            self.rect_x = mouse_pos.x - self.rect_side // 2
+            self.rect_y = mouse_pos.y - self.rect_side // 2
         pygame.draw.rect(
             self.screen,
             (0, 0, 0),
             pygame.Rect(
-                mouse_pos.x - self.rect_side // 2,
-                mouse_pos.y - self.rect_side // 2,
+                self.rect_x,
+                self.rect_y,
                 self.rect_side,
                 self.rect_side,
             ),
@@ -58,6 +78,7 @@ class SelectRectScene(Scene):
                 pygame.Rect(*self.rect),
                 2,
             )
+            
             
 
     def update(self, mouse_pos, clicked):
@@ -73,6 +94,6 @@ class SelectRectScene(Scene):
         self.rate = 1 if not self.shrink_rate else self.rate
         self.shrink_rate = (self.shrink_rate+1)%60
         if clicked==1 and mouse_pos.x < 900:
-            self.rect = [mouse_pos.x-self.rect_side//2,mouse_pos.y-self.rect_side//2,self.rect_side, self.rect_side]
+            self.rect = [self.rect_x,self.rect_y,self.rect_side, self.rect_side]
         if clicked==1 and mouse_pos.x > 900:
             self.rect = None
