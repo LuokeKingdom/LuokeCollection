@@ -81,13 +81,13 @@ class CollectionScene(Scene):
         self.OTHERS["talent_icon_AD"]
         self.OTHERS["talent_icon_DF"]
         self.OTHERS["talent_icon_AP"]
-        self.OTHERS["talent_icon_MF"]
+        self.OTHERS["talent_icon_MD"]
         self.OTHERS["talent_icon_SP"]
         self.TEXTS["pet_talent_HP"].change_text(pet.stats[0])
         self.TEXTS["pet_talent_AD"].change_text(pet.stats[1])
         self.TEXTS["pet_talent_DF"].change_text(pet.stats[2])
         self.TEXTS["pet_talent_AP"].change_text(pet.stats[3])
-        self.TEXTS["pet_talent_MF"].change_text(pet.stats[4])
+        self.TEXTS["pet_talent_MD"].change_text(pet.stats[4])
         self.TEXTS["pet_talent_SP"].change_text(pet.stats[5])
 
     def init_page(self):
