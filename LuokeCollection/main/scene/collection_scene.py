@@ -71,7 +71,6 @@ class CollectionScene(Scene):
                 self.OTHERS[name] = comp
 
     def set_info(self, pet):
-        print(self.OTHERS)
         self.TEXTS["pet_name"].change_text(pet.name)
         self.OTHERS["pet_image"]
         self.OTHERS["pet_element"]
