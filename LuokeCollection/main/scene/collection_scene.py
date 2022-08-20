@@ -9,7 +9,7 @@ from ..components.text import Text
 from ..components.sprite import Sprite
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
-EMPTY = pygame.Surface([1, 1])
+EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 
 class CollectionScene(Scene):
@@ -35,32 +35,32 @@ class CollectionScene(Scene):
             "pet_name": Text("", x=750, y=130),
             "pet_image": Sprite(EMPTY, ratio=0.2, x=900, y=330),
             "pet_element": Sprite(EMPTY, x=700, y=130),
-            "pet_id": Text("1"),
-            "pet_description": Text("Description.....", x=700, y=200),
+            "pet_id": Text("1",),
+            "pet_description": Text("", x=700, y=200),
             "talent_icon_HP": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=700, y=500
+                EMPTY,  x=700, y=500
             ),
             "talent_icon_AD": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=700, y=570
+                EMPTY,  x=700, y=570
             ),
             "talent_icon_DF": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=700, y=640
+                EMPTY,  x=700, y=640
             ),
             "talent_icon_SP": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=900, y=500
+                EMPTY,  x=900, y=500
             ),
             "talent_icon_AP": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=900, y=570
+                EMPTY, x=900, y=570
             ),
             "talent_icon_MD": Sprite(
-                IMAGE("place_holder.png"), ratio=0.8, x=900, y=640
+                EMPTY, x=900, y=640
             ),
-            "pet_talent_HP": Text("40", x=730, y=490),
-            "pet_talent_AD": Text("40", x=730, y=560),
-            "pet_talent_DF": Text("40", x=730, y=630),
-            "pet_talent_SP": Text("40", x=930, y=490),
-            "pet_talent_AP": Text("40", x=930, y=560),
-            "pet_talent_MD": Text("40", x=930, y=630),
+            "pet_talent_HP": Text("", x=730, y=490),
+            "pet_talent_AD": Text("", x=730, y=560),
+            "pet_talent_DF": Text("", x=730, y=630),
+            "pet_talent_SP": Text("", x=930, y=490),
+            "pet_talent_AP": Text("", x=930, y=560),
+            "pet_talent_MD": Text("", x=930, y=630),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -72,8 +72,8 @@ class CollectionScene(Scene):
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
-        self.OTHERS["pet_image"]
-        self.OTHERS["pet_element"]
+        self.OTHERS["pet_image"].image=IMAGE("place_holder.png")
+        self.OTHERS["pet_element"].image=EMPTY
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
         self.OTHERS["talent_icon_HP"]

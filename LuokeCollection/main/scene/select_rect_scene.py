@@ -7,7 +7,7 @@ from ..components.container import Container
 from ..components.text import Text
 from settings.dev import WIDTH, HEIGHT, IMAGE
 
-EMPTY = pygame.Surface([1, 1])
+EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 
 class SelectRectScene(Scene):
