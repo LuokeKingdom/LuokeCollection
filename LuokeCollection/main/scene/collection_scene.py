@@ -38,26 +38,28 @@ class CollectionScene(Scene):
 
     def init_info(self):
         info_compoments = {
-            "pet_name": Text("", x=760, y=100),
+            "pet_name": Text("", x=760, y=100, size=32),
             "pet_image": Sprite(EMPTY),
             "pet_element": Sprite(EMPTY),
             "pet_secondary_element": Sprite(EMPTY),
             "pet_id": Text(
                 text="", size=150, x=780, y=60, color=(200, 150, 100), opacity=100
             ),
-            "pet_description": Text("", x=700, y=160, size=20),
+            "pet_description": Text("", x=750, y=160, size=20),
+            "pet_weight": Text("", x=980, y=131, size=24),
+            "pet_height": Text("", x=980, y=156, size=24),
             "talent_icon_HP": Sprite(EMPTY, width=36),
             "talent_icon_AD": Sprite(EMPTY, width=36),
             "talent_icon_DF": Sprite(EMPTY, width=36),
             "talent_icon_SP": Sprite(EMPTY, width=36),
             "talent_icon_AP": Sprite(EMPTY, width=36),
             "talent_icon_MD": Sprite(EMPTY, width=36),
-            "pet_talent_HP": Text("", x=1010, y=226, size=26),
-            "pet_talent_AD": Text("", x=1010, y=266, size=26),
-            "pet_talent_DF": Text("", x=1010, y=306, size=26),
-            "pet_talent_SP": Text("", x=1010, y=346, size=26),
-            "pet_talent_AP": Text("", x=1010, y=386, size=26),
-            "pet_talent_MD": Text("", x=1010, y=426, size=26),
+            "pet_talent_HP": Text("", x=1050, y=286, size=26),
+            "pet_talent_AD": Text("", x=1050, y=326, size=26),
+            "pet_talent_DF": Text("", x=1050, y=366, size=26),
+            "pet_talent_SP": Text("", x=1050, y=406, size=26),
+            "pet_talent_AP": Text("", x=1050, y=446, size=26),
+            "pet_talent_MD": Text("", x=1050, y=486, size=26),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -72,17 +74,17 @@ class CollectionScene(Scene):
         pet_image = IMAGE(
             os.path.join("LuokeCollection/assets/data/", pet.path, "display.png"), False
         )
-        max_width, max_height = 300, 250
+        max_width, max_height = 380, 320
         w, h = pet_image.get_size()
         if h / max_height < w / max_width:
             self.OTHERS["pet_image"].set_image(
                 image=pet_image, width=max_width
-            ).set_pos(780, 340)
+            ).set_pos(830, 420)
 
         else:
             self.OTHERS["pet_image"].set_image(
                 image=pet_image, height=max_height
-            ).set_pos(780, 340)
+            ).set_pos(830, 420)
         self.OTHERS["pet_element"].set_image(
             image=ELEMENT_MAP.get(pet.element).image, width=100
         ).set_pos(690, 110)
@@ -95,22 +97,22 @@ class CollectionScene(Scene):
             
         self.OTHERS["talent_icon_HP"].set_image(
             image=IMAGE('HP.png'), width=36
-        ).set_pos(980, 240)
+        ).set_pos(1020, 300)
         self.OTHERS["talent_icon_AD"].set_image(
             image=IMAGE('AD.png'), width=36
-        ).set_pos(980, 280)
+        ).set_pos(1020, 340)
         self.OTHERS["talent_icon_DF"].set_image(
             image=IMAGE('DF.png'), width=36
-        ).set_pos(980, 320)
+        ).set_pos(1020, 380)
         self.OTHERS["talent_icon_SP"].set_image(
             image=IMAGE('SP.png'), width=36
-        ).set_pos(980, 360)
+        ).set_pos(1020, 420)
         self.OTHERS["talent_icon_AP"].set_image(
             image=IMAGE('AP.png'), width=36
-        ).set_pos(980, 400)
+        ).set_pos(1020, 460)
         self.OTHERS["talent_icon_MD"].set_image(
             image=IMAGE('MD.png'), width=36
-        ).set_pos(980, 440)
+        ).set_pos(1020, 500)
         color = tuple(map(lambda x: max(0,x-40), ELEMENT_MAP.get(pet.element).color))
         self.TEXTS["pet_talent_HP"].color = color
         self.TEXTS["pet_talent_AD"].color = color
@@ -126,6 +128,8 @@ class CollectionScene(Scene):
         self.TEXTS["pet_talent_AP"].change_text(pet.stats[3])
         self.TEXTS["pet_talent_MD"].change_text(pet.stats[4])
         self.TEXTS["pet_talent_SP"].change_text(pet.stats[5])
+        self.TEXTS["pet_weight"].change_text('体重：'+pet.weight)
+        self.TEXTS["pet_height"].change_text('身高：'+pet.height)
 
     def init_page(self):
         index = 0
