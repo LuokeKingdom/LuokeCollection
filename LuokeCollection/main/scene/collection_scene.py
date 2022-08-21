@@ -157,6 +157,7 @@ class CollectionScene(Scene):
                 ),
                 False,
             )
+            self.model.DATA["pet_rects"] = self.model.DATA.get("pet_rects", {})
             rect = self.model.DATA["pet_rects"].get(pet_info.number)
             if rect:
                 canvas = pygame.Surface([rect[2], rect[2]], pygame.SRCALPHA)

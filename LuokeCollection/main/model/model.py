@@ -83,6 +83,7 @@ class Model:
         )
         scene = self.get_scene()
         scene.set_pet_image(IMAGE(image_path, False))
+        self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
         scene.rect = self.DATA["pet_rects"].get(pet_number)
 
     def previous_pet(self):

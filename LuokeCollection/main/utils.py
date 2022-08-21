@@ -35,7 +35,7 @@ ELEMENT_MAP = {
     "恶魔": "elements/demon.png",
     "土": "elements/dirt.png",
     "龙": "elements/dragon.png",
-    "格斗": "elements/fight.png",
+    "武": "elements/fight.png",
     "幽灵": "elements/ghost.png",
     "神火": "elements/godfire.png",
     "神草": "elements/godgrass.png",
