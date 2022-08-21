@@ -20,13 +20,23 @@ class CollectionScene(Scene):
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
             "close": Button(
-                x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
+                image=IMAGE('close.png'),x=1100, y=70, on_click=lambda: model.close(),
+                animation='opacity',
+                parameter=0.2,
+                width=120
             ),
             "next_page": Button(
-                x=420, y=730, on_click=lambda: model.next_page(), text="下一页"
+                image=pygame.transform.flip(IMAGE('previous.png'),True, False),x=421, y=649, on_click=lambda: model.next_page(),
+                animation='opacity',
+                parameter=0.2,
+                width=48
             ),
             "previous_page": Button(
-                x=300, y=730, on_click=lambda: model.previous_page(), text="上一页"
+                image=IMAGE('previous.png'),x=308, y=649, on_click=lambda: model.previous_page(),
+                animation='opacity',
+                parameter=0.2,
+                width=48
+
             ),
         }
         self.init_info()
@@ -34,7 +44,7 @@ class CollectionScene(Scene):
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_page(self.model.pet_page_number)
+        self.model.set_page()
 
     def init_info(self):
         info_compoments = {
