@@ -29,6 +29,26 @@ PetInfo = namedtuple(
 
 ELEMENT_MAP = {
     "草": "elements/grass.png",
+    "火": "elements/fire.png",
+    "翼": "elements/air.png",
+    "虫": "elements/bug.png",
+    "恶魔": "elements/demon.png",
+    "土": "elements/dirt.png",
+    "龙": "elements/dragon.png",
+    "格斗": "elements/fight.png",
+    "幽灵": "elements/ghost.png",
+    "神火": "elements/godfire.png",
+    "神草": "elements/godgrass.png",
+    "神水": "elements/godwater.png",
+    "萌": "elements/heart.png",
+    "冰": "elements/ice.png",
+    "光": "elements/light.png",
+    "电": "elements/lightening.png",
+    "机械": "elements/mech.png",
+    "毒": "elements/poison.png",
+    "普通": "elements/regular.png",
+    "石": "elements/rock.png",
+    "水": "elements/water.png",
 }
 
 
