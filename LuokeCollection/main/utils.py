@@ -174,6 +174,6 @@ class Mouse:
     cursor_arrow = pygame.transform.scale(IMAGE("cursor.png"), (36, 54))
     cursor_hand = pygame.transform.scale(IMAGE("hand.png"), (48, 54))
 
-    def draw(screen, mouse_pos, pointer):
-        screen.blit(Mouse.cursor_hand if pointer else Mouse.cursor_arrow, mouse_pos)
+    def draw(screen, mouse_pos, is_pointer):
+        screen.blit(Mouse.cursor_hand if is_pointer else Mouse.cursor_arrow, mouse_pos)
         pass

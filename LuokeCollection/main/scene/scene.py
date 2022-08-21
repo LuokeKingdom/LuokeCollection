@@ -34,10 +34,12 @@ class Scene:
     def update(self, mouse_pos, clicked):
         btns = self.BUTTONS.values()
         others = self.OTHERS.values()
+        self.is_pointer = False
         for button in btns:
             button.hovered = False
         for button in btns:
             button.update(mouse_pos, clicked)
+            if button.hovered: self.is_pointer = True
         for other in others:
             other.update()
 

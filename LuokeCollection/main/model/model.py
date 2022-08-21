@@ -11,10 +11,11 @@ class Model:
     DATA = None
 
     def __init__(self, app):
-        self.pet_page_number = 1
         self.app = app
         self.load_pets()
         self.load_current_data()
+
+        self.pet_page_number = 1
         self.MAX_PAGE = len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1)
         self.pet_select_rect = None
         self.pet_number_select_rect = 1
