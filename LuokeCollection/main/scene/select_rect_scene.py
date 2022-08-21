@@ -22,7 +22,7 @@ class SelectRectScene(Scene):
             "save": Button(
                 x=1100,
                 y=700,
-                on_click=lambda: model.save_rect(self.ratio, *self.rect),
+                on_click=lambda: self.save_rect(screen),
                 text="保存",
             ),
             "previous_pet": Button(
@@ -37,6 +37,16 @@ class SelectRectScene(Scene):
                 image=EMPTY,
                 align_mode="TOPLEFT",
             )
+        }
+        self.TEXTS = {
+            "warning": Text(
+                x=1100,
+                y=600,
+                color=(255, 0, 0),
+                align_mode="CENTER",
+                text="未保存! 請先選擇新頭像",
+                opacity=0,
+            ),
         }
         self.rect_side = 200
         self.rate = 1
@@ -164,3 +174,10 @@ class SelectRectScene(Scene):
             self.rect = [self.rect_x, self.rect_y, self.rect_side, self.rect_side]
         if clicked == 1 and mouse_pos.x > 900:
             self.rect = None
+
+    def save_rect(self):
+        if self.rect is not None:
+            self.model.save_rect(self.ratio, *self.rect)
+        else:
+            self.TEXTS["warning"].opacity = 255
+            print("save first")
