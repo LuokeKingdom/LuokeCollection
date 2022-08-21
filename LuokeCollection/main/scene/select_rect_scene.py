@@ -22,7 +22,7 @@ class SelectRectScene(Scene):
             "save": Button(
                 x=1100,
                 y=700,
-                on_click=lambda: model.save_rect(self.ratio, *self.rect),
+                on_click=lambda: self.save_rect(),
                 text="保存",
             ),
             "previous_pet": Button(
@@ -37,6 +37,15 @@ class SelectRectScene(Scene):
                 image=EMPTY,
                 align_mode="TOPLEFT",
             )
+        }
+        self.TEXTS = {
+            "warning": Text(
+                x=1100,
+                y=600,
+                color=(240, 50, 50),
+                align_mode="CENTER",
+                text="",
+            ),
         }
         self.rect_side = 200
         self.rate = 1
@@ -56,10 +65,11 @@ class SelectRectScene(Scene):
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_pet_select_rect(1)
+        self.model.set_pet_select_rect(self.model.pet_number_select_rect)
 
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
+
         if mouse_pos.x < self.rect_side // 2:
             if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
                 self.rect_x = 0
@@ -95,6 +105,7 @@ class SelectRectScene(Scene):
         else:  # when mouse_pos is not touching any edge
             self.rect_x = mouse_pos.x - self.rect_side // 2
             self.rect_y = mouse_pos.y - self.rect_side // 2
+
         pygame.draw.rect(
             self.screen,
             (0, 0, 0),
@@ -106,11 +117,12 @@ class SelectRectScene(Scene):
             ),
             2,
         )
+
         if self.rect is not None:
             pygame.draw.rect(
                 self.screen,
                 (100, 200, 100),
-                pygame.Rect(*self.rect),
+                pygame.Rect(*list(map(lambda x: x // self.ratio, self.rect))),
                 2,
             )
 
@@ -121,12 +133,24 @@ class SelectRectScene(Scene):
             self.rate += 1
             self.shrink_rate = 1
         if clicked == 4:
-            self.rect_side = min(500, self.rect_side + self.rate)
+            self.rect_side = min(
+                self.image_rect_h, self.image_rect_w, self.rect_side + self.rate
+            )
             self.rate += 1
             self.shrink_rate = 1
         self.rate = 1 if not self.shrink_rate else self.rate
         self.shrink_rate = (self.shrink_rate + 1) % 60
         if clicked == 1 and mouse_pos.x < 900:
-            self.rect = [self.rect_x, self.rect_y, self.rect_side, self.rect_side]
-        if clicked == 1 and mouse_pos.x > 900:
-            self.rect = None
+            self.rect = list(
+                map(
+                    lambda x: int(x * self.ratio),
+                    [self.rect_x, self.rect_y, self.rect_side, self.rect_side],
+                )
+            )
+
+    def save_rect(self):
+        if self.rect is not None:
+            self.model.save_rect(*self.rect)
+            self.TEXTS["warning"].change_text("")
+        else:
+            self.TEXTS["warning"].change_text("未保存! 請先選擇新頭像")
