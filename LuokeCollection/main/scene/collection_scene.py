@@ -45,18 +45,18 @@ class CollectionScene(Scene):
                 text="", size=150, x=780, y=60, color=(200, 150, 100), opacity=100
             ),
             "pet_description": Text("", x=700, y=160, size=20),
-            "talent_icon_HP": Sprite(EMPTY, x=700, y=500),
-            "talent_icon_AD": Sprite(EMPTY, x=700, y=570),
-            "talent_icon_DF": Sprite(EMPTY, x=700, y=640),
-            "talent_icon_SP": Sprite(EMPTY, x=900, y=500),
-            "talent_icon_AP": Sprite(EMPTY, x=900, y=570),
-            "talent_icon_MD": Sprite(EMPTY, x=900, y=640),
-            "pet_talent_HP": Text("", x=730, y=490),
-            "pet_talent_AD": Text("", x=730, y=560),
-            "pet_talent_DF": Text("", x=730, y=630),
-            "pet_talent_SP": Text("", x=930, y=490),
-            "pet_talent_AP": Text("", x=930, y=560),
-            "pet_talent_MD": Text("", x=930, y=630),
+            "talent_icon_HP": Sprite(IMAGE('HP.png'), x=700, y=506, width=36),
+            "talent_icon_AD": Sprite(IMAGE('AD.png'), x=700, y=576, width=36),
+            "talent_icon_DF": Sprite(EMPTY, x=700, y=646, width=36),
+            "talent_icon_SP": Sprite(EMPTY, x=900, y=506, width=36),
+            "talent_icon_AP": Sprite(IMAGE('AP.png'), x=900, y=576, width=36),
+            "talent_icon_MD": Sprite(EMPTY, x=900, y=646, width=36),
+            "pet_talent_HP": Text("", x=730, y=490, size=28),
+            "pet_talent_AD": Text("", x=730, y=560, size=28),
+            "pet_talent_DF": Text("", x=730, y=630, size=28),
+            "pet_talent_SP": Text("", x=930, y=490, size=28),
+            "pet_talent_AP": Text("", x=930, y=560, size=28),
+            "pet_talent_MD": Text("", x=930, y=630, size=28),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -87,12 +87,6 @@ class CollectionScene(Scene):
         ).set_pos(700, 110)
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
-        self.OTHERS["talent_icon_HP"]
-        self.OTHERS["talent_icon_AD"]
-        self.OTHERS["talent_icon_DF"]
-        self.OTHERS["talent_icon_AP"]
-        self.OTHERS["talent_icon_MD"]
-        self.OTHERS["talent_icon_SP"]
         self.TEXTS["pet_talent_HP"].change_text(pet.stats[0])
         self.TEXTS["pet_talent_AD"].change_text(pet.stats[1])
         self.TEXTS["pet_talent_DF"].change_text(pet.stats[2])
