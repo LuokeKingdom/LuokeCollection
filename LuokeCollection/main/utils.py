@@ -27,7 +27,7 @@ PetInfo = namedtuple(
     ],
 )
 
-ELEMENT = namedtuple('ELEMENT', ['image', 'color'])
+ELEMENT = namedtuple("ELEMENT", ["image", "color"])
 
 ELEMENT_FILES = {
     "草": "elements/grass.png",
@@ -76,6 +76,7 @@ ELEMENT2COLOR = {
     "水": (108, 206, 246),
 }
 
+
 def add_average_color(image_map):
     def get_color(img):
         color_sum_r = 0
@@ -85,22 +86,25 @@ def add_average_color(image_map):
         w, h = img.get_size()
         for x in range(w):
             for y in range(h):
-                r,g,b,a = img.get_at((x,y))
+                r, g, b, a = img.get_at((x, y))
                 color_sum_a += a / 255
                 color_sum_r += r * a / 255
                 color_sum_g += g * a / 255
                 color_sum_b += b * a / 255
-        return tuple(map(lambda x: int(x/color_sum_a), [color_sum_r, color_sum_g, color_sum_b]))
+        return tuple(
+            map(lambda x: int(x / color_sum_a), [color_sum_r, color_sum_g, color_sum_b])
+        )
 
     for key in image_map:
-        print('"' + key + '": ' + str(get_color(image_map[key].image))+',')
+        print('"' + key + '": ' + str(get_color(image_map[key].image)) + ",")
 
     return image_map
 
+
 ELEMENT_MAP = {
-    key: ELEMENT(IMAGE(val), ELEMENT2COLOR[key])
-    for key, val in ELEMENT_FILES.items()
+    key: ELEMENT(IMAGE(val), ELEMENT2COLOR[key]) for key, val in ELEMENT_FILES.items()
 }
+
 
 class vec(list):
     def __init__(self, x, y=0):

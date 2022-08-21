@@ -94,26 +94,26 @@ class CollectionScene(Scene):
             ).set_pos(736, 124)
         else:
             self.OTHERS["pet_secondary_element"].set_image(EMPTY)
-            
+
         self.OTHERS["talent_icon_HP"].set_image(
-            image=IMAGE('HP.png'), width=36
+            image=IMAGE("HP.png"), width=36
         ).set_pos(1020, 300)
         self.OTHERS["talent_icon_AD"].set_image(
-            image=IMAGE('AD.png'), width=36
+            image=IMAGE("AD.png"), width=36
         ).set_pos(1020, 340)
         self.OTHERS["talent_icon_DF"].set_image(
-            image=IMAGE('DF.png'), width=36
+            image=IMAGE("DF.png"), width=36
         ).set_pos(1020, 380)
         self.OTHERS["talent_icon_SP"].set_image(
-            image=IMAGE('SP.png'), width=36
+            image=IMAGE("SP.png"), width=36
         ).set_pos(1020, 420)
         self.OTHERS["talent_icon_AP"].set_image(
-            image=IMAGE('AP.png'), width=36
+            image=IMAGE("AP.png"), width=36
         ).set_pos(1020, 460)
         self.OTHERS["talent_icon_MD"].set_image(
-            image=IMAGE('MD.png'), width=36
+            image=IMAGE("MD.png"), width=36
         ).set_pos(1020, 500)
-        color = tuple(map(lambda x: max(0,x-40), ELEMENT_MAP.get(pet.element).color))
+        color = tuple(map(lambda x: max(0, x - 40), ELEMENT_MAP.get(pet.element).color))
         self.TEXTS["pet_talent_HP"].color = color
         self.TEXTS["pet_talent_AD"].color = color
         self.TEXTS["pet_talent_DF"].color = color
@@ -128,8 +128,8 @@ class CollectionScene(Scene):
         self.TEXTS["pet_talent_AP"].change_text(pet.stats[3])
         self.TEXTS["pet_talent_MD"].change_text(pet.stats[4])
         self.TEXTS["pet_talent_SP"].change_text(pet.stats[5])
-        self.TEXTS["pet_weight"].change_text('体重：'+pet.weight)
-        self.TEXTS["pet_height"].change_text('身高：'+pet.height)
+        self.TEXTS["pet_weight"].change_text("体重：" + pet.weight)
+        self.TEXTS["pet_height"].change_text("身高：" + pet.height)
 
     def init_page(self):
         index = 0
