@@ -72,12 +72,12 @@ class CollectionScene(Scene):
             "talent_icon_SP": Sprite(EMPTY, width=36),
             "talent_icon_AP": Sprite(EMPTY, width=36),
             "talent_icon_MD": Sprite(EMPTY, width=36),
-            "pet_talent_HP": Text("", x=1050, y=286, size=26),
-            "pet_talent_AD": Text("", x=1050, y=326, size=26),
-            "pet_talent_DF": Text("", x=1050, y=366, size=26),
-            "pet_talent_SP": Text("", x=1050, y=406, size=26),
-            "pet_talent_AP": Text("", x=1050, y=446, size=26),
-            "pet_talent_MD": Text("", x=1050, y=486, size=26),
+            "pet_talent_HP": Text("", x=1070, y=286, size=26),
+            "pet_talent_AD": Text("", x=1070, y=326, size=26),
+            "pet_talent_DF": Text("", x=1070, y=366, size=26),
+            "pet_talent_SP": Text("", x=1070, y=406, size=26),
+            "pet_talent_AP": Text("", x=1070, y=446, size=26),
+            "pet_talent_MD": Text("", x=1070, y=486, size=26),
             "page_number": Text(
                 "", x=367, y=650, size=26, align_mode="CENTER", color=(231, 225, 146)
             ),
@@ -118,22 +118,22 @@ class CollectionScene(Scene):
 
         self.OTHERS["talent_icon_HP"].set_image(
             image=IMAGE("HP.png"), width=36
-        ).set_pos(1020, 300)
+        ).set_pos(1040, 300)
         self.OTHERS["talent_icon_AD"].set_image(
             image=IMAGE("AD.png"), width=36
-        ).set_pos(1020, 340)
+        ).set_pos(1040, 340)
         self.OTHERS["talent_icon_DF"].set_image(
             image=IMAGE("DF.png"), width=36
-        ).set_pos(1020, 380)
+        ).set_pos(1040, 380)
         self.OTHERS["talent_icon_SP"].set_image(
             image=IMAGE("SP.png"), width=36
-        ).set_pos(1020, 420)
+        ).set_pos(1040, 420)
         self.OTHERS["talent_icon_AP"].set_image(
             image=IMAGE("AP.png"), width=36
-        ).set_pos(1020, 460)
+        ).set_pos(1040, 460)
         self.OTHERS["talent_icon_MD"].set_image(
             image=IMAGE("MD.png"), width=36
-        ).set_pos(1020, 500)
+        ).set_pos(1040, 500)
         color = tuple(map(lambda x: max(0, x - 40), ELEMENT_MAP.get(pet.element).color))
         self.TEXTS["pet_talent_HP"].color = color
         self.TEXTS["pet_talent_AD"].color = color
@@ -203,22 +203,16 @@ class CollectionScene(Scene):
     def set_page(self, pet_page):
         index = 0
         for pet_info in pet_page:
-            pet_image = IMAGE(
-                os.path.join(
-                    "LuokeCollection/assets/data/", pet_info.path, "display.png"
-                ),
-                False,
-            )
-            self.model.DATA["pet_rects"] = self.model.DATA.get("pet_rects", {})
-            rect = self.model.DATA["pet_rects"].get(pet_info.number)
-            if rect:
-                canvas = pygame.Surface([rect[2], rect[2]], pygame.SRCALPHA)
-                canvas.blit(pet_image.subsurface(*rect), (0, 0))
-                pet_image = pygame.transform.smoothscale(canvas, (100, 100))
-            self.BUTTONS[f"slot_{index+1}"].image = pet_image if rect else EMPTY
             self.TEXTS[f"slot_{index+1}"].change_text(pet_info.name)
             index += 1
         for i in range(index, 9):
             self.TEXTS[f"slot_{i+1}"].change_text("")
             self.BUTTONS[f"slot_{i+1}"].image = EMPTY
         self.TEXTS["page_number"].change_text(str(self.model.pet_page_number))
+
+    def update(self, mouse_pos, clicked):
+        super().update(mouse_pos, clicked)
+        for index in range(9):
+            pet_number = (self.model.pet_page_number - 1) * 9 + index + 1
+            pet_image = self.model.pet_rects.get(pet_number)
+            self.BUTTONS[f"slot_{index+1}"].image = pet_image or EMPTY

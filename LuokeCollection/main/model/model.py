@@ -2,8 +2,13 @@ import copy
 from LuokeCollection.main.utils import PetInfo
 import os
 import json
+import threading
+import time
 from LuokeCollection.settings.dev import IMAGE, JSON
 from ..utils import save_file
+
+import pygame
+from pygame.locals import *
 
 
 class Model:
@@ -19,6 +24,18 @@ class Model:
         self.MAX_PAGE = len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1)
         self.pet_select_rect = None
         self.pet_number_select_rect = 1
+
+        self.pet_rects = {}
+
+        def load_pet_rects_async():
+            for pet_number in range(1, len(self.PETS) + 1):
+                if self.stop:
+                    return
+                self._load_pet_rect(pet_number)
+
+        self.loading_thread = threading.Thread(target=load_pet_rects_async)
+        self.stop = False
+        self.loading_thread.start()
 
     def close(self):
         self.app.pop_scene()
@@ -86,6 +103,20 @@ class Model:
         scene.set_pet_image(IMAGE(image_path, False))
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
         scene.rect = self.DATA["pet_rects"].get(pet_number)
+
+    def _load_pet_rect(self, pet_number):
+        pet_info = self.PETS[pet_number]
+        pet_image = IMAGE(
+            os.path.join("LuokeCollection/assets/data/", pet_info.path, "display.png"),
+            False,
+        )
+        self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
+        rect = self.DATA["pet_rects"].get(pet_info.number)
+        if rect:
+            canvas = pygame.Surface([rect[2], rect[2]], pygame.SRCALPHA)
+            canvas.blit(pet_image.subsurface(*rect), (0, 0))
+            pet_image = pygame.transform.smoothscale(canvas, (100, 100))
+        self.pet_rects[pet_number] = pet_image if rect else None
 
     def previous_pet(self):
         self.pet_number_select_rect = max(1, self.pet_number_select_rect - 1)
