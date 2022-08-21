@@ -60,7 +60,7 @@ class CollectionScene(Scene):
             "pet_talent_SP": Text("", x=1050, y=406, size=26),
             "pet_talent_AP": Text("", x=1050, y=446, size=26),
             "pet_talent_MD": Text("", x=1050, y=486, size=26),
-            "page_number": Text("", x=367, y=650, size=26, align_mode="CENTER"),
+            "page_number": Text("", x=367, y=650, size=26, align_mode="CENTER",color=(231,225,146)),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
