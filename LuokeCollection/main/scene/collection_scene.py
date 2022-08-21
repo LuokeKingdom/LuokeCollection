@@ -111,7 +111,7 @@ class CollectionScene(Scene):
         self.OTHERS["talent_icon_MD"].set_image(
             image=IMAGE('MD.png'), width=36
         ).set_pos(980, 440)
-        color = tuple(map(lambda x: max(0,x-30), ELEMENT_MAP.get(pet.element).color))
+        color = tuple(map(lambda x: max(0,x-40), ELEMENT_MAP.get(pet.element).color))
         self.TEXTS["pet_talent_HP"].color = color
         self.TEXTS["pet_talent_AD"].color = color
         self.TEXTS["pet_talent_DF"].color = color
