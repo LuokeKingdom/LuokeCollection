@@ -65,13 +65,15 @@ class Model:
         self.get_scene().set_info(self.PETS[(self.pet_page_number - 1) * 9 + offset])
 
     def previous_page(self):
-        if self.pet_page_number == 1: return
-        self.pet_page_number-=1
+        if self.pet_page_number == 1:
+            return
+        self.pet_page_number -= 1
         self.set_page()
 
     def next_page(self):
-        if self.pet_page_number == self.MAX_PAGE: return
-        self.pet_page_number+=1
+        if self.pet_page_number == self.MAX_PAGE:
+            return
+        self.pet_page_number += 1
         self.set_page()
 
     # select_rect

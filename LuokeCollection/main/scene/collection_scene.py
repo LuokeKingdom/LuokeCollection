@@ -20,23 +20,31 @@ class CollectionScene(Scene):
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
         self.BUTTONS = {
             "close": Button(
-                image=IMAGE('close.png'),x=1100, y=70, on_click=lambda: model.close(),
-                animation='opacity',
+                image=IMAGE("close.png"),
+                x=1100,
+                y=70,
+                on_click=lambda: model.close(),
+                animation="opacity",
                 parameter=0.2,
-                width=120
+                width=120,
             ),
             "next_page": Button(
-                image=pygame.transform.flip(IMAGE('previous.png'),True, False),x=421, y=649, on_click=lambda: model.next_page(),
-                animation='opacity',
+                image=pygame.transform.flip(IMAGE("previous.png"), True, False),
+                x=421,
+                y=649,
+                on_click=lambda: model.next_page(),
+                animation="opacity",
                 parameter=0.2,
-                width=48
+                width=48,
             ),
             "previous_page": Button(
-                image=IMAGE('previous.png'),x=308, y=649, on_click=lambda: model.previous_page(),
-                animation='opacity',
+                image=IMAGE("previous.png"),
+                x=308,
+                y=649,
+                on_click=lambda: model.previous_page(),
+                animation="opacity",
                 parameter=0.2,
-                width=48
-
+                width=48,
             ),
         }
         self.init_info()
@@ -70,7 +78,9 @@ class CollectionScene(Scene):
             "pet_talent_SP": Text("", x=1050, y=406, size=26),
             "pet_talent_AP": Text("", x=1050, y=446, size=26),
             "pet_talent_MD": Text("", x=1050, y=486, size=26),
-            "page_number": Text("", x=367, y=650, size=26, align_mode="CENTER",color=(231,225,146)),
+            "page_number": Text(
+                "", x=367, y=650, size=26, align_mode="CENTER", color=(231, 225, 146)
+            ),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
