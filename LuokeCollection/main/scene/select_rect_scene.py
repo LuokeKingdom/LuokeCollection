@@ -51,7 +51,6 @@ class SelectRectScene(Scene):
         self.rate = 1
         self.shrink_rate = False
         self.rect = None
-        self.saved_rect = False
 
     def set_pet_image(self, image):
         w, h = image.get_size()
