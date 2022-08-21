@@ -11,7 +11,7 @@ class Model:
     DATA = None
 
     def __init__(self, app):
-        self.page_number = 1
+        self.pet_page_number = 1
         self.app = app
         self.load_pets()
         self.load_current_data()
@@ -50,27 +50,27 @@ class Model:
             self.DATA["pet_rects"][int(i)] = a[i]
 
     # collection
-    def set_page(self, page_number):
-        self.page_number = min(
+    def set_page(self, pet_page_number):
+        self.pet_page_number = min(
             len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1),
-            max(1, page_number),
+            max(1, pet_page_number),
         )
         pet_page = []
         for i in range(9):
-            pet_number = page_number * 9 + i - 8
+            pet_number = pet_page_number * 9 + i - 8
             if self.PETS.get(pet_number) is None:
                 break
             pet_page.append(self.PETS[pet_number])
         self.get_scene().set_page(pet_page)
 
     def set_info(self, offset):
-        self.get_scene().set_info(self.PETS[(self.page_number - 1) * 9 + offset])
+        self.get_scene().set_info(self.PETS[(self.pet_page_number - 1) * 9 + offset])
 
     def previous_page(self):
-        self.set_page(self.page_number - 1)
+        self.set_page(self.pet_page_number - 1)
 
     def next_page(self):
-        self.set_page(self.page_number + 1)
+        self.set_page(self.pet_page_number + 1)
 
     # select_rect
     def set_pet_select_rect(self, pet_number):

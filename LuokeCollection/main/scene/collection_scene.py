@@ -34,7 +34,7 @@ class CollectionScene(Scene):
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_page(self.model.page_number)
+        self.model.set_page(self.model.pet_page_number)
 
     def init_info(self):
         info_compoments = {
@@ -60,6 +60,7 @@ class CollectionScene(Scene):
             "pet_talent_SP": Text("", x=1050, y=406, size=26),
             "pet_talent_AP": Text("", x=1050, y=446, size=26),
             "pet_talent_MD": Text("", x=1050, y=486, size=26),
+            "page_number": Text("", x=367, y=650, size=26, align_mode="CENTER"),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -199,3 +200,5 @@ class CollectionScene(Scene):
             index += 1
         for i in range(index, 9):
             self.TEXTS[f"slot_{i+1}"].change_text("")
+            self.BUTTONS[f"slot_{i+1}"].image = EMPTY
+        self.TEXTS["page_number"].change_text(str(self.model.pet_page_number))
