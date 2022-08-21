@@ -103,6 +103,7 @@ class Model:
         scene.set_pet_image(IMAGE(image_path, False))
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
         scene.rect = self.DATA["pet_rects"].get(pet_number)
+        scene.TEXTS["warning"].change_text("")
 
     def _load_pet_rect(self, pet_number):
         pet_info = self.PETS[pet_number]
