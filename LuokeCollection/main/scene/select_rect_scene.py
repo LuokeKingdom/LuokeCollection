@@ -22,7 +22,7 @@ class SelectRectScene(Scene):
             "save": Button(
                 x=1100,
                 y=700,
-                on_click=lambda: self.save_rect(screen),
+                on_click=lambda: self.save_rect(),
                 text="保存",
             ),
             "previous_pet": Button(
@@ -42,10 +42,9 @@ class SelectRectScene(Scene):
             "warning": Text(
                 x=1100,
                 y=600,
-                color=(255, 0, 0),
+                color=(240, 50, 50),
                 align_mode="CENTER",
-                text="未保存! 請先選擇新頭像",
-                opacity=0,
+                text="",
             ),
         }
         self.rect_side = 200
@@ -67,25 +66,10 @@ class SelectRectScene(Scene):
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_pet_select_rect(1)
+        self.model.set_pet_select_rect(self.model.pet_number_select_rect)
 
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
-
-        if self.model.DATA["pet_rects"][self.model.pet_number_select_rect] is not None:
-            self.saved_rect_x = (
-                self.model.DATA["pet_rects"][self.model.pet_number_select_rect][0]
-                // self.ratio
-            )
-            self.saved_rect_y = (
-                self.model.DATA["pet_rects"][self.model.pet_number_select_rect][1]
-                // self.ratio
-            )
-            self.saved_rect_side = (
-                self.model.DATA["pet_rects"][self.model.pet_number_select_rect][2]
-                // self.ratio
-            )
-            self.saved_rect = True
 
         if mouse_pos.x < self.rect_side // 2:
             if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
@@ -139,22 +123,9 @@ class SelectRectScene(Scene):
             pygame.draw.rect(
                 self.screen,
                 (100, 200, 100),
-                pygame.Rect(*self.rect),
+                pygame.Rect(*list(map(lambda x: x // self.ratio, self.rect))),
                 2,
             )
-        elif self.saved_rect:
-            pygame.draw.rect(
-                self.screen,
-                (100, 200, 100),
-                pygame.Rect(
-                    self.saved_rect_x,
-                    self.saved_rect_y,
-                    self.saved_rect_side,
-                    self.saved_rect_side,
-                ),
-                2,
-            )
-            self.saved_rect = False
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
@@ -171,13 +142,16 @@ class SelectRectScene(Scene):
         self.rate = 1 if not self.shrink_rate else self.rate
         self.shrink_rate = (self.shrink_rate + 1) % 60
         if clicked == 1 and mouse_pos.x < 900:
-            self.rect = [self.rect_x, self.rect_y, self.rect_side, self.rect_side]
-        if clicked == 1 and mouse_pos.x > 900:
-            self.rect = None
+            self.rect = list(
+                map(
+                    lambda x: int(x * self.ratio),
+                    [self.rect_x, self.rect_y, self.rect_side, self.rect_side],
+                )
+            )
 
     def save_rect(self):
         if self.rect is not None:
-            self.model.save_rect(self.ratio, *self.rect)
+            self.model.save_rect(*self.rect)
+            self.TEXTS["warning"].change_text("")
         else:
-            self.TEXTS["warning"].opacity = 255
-            print("save first")
+            self.TEXTS["warning"].change_text("未保存! 請先選擇新頭像")
