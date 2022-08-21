@@ -34,7 +34,7 @@ class CollectionScene(Scene):
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_page(1)
+        self.model.set_page(self.model.page_number)
 
     def init_info(self):
         info_compoments = {

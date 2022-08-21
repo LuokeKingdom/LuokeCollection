@@ -11,7 +11,7 @@ class Model:
     DATA = None
 
     def __init__(self, app):
-        self.page_number = -1
+        self.page_number = 1
         self.app = app
         self.load_pets()
         self.load_current_data()
@@ -51,13 +51,10 @@ class Model:
 
     # collection
     def set_page(self, page_number):
-        temp = self.page_number
         self.page_number = min(
             len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1),
             max(1, page_number),
         )
-        if temp == self.page_number:
-            return
         pet_page = []
         for i in range(9):
             pet_number = page_number * 9 + i - 8
