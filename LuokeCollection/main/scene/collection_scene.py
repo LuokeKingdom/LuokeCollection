@@ -41,22 +41,23 @@ class CollectionScene(Scene):
             "pet_name": Text("", x=760, y=100),
             "pet_image": Sprite(EMPTY),
             "pet_element": Sprite(EMPTY),
+            "pet_secondary_element": Sprite(EMPTY),
             "pet_id": Text(
                 text="", size=150, x=780, y=60, color=(200, 150, 100), opacity=100
             ),
             "pet_description": Text("", x=700, y=160, size=20),
-            "talent_icon_HP": Sprite(IMAGE('HP.png'), x=700, y=506, width=36),
-            "talent_icon_AD": Sprite(IMAGE('AD.png'), x=700, y=576, width=36),
-            "talent_icon_DF": Sprite(EMPTY, x=700, y=646, width=36),
-            "talent_icon_SP": Sprite(EMPTY, x=900, y=506, width=36),
-            "talent_icon_AP": Sprite(IMAGE('AP.png'), x=900, y=576, width=36),
-            "talent_icon_MD": Sprite(EMPTY, x=900, y=646, width=36),
-            "pet_talent_HP": Text("", x=730, y=490, size=28),
-            "pet_talent_AD": Text("", x=730, y=560, size=28),
-            "pet_talent_DF": Text("", x=730, y=630, size=28),
-            "pet_talent_SP": Text("", x=930, y=490, size=28),
-            "pet_talent_AP": Text("", x=930, y=560, size=28),
-            "pet_talent_MD": Text("", x=930, y=630, size=28),
+            "talent_icon_HP": Sprite(EMPTY, width=36),
+            "talent_icon_AD": Sprite(EMPTY, width=36),
+            "talent_icon_DF": Sprite(EMPTY, width=36),
+            "talent_icon_SP": Sprite(EMPTY, width=36),
+            "talent_icon_AP": Sprite(EMPTY, width=36),
+            "talent_icon_MD": Sprite(EMPTY, width=36),
+            "pet_talent_HP": Text("", x=1010, y=226, size=26),
+            "pet_talent_AD": Text("", x=1010, y=266, size=26),
+            "pet_talent_DF": Text("", x=1010, y=306, size=26),
+            "pet_talent_SP": Text("", x=1010, y=346, size=26),
+            "pet_talent_AP": Text("", x=1010, y=386, size=26),
+            "pet_talent_MD": Text("", x=1010, y=426, size=26),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -83,8 +84,40 @@ class CollectionScene(Scene):
                 image=pet_image, height=max_height
             ).set_pos(780, 340)
         self.OTHERS["pet_element"].set_image(
-            image=IMAGE(ELEMENT_MAP.get(pet.element, "place_holder.png")), width=100
-        ).set_pos(700, 110)
+            image=ELEMENT_MAP.get(pet.element).image, width=100
+        ).set_pos(690, 110)
+        if pet.secondary_element is not None:
+            self.OTHERS["pet_secondary_element"].set_image(
+                image=ELEMENT_MAP.get(pet.secondary_element).image, width=50
+            ).set_pos(736, 124)
+        else:
+            self.OTHERS["pet_secondary_element"].set_image(EMPTY)
+            
+        self.OTHERS["talent_icon_HP"].set_image(
+            image=IMAGE('HP.png'), width=36
+        ).set_pos(980, 240)
+        self.OTHERS["talent_icon_AD"].set_image(
+            image=IMAGE('AD.png'), width=36
+        ).set_pos(980, 280)
+        self.OTHERS["talent_icon_DF"].set_image(
+            image=IMAGE('DF.png'), width=36
+        ).set_pos(980, 320)
+        self.OTHERS["talent_icon_SP"].set_image(
+            image=IMAGE('SP.png'), width=36
+        ).set_pos(980, 360)
+        self.OTHERS["talent_icon_AP"].set_image(
+            image=IMAGE('AP.png'), width=36
+        ).set_pos(980, 400)
+        self.OTHERS["talent_icon_MD"].set_image(
+            image=IMAGE('MD.png'), width=36
+        ).set_pos(980, 440)
+        color = tuple(map(lambda x: max(0,x-30), ELEMENT_MAP.get(pet.element).color))
+        self.TEXTS["pet_talent_HP"].color = color
+        self.TEXTS["pet_talent_AD"].color = color
+        self.TEXTS["pet_talent_DF"].color = color
+        self.TEXTS["pet_talent_AP"].color = color
+        self.TEXTS["pet_talent_MD"].color = color
+        self.TEXTS["pet_talent_SP"].color = color
         self.TEXTS["pet_id"].change_text(str(pet.number))
         self.TEXTS["pet_description"].change_text(pet.desc)
         self.TEXTS["pet_talent_HP"].change_text(pet.stats[0])
