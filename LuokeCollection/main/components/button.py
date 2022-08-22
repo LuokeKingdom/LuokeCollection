@@ -9,7 +9,6 @@ from ..animation.button.button_animations import (
     RotateButtonAnimation,
     FrameButtonAnimation,
 )
-from ..utils import Mouse
 from .container import Container
 from .text import Text
 

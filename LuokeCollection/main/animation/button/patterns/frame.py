@@ -1,6 +1,6 @@
 from ...mixin import Mixin
 from pygame.locals import *
-from settings.dev import IMAGE
+from LuokeCollection.settings.dev import IMAGE
 
 
 class FrameMixin(Mixin):

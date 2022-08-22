@@ -17,7 +17,6 @@ class ButtonAnimation:
         self.button = button
         self.transition = transition
         self.parameter = parameter
-        self.startTime = 0
         self.is_playing = False
 
     def update(self, current_time):
