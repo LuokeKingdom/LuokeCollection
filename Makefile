@@ -5,7 +5,7 @@ run:
 	poetry run python -B index.py
 
 black:
-	poetry run black ./LuokeCollection
+	poetry run black ./
 
 # If the first argument is "version"
 ifeq (version,$(firstword $(MAKECMDGOALS)))
