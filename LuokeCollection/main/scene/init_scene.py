@@ -2,7 +2,7 @@ from LuokeCollection.main.scene.scene import Scene
 from pygame.locals import *
 from ..components.button import Button
 from ..components.text import Text
-from settings.dev import WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
 
 
 class InitScene(Scene):

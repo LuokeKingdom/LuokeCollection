@@ -60,7 +60,7 @@ class Model:
                 continue
 
     def load_current_data(self):
-        self.DATA = JSON("LuokeCollection/main/model/data.json", False)
+        self.DATA = JSON("LuokeCollection/assets/data.json", False)
         a = copy.copy(self.DATA.get("pet_rects"))
         if a is None:
             return
@@ -138,5 +138,5 @@ class Model:
             self.DATA["pet_rects"][pet_num] = [x, y, w, h]
 
         content = json.dumps(self.DATA, ensure_ascii=False)
-        save_file("LuokeCollection/main/model/data.json", content)
+        save_file("LuokeCollection/assets/data.json", content)
         self._load_pet_rect(pet_num)

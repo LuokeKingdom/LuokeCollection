@@ -8,7 +8,7 @@ from .scene import Scene
 from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
-from settings.dev import WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
 from ..utils import ELEMENT_MAP
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)

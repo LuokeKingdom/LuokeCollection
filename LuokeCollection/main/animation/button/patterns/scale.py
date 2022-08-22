@@ -5,7 +5,7 @@ from pygame.locals import *
 
 
 class ScaleMixin(Mixin):
-    def effect(self, current_time):
+    def effect(self, current_time=0.5):
         x_grow = self.w * self.scale - self.w
         y_grow = self.h * self.scale - self.h
 
@@ -16,16 +16,16 @@ class ScaleMixin(Mixin):
             self.button.image = pygame.transform.smoothscale(
                 self.button.original_image,
                 (
-                    self.w + x_grow * self.progress(current_time),
-                    self.h + y_grow * self.progress(current_time),
+                    int(self.w + x_grow * self.progress(current_time)),
+                    int(self.h + y_grow * self.progress(current_time)),
                 ),
             )
         else:
             self.button.image = pygame.transform.smoothscale(
                 pygame.Surface([100, 100]),
                 (
-                    self.w + x_grow * self.progress(current_time),
-                    self.h + y_grow * self.progress(current_time),
+                    int(self.w + x_grow * self.progress(current_time)),
+                    int(self.h + y_grow * self.progress(current_time)),
                 ),
             )
             self.button.image.fill(self.button.color)
@@ -37,6 +37,7 @@ class ScaleMixin(Mixin):
         self.button.rect = self.button.image.get_rect(
             center=self.button.original_rect.center
         )
+        pass
 
     def reset(self):
         self.button.image = self.button.original_image
