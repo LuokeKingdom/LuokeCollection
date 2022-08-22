@@ -1,10 +1,12 @@
 import shutil
+import os
 
 
 def copy_datas_to_dist():
     source_dir = "LuokeCollection/assets/"
     destination_dir = "dist/LuokeCollection/assets/"
-    shutil.rmtree(destination_dir)
+    if os.path.isdir(destination_dir):
+        shutil.rmtree(destination_dir)
     shutil.copytree(source_dir, destination_dir)
 
 
