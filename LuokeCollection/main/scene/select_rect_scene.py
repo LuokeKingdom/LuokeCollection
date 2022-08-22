@@ -42,7 +42,6 @@ class SelectRectScene(Scene):
             "warning": Text(
                 x=1100,
                 y=600,
-                color=(240, 50, 50),
                 align_mode="CENTER",
                 text="",
             ),
@@ -151,6 +150,8 @@ class SelectRectScene(Scene):
     def save_rect(self):
         if self.rect is not None:
             self.model.save_rect(*self.rect)
-            self.TEXTS["warning"].change_text("")
+            self.TEXTS["warning"].color = (100, 200, 100)
+            self.TEXTS["warning"].change_text("已保存！")
         else:
+            self.TEXTS["warning"].color = (240, 50, 50)
             self.TEXTS["warning"].change_text("未保存! 請先選擇新頭像")

@@ -46,4 +46,6 @@ while running:
     pygame.display.flip()
 
 # app exit
+app.model.stop = True
+app.model.loading_thread.join()
 pygame.quit()
