@@ -139,3 +139,4 @@ class Model:
 
         content = json.dumps(self.DATA, ensure_ascii=False)
         save_file("LuokeCollection/main/model/data.json", content)
+        self._load_pet_rect(pet_num)
