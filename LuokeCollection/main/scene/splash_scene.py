@@ -1,3 +1,4 @@
+from email.mime import image
 from pydoc import ModuleScanner
 import pygame
 from pygame.locals import *
@@ -16,7 +17,16 @@ class SplashScene(Scene):
         kwargs["bg"].fill((255, 255, 255))
         super(SplashScene, self).__init__(screen, model, *args, **kwargs)
         self.progress = 0
-        self.BUTTONS = {}
+        self.BUTTONS = {
+            "progress_pet": Button(
+                image=IMAGE("progress_pet.png").convert_alpha(),
+                x=0,
+                y=self.screen.get_height() - 200,
+                animation="frame",
+                transition=40,
+                parameter="progress_pet",
+            )
+        }
         self.OTHERS = {
             "icon": Container(
                 image=IMAGE("icon.png"),
@@ -49,7 +59,7 @@ class SplashScene(Scene):
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
-        self.progress += 20
+        self.progress += 5
         if self.progress > self.screen.get_width():
             print("finish loading")
             self.model.open("init")

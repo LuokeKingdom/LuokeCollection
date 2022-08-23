@@ -71,6 +71,7 @@ class RotateButtonAnimation(ButtonAnimation, RotateMixin):
 
 
 class FrameButtonAnimation(ButtonAnimation, FrameMixin):
-    def __int__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.current_frame = 1
+        self.path = "assets/images/" + self.parameter + "/"
