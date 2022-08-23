@@ -21,6 +21,7 @@ class App:
 
     def push_scene(self, scene_name):
         self.scene = self.create_scene(scene_name)
+        self.on_scene_change()
         self.scene.side_effect()
         self.stack.append(self.scene)
 
@@ -28,9 +29,13 @@ class App:
         self.stack.pop()
         if self.stack:
             self.scene = self.stack[len(self.stack) - 1]
+            self.on_scene_change()
 
     def display(self, mouse_pos, clicked):
         self.scene.display(mouse_pos, clicked)
 
     def update(self, mouse_pos, clicked):
         self.scene.update(mouse_pos, clicked)
+
+    def on_scene_change(self):
+        self.scene.background_music.play()

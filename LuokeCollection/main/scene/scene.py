@@ -52,8 +52,6 @@ class Scene:
         self.others_group.add(list(self.OTHERS.values()))
         self.buttons_group.add(list(self.BUTTONS.values()))
         self.texts_group.add(list(self.TEXTS.values()))
-        if self.background_music is not None:
-            self.background_music.play_music()
 
     def side_effect(self):
         self.load_items()

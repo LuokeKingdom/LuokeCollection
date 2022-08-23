@@ -2,7 +2,7 @@ import os
 from turtle import width
 import pygame
 from pygame.locals import *
-from LuokeCollection.main.components.background_music import BackgroundMusic
+from ..model.background_music import BackgroundMusic
 
 from LuokeCollection.main.components.container import Container
 from .scene import Scene

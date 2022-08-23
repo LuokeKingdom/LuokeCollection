@@ -2,7 +2,7 @@ from LuokeCollection.main.scene.scene import Scene
 from pygame.locals import *
 from ..components.button import Button
 from ..components.text import Text
-from ..components.background_music import BackgroundMusic
+from ..model.background_music import BackgroundMusic
 from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 
@@ -25,5 +25,4 @@ class InitScene(Scene):
                 text="修改头像",
             ),
         }
-
         self.OTHERS = {}

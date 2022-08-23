@@ -2,7 +2,7 @@ from pydoc import ModuleScanner
 import pygame
 from pygame.locals import *
 
-from LuokeCollection.main.components.background_music import BackgroundMusic
+from ..model.background_music import BackgroundMusic
 from .scene import Scene
 from ..components.button import Button
 from ..components.container import Container
