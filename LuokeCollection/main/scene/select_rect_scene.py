@@ -153,8 +153,10 @@ class SelectRectScene(Scene):
     def save_rect(self):
         if self.rect is not None:
             self.model.save_rect(*self.rect)
+            self.model.saved_sound.play()
             self.TEXTS["warning"].color = (100, 200, 100)
             self.TEXTS["warning"].change_text("已保存！")
         else:
+            self.model.error_sound.play()
             self.TEXTS["warning"].color = (240, 50, 50)
             self.TEXTS["warning"].change_text("未保存! 請先選擇新頭像")

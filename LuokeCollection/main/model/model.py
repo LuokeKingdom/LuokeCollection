@@ -1,10 +1,11 @@
 import copy
-from LuokeCollection.main.utils import PetInfo
+from .sound import Channel
+from ..utils import PetInfo
 import os
 import json
 import threading
 import time
-from LuokeCollection.settings.dev import IMAGE, JSON
+from ...settings.dev import IMAGE, JSON, SOUND
 from ..utils import save_file
 
 import pygame
@@ -19,7 +20,8 @@ class Model:
         self.app = app
         self.load_pets()
         self.load_current_data()
-
+        self.error_sound = SOUND("click-error.wav", Channel.GAME)
+        self.saved_sound = SOUND("saved.wav", Channel.GAME)
         self.pet_page_number = 1
         self.MAX_PAGE = len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1)
         self.pet_select_rect = None
@@ -83,6 +85,7 @@ class Model:
 
     def previous_page(self):
         if self.pet_page_number == 1:
+            self.error_sound.play()
             return
         self.pet_page_number -= 1
         self.set_page()

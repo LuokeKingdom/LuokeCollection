@@ -11,7 +11,8 @@ from ..animation.button.button_animations import (
 )
 from .container import Container
 from .text import Text
-
+from ...settings.dev import SOUND
+from ..model.sound import Channel
 import time
 
 
@@ -35,6 +36,7 @@ class Button(Container):
         text_fontsize=24,
         text_color=(0, 0, 0),
         color=(150, 200, 100),
+        sound=SOUND("mouse-click.wav", Channel.UI),
         *args,
         **kwargs
     ):
@@ -42,6 +44,7 @@ class Button(Container):
         self.text_color = text_color
         self.text_fontsize = text_fontsize
         self.color = color
+        self.sound = sound
         # default button
         if len(args) < 1 and not kwargs.get("image"):
             image = pygame.Surface([100, 100])
@@ -72,6 +75,7 @@ class Button(Container):
 
     def click(self):
         if self.on_click:
+            self.sound.play()
             self.on_click()
         else:
             raise NotImplementedError("Function: <on_click> not implemented!!")
