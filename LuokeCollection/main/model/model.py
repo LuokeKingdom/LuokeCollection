@@ -4,11 +4,12 @@ from ..utils import PetInfo
 import os
 import json
 import threading
+import time
 from ...settings.dev import IMAGE, JSON, SOUND
 from ..utils import save_file
 
 import pygame
-from pygame.locals import *  # noqa
+from pygame.locals import *
 
 
 class Model:
@@ -60,7 +61,7 @@ class Model:
                 info["secondary_element"] = info.get("secondary_element")
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
-            except Exception:
+            except:
                 continue
 
     def load_current_data(self):

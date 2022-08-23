@@ -1,3 +1,4 @@
+from pygame.locals import *
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
 from .patterns.scale import ScaleMixin

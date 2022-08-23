@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import *  # noqa
+from pygame.locals import *
 from ..utils import vec
 
 

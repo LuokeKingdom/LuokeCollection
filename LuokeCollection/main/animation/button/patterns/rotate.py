@@ -1,6 +1,6 @@
 from ...mixin import Mixin
 import pygame
-from pygame.locals import *  # noqa
+from pygame.locals import *
 
 
 class RotateMixin(Mixin):

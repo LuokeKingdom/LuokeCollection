@@ -35,9 +35,6 @@ jobs:
       - name: Install typing_extensions
         run: poetry add typing_extensions
       
-      - name: Code Format
+      - name: Code Quality
         run: poetry run black . --check
-
-      - name: Code Quailty
-        run: poetry run flake8 --ignore=E501,W503 .
       

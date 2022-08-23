@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import *  # noqa
+from pygame.locals import *
 from LuokeCollection.main.utils import vec
 from LuokeCollection.main.app import App
 from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE

@@ -1,4 +1,5 @@
 from ...mixin import Mixin
+from pygame.locals import *
 
 
 class OpacityMixin(Mixin):
