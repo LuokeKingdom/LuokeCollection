@@ -60,7 +60,7 @@ class Model:
                 continue
 
     def load_current_data(self):
-        self.DATA = JSON("LuokeCollection/assets/data.json", False)
+        self.DATA = JSON("assets/data.json", False)
         a = copy.copy(self.DATA.get("pet_rects"))
         if a is None:
             return
@@ -97,7 +97,7 @@ class Model:
     def set_pet_select_rect(self, pet_number):
         self.pet_select_rect = self.PETS[pet_number]
         image_path = os.path.join(
-            "LuokeCollection/assets/data/", self.pet_select_rect.path, "display.png"
+            "assets/data/", self.pet_select_rect.path, "display.png"
         )
         scene = self.get_scene()
         scene.set_pet_image(IMAGE(image_path, False))
@@ -108,7 +108,7 @@ class Model:
     def _load_pet_rect(self, pet_number):
         pet_info = self.PETS[pet_number]
         pet_image = IMAGE(
-            os.path.join("LuokeCollection/assets/data/", pet_info.path, "display.png"),
+            os.path.join("assets/data/", pet_info.path, "display.png"),
             False,
         )
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
@@ -138,5 +138,5 @@ class Model:
             self.DATA["pet_rects"][pet_num] = [x, y, w, h]
 
         content = json.dumps(self.DATA, ensure_ascii=False)
-        save_file("LuokeCollection/assets/data.json", content)
+        save_file("assets/data.json", content)
         self._load_pet_rect(pet_num)

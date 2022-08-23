@@ -8,7 +8,7 @@ a = Analysis(
     ['index.py'],
     pathex=[],
     binaries=[],
-    datas=[('./LuokeCollection/main/model/data.json', './LuokeCollection/main/model/')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -19,7 +19,7 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
-a.datas += Tree('./LuokeCollection/assets', prefix='LuokeCollection/assets')
+a.datas += Tree('./assets', prefix='assets')
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(

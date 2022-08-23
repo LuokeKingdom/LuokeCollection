@@ -11,7 +11,7 @@ DEFAULT_SIZE = 32
 
 class Text(Container):
     fontsizes = {}
-    pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", DEFAULT_SIZE)
+    pygame.font.Font("assets/fonts/chinese.ttf", DEFAULT_SIZE)
 
     def __init__(
         self,
@@ -47,5 +47,5 @@ class Text(Container):
     def get_font(size):
         return __class__.fontsizes.get(
             size,
-            pygame.font.Font("LuokeCollection/assets/fonts/chinese.ttf", size),
+            pygame.font.Font("assets/fonts/chinese.ttf", size),
         )
