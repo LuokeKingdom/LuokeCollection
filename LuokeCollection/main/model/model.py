@@ -44,6 +44,9 @@ class Model:
 
     def open(self, name):
         self.app.push_scene(name)
+    
+    def close_pop_up(self):
+        self.app.close_pop_up()
 
     def get_scene(self):
         return self.app.scene

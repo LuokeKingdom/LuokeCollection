@@ -70,4 +70,4 @@ class SplashScene(Scene):
         super().update(mouse_pos, clicked)
         self.progress += 5
         if self.progress > self.screen.get_width():
-            self.model.open("init")
+            self.model.close_pop_up()
