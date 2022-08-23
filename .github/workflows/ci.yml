@@ -39,5 +39,5 @@ jobs:
         run: poetry run black . --check
 
       - name: Code Quailty
-        run: poetry flake8 --ignore=E501,W503
+        run: poetry flake8 --ignore=E501,W503 .
       
