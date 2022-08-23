@@ -2,7 +2,7 @@ from pydoc import ModuleScanner
 import pygame
 from pygame.locals import *
 
-from ..model.sound import Sound
+from ..model.sound import Channel
 from .scene import Scene
 from ..components.button import Button
 from ..components.container import Container
@@ -17,7 +17,7 @@ class SelectRectScene(Scene):
         kwargs["bg"] = pygame.Surface([1, 1])
         kwargs["bg"].fill((200, 200, 245))
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
-        self.background_music = Sound(SOUND("sky_gym.wav"))
+        self.background_music = SOUND("sky_gym.wav", Channel.BACKGROUND)
         self.BUTTONS = {
             "close": Button(
                 x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
