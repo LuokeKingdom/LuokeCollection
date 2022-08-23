@@ -1,6 +1,6 @@
 import pygame
-from pygame.locals import *  # noqa
-from LuokeCollection.settings.dev import IMAGE
+from pygame.locals import *
+from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
 from collections import namedtuple
 import os
 

@@ -21,6 +21,3 @@ build:
 	pyinstaller --noconsole --onefile index.py
 	pyinstaller index.spec
 	python build_utils.py
-
-lint:
-	poetry run flake8 --ignore=E501,W503 ./

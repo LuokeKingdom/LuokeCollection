@@ -1,6 +1,7 @@
 from enum import Enum
+import imp
 import pygame
-from pygame.locals import *  # noqa
+from pygame.locals import *
 from pygame import mixer
 
 

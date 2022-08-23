@@ -1,12 +1,13 @@
+from pydoc import ModuleScanner
 import pygame
-from pygame.locals import *  # noqa
+from pygame.locals import *
 
 from ..model.sound import Channel
 from .scene import Scene
 from ..components.button import Button
 from ..components.container import Container
 from ..components.text import Text
-from LuokeCollection.settings.dev import SOUND, HEIGHT
+from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 

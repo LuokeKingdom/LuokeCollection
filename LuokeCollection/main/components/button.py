@@ -1,7 +1,8 @@
 import pygame
-from pygame.locals import *  # noqa
+from pygame.locals import *
 
 from ..animation.button.button_animations import (
+    JumpButtonAnimation,
     OpacityButtonAnimation,
     ScaleButtonAnimation,
     JumpButtonAnimation,
