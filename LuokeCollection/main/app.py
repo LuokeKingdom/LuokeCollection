@@ -38,4 +38,5 @@ class App:
         self.scene.update(mouse_pos, clicked)
 
     def on_scene_change(self):
-        self.scene.background_music.play()
+        if self.scene.background_music is not None:
+            self.scene.background_music.play()
