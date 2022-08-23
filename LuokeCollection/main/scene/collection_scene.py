@@ -2,7 +2,7 @@ import os
 from turtle import width
 import pygame
 from pygame.locals import *
-from ..model.background_music import BackgroundMusic
+from ..model.sound import Sound
 
 from LuokeCollection.main.components.container import Container
 from .scene import Scene
@@ -19,7 +19,7 @@ class CollectionScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
-        self.background_music = BackgroundMusic(SOUND("peter_ave.wav"))
+        self.background_music = Sound(SOUND("peter_ave.wav"))
         self.BUTTONS = {
             "close": Button(
                 image=IMAGE("close.png"),

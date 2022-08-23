@@ -7,7 +7,7 @@ from pygame import mixer
 mixer.init()
 
 
-class BackgroundMusic:
+class Sound:
     def __init__(self, music):
         self.music = music
         self.music_playing = False
