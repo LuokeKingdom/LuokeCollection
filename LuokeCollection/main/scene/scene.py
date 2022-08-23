@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import *
+from pygame.locals import *  # noqa
 from ..utils import Mouse
 from ..components.button import Button
 from ..components.background import Background
