@@ -1,7 +1,7 @@
 from LuokeCollection.main.components.text import Text
 from ...mixin import Mixin
 import pygame
-from pygame.locals import *
+from pygame.locals import *  # noqa
 
 
 class ScaleMixin(Mixin):
