@@ -3,7 +3,6 @@ from ...mixin import Mixin
 import pygame
 from pygame.locals import *
 
-
 class FrameMixin(Mixin):
     def effect(self, current_time):
         self.frame_image = IMAGE(

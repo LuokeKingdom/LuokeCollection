@@ -21,10 +21,11 @@ class SplashScene(Scene):
             "progress_pet": Button(
                 image=IMAGE("progress_pet.png").convert_alpha(),
                 x=0,
-                y=self.screen.get_height() - 200,
+                y=self.screen.get_height() - 180,
                 animation="frame",
                 transition=40,
                 parameter="progress_pet",
+                # ratio=0.8,
             )
         }
         self.OTHERS = {
@@ -52,10 +53,10 @@ class SplashScene(Scene):
 
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
+        self.BUTTONS["progress_pet"].set_pos(x=self.progress, y = self.screen.get_height() - 180)
         self.OTHERS["progress_bar"].set_image(
             self.OTHERS["progress_bar"].original_image, height=100, width=self.progress
-        )
-        self.OTHERS["progress_bar"].set_pos(x=0, y=self.screen.get_height() - 50)
+        ).set_pos(x=0, y = self.screen.get_height() - 50)
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
