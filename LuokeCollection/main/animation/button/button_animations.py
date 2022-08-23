@@ -40,13 +40,13 @@ class ButtonAnimation:
 class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.opacity = self.parameter
+        self.opacity = self.parameter["factor"]
 
 
 class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.scale = self.parameter
+        self.scale = self.parameter["factor"]
         self.w, self.h = self.button.image.get_size()
 
 
@@ -54,7 +54,7 @@ class JumpButtonAnimation(ButtonAnimation, JumpMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.button.align_mode = "TOPLEFT"
-        self.jump_height = self.parameter
+        self.jump_height = self.parameter["factor"]
         self.a = self.jump_height / (self.transition / 2) / (self.transition / 2)
         self.w, self.h = self.button.image.get_size()
         self.x, self.y = self.button.get_pos()
@@ -67,10 +67,12 @@ class RotateButtonAnimation(ButtonAnimation, RotateMixin):
         super().__init__(*args, **kwargs)
         self.w, self.h = self.button.image.get_size()
         self.x, self.y = self.button.get_pos()
-        self.rotation = self.parameter
+        self.rotation = self.parameter["factor"]
 
 
 class FrameButtonAnimation(ButtonAnimation, FrameMixin):
-    def __int__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.current_frame = 1
+        self.path = "assets/images/" + self.parameter["path"] + "/"
+        self.original_x, self.original_y = self.button.get_pos()

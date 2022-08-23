@@ -30,7 +30,7 @@ class Button(Container):
         self,
         animation="scale",
         transition=0.2,
-        parameter=1.2,
+        parameter={"factor": 1.2},
         on_click=None,
         text=None,
         text_fontsize=24,

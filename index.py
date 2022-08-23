@@ -17,6 +17,7 @@ pygame.mouse.set_visible(False)
 # app settings
 app = App(screen)
 app.change_scene("init")
+app.open_pop_up("splash")
 clock = pygame.time.Clock()
 clicked = False
 mouse_pos = vec(0, 0)
