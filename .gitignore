@@ -1,8 +1,5 @@
 .vscode/
 __pycache__/
-display.webp
-display.png
 build/
 dist/
-LuokeCollection/assets
 index.spec
