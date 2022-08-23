@@ -27,7 +27,7 @@ class CollectionScene(Scene):
                 y=70,
                 on_click=lambda: model.close(),
                 animation="opacity",
-                parameter=0.2,
+                parameter={"factor": 0.2},
                 width=120,
             ),
             "next_page": Button(
@@ -36,7 +36,7 @@ class CollectionScene(Scene):
                 y=649,
                 on_click=lambda: model.next_page(),
                 animation="opacity",
-                parameter=0.2,
+                parameter={"factor": 0.2},
                 width=48,
             ),
             "previous_page": Button(
@@ -45,7 +45,7 @@ class CollectionScene(Scene):
                 y=649,
                 on_click=lambda: model.previous_page(),
                 animation="opacity",
-                parameter=0.2,
+                parameter={"factor": 0.2},
                 width=48,
             ),
         }
