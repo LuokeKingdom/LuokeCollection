@@ -12,6 +12,7 @@ class Scene:
             bg = pygame.Surface([WIDTH, HEIGHT])
             bg.fill((0, 0, 0))
         self.background = Background(bg)
+        self.background_music = None
         self.screen = screen
         self.model = model
         self.is_pointer = False

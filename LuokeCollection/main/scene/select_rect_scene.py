@@ -1,11 +1,13 @@
 from pydoc import ModuleScanner
 import pygame
 from pygame.locals import *
+
+from ..model.sound import Channel
 from .scene import Scene
 from ..components.button import Button
 from ..components.container import Container
 from ..components.text import Text
-from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
@@ -15,6 +17,7 @@ class SelectRectScene(Scene):
         kwargs["bg"] = pygame.Surface([1, 1])
         kwargs["bg"].fill((200, 200, 245))
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
+        self.background_music = SOUND("sky_gym.wav", Channel.BACKGROUND)
         self.BUTTONS = {
             "close": Button(
                 x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
@@ -150,8 +153,10 @@ class SelectRectScene(Scene):
     def save_rect(self):
         if self.rect is not None:
             self.model.save_rect(*self.rect)
+            self.model.saved_sound.play()
             self.TEXTS["warning"].color = (100, 200, 100)
             self.TEXTS["warning"].change_text("已保存！")
         else:
+            self.model.error_sound.play()
             self.TEXTS["warning"].color = (240, 50, 50)
             self.TEXTS["warning"].change_text("未保存! 請先選擇新頭像")

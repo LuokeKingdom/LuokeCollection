@@ -2,13 +2,15 @@ from LuokeCollection.main.scene.scene import Scene
 from pygame.locals import *
 from ..components.button import Button
 from ..components.text import Text
-from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
+from ..model.sound import Channel
+from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 
 class InitScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = IMAGE("init_bg.jpg")
         super(InitScene, self).__init__(screen, model, *args, **kwargs)
+        self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
         self.BUTTONS = {
             "collection": Button(
                 image=IMAGE("collection_button.png"),
@@ -23,5 +25,4 @@ class InitScene(Scene):
                 text="修改头像",
             ),
         }
-
         self.OTHERS = {}
