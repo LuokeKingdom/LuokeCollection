@@ -17,6 +17,7 @@ This project aims to recreate a PET index of the game Roco Kingdom
 * extract the `assets` folder to `./assets`
 * To run: `make` or `make run`
 * To reformat: `make black`
+* To check code quality: `make lint`
 * To bump the version of the project: `make versoin major/minor/patch` 
 * To build the project: `make build`
     * executable is at `dist/index.exe`
