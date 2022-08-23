@@ -1,11 +1,13 @@
 from pydoc import ModuleScanner
 import pygame
 from pygame.locals import *
+
+from LuokeCollection.main.components.background_music import BackgroundMusic
 from .scene import Scene
 from ..components.button import Button
 from ..components.container import Container
 from ..components.text import Text
-from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
@@ -15,6 +17,7 @@ class SelectRectScene(Scene):
         kwargs["bg"] = pygame.Surface([1, 1])
         kwargs["bg"].fill((200, 200, 245))
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
+        self.background_music = BackgroundMusic(SOUND("sky_gym.wav"))
         self.BUTTONS = {
             "close": Button(
                 x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80

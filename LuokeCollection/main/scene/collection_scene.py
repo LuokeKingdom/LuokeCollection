@@ -2,13 +2,14 @@ import os
 from turtle import width
 import pygame
 from pygame.locals import *
+from LuokeCollection.main.components.background_music import BackgroundMusic
 
 from LuokeCollection.main.components.container import Container
 from .scene import Scene
 from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
-from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 from ..utils import ELEMENT_MAP
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
@@ -18,6 +19,7 @@ class CollectionScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
+        self.background_music = BackgroundMusic(SOUND("peter_ave.wav"))
         self.BUTTONS = {
             "close": Button(
                 image=IMAGE("close.png"),

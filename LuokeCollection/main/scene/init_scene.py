@@ -2,13 +2,15 @@ from LuokeCollection.main.scene.scene import Scene
 from pygame.locals import *
 from ..components.button import Button
 from ..components.text import Text
-from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
+from ..components.background_music import BackgroundMusic
+from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 
 class InitScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = IMAGE("init_bg.jpg")
         super(InitScene, self).__init__(screen, model, *args, **kwargs)
+        self.background_music = BackgroundMusic(SOUND("castle.wav"))
         self.BUTTONS = {
             "collection": Button(
                 image=IMAGE("collection_button.png"),

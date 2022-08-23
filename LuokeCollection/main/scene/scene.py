@@ -12,6 +12,7 @@ class Scene:
             bg = pygame.Surface([WIDTH, HEIGHT])
             bg.fill((0, 0, 0))
         self.background = Background(bg)
+        self.background_music = None
         self.screen = screen
         self.model = model
         self.is_pointer = False
@@ -51,6 +52,8 @@ class Scene:
         self.others_group.add(list(self.OTHERS.values()))
         self.buttons_group.add(list(self.BUTTONS.values()))
         self.texts_group.add(list(self.TEXTS.values()))
+        if self.background_music is not None:
+            self.background_music.play_music()
 
     def side_effect(self):
         self.load_items()
