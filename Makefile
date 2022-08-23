@@ -23,4 +23,4 @@ build:
 	python build_utils.py
 
 lint:
-	poetry run flake8 ./
+	poetry run flake8 --ignore=F403 ./
