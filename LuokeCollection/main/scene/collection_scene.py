@@ -92,9 +92,7 @@ class CollectionScene(Scene):
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
-        pet_image = IMAGE(
-            os.path.join("assets/data/", pet.path, "display.png"), False
-        )
+        pet_image = IMAGE(os.path.join("assets/data/", pet.path, "display.png"), False)
         max_width, max_height = 380, 320
         w, h = pet_image.get_size()
         if h / max_height < w / max_width:
