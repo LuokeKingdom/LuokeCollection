@@ -13,6 +13,7 @@ Icon = IMAGE("icon.png")
 pygame.display.set_caption("Roco Collection 洛克王國 寵物圖鑑")
 pygame.display.set_icon(Icon)
 pygame.mouse.set_visible(False)
+user_text = ''
 
 # app settings
 app = App(screen)
@@ -40,9 +41,15 @@ while running:
                     print(str(mouse_pos) + " is clicked!")
         if event.type == pygame.MOUSEBUTTONDOWN:
             pressing = True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                user_text = user_text[:-1]
+            else:
+                user_text += event.unicode
 
     app.update(mouse_pos, clicked)
     app.display(mouse_pos, clicked)
+    app.input_text(user_text)
     clock.tick(60)
     pygame.display.flip()
 

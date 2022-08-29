@@ -4,6 +4,7 @@ from .model.model import Model
 
 class App:
     def __init__(self, screen):
+        self.text = ''
         self.scene = None
         self.pop_up = None
         self.stack = []
@@ -54,3 +55,6 @@ class App:
     def on_scene_change(self):
         if self.scene.background_music is not None:
             self.scene.background_music.play()
+
+    def input_text(self, user_text):
+        self.text = user_text

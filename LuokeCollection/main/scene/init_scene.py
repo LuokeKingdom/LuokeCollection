@@ -1,3 +1,4 @@
+from re import X
 from LuokeCollection.main.scene.scene import Scene
 from pygame.locals import *
 from ..components.button import Button
@@ -25,4 +26,16 @@ class InitScene(Scene):
                 text="修改头像",
             ),
         }
+        self.TEXTS = {
+            "text": Text(
+                text=self.model.app.text,
+                x=100,
+                y=100,
+                align_mode="CENTER"
+            )
+        }
         self.OTHERS = {}
+
+    def update(self, mouse_pos, clicked):
+        super().update(mouse_pos, clicked)
+        self.TEXTS["text"].change_text(self.model.app.text)
