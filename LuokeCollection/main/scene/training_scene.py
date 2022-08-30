@@ -1,5 +1,4 @@
 import os
-from turtle import width
 import pygame
 from pygame.locals import *
 from ..model.sound import Channel
@@ -15,10 +14,10 @@ from ..utils import ELEMENT_MAP
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 
-class CollectionScene(Scene):
+class TrainingScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
         kwargs["bg"] = IMAGE("temp_bg.png")
-        super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
+        super(TrainingScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
         self.BUTTONS = {
             "close": Button(
@@ -50,24 +49,17 @@ class CollectionScene(Scene):
             ),
         }
         self.init_info()
-        self.init_page()
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_page()
+        self.model.set_info()
 
     def init_info(self):
         info_compoments = {
-            "pet_name": Text("", x=760, y=100, size=32),
+            "pet_name": Text("", x=260, y=100, size=32),
             "pet_image": Sprite(EMPTY),
             "pet_element": Sprite(EMPTY),
             "pet_secondary_element": Sprite(EMPTY),
-            "pet_id": Text(
-                text="", size=150, x=780, y=60, color=(200, 150, 100), opacity=100
-            ),
-            "pet_description": Text("", x=750, y=160, size=20),
-            "pet_weight": Text("", x=980, y=131, size=24),
-            "pet_height": Text("", x=980, y=156, size=24),
             "talent_icon_HP": Sprite(EMPTY, width=36),
             "talent_icon_AD": Sprite(EMPTY, width=36),
             "talent_icon_DF": Sprite(EMPTY, width=36),
@@ -80,12 +72,6 @@ class CollectionScene(Scene):
             "pet_talent_SP": Text("", x=1070, y=406, size=26),
             "pet_talent_AP": Text("", x=1070, y=446, size=26),
             "pet_talent_MD": Text("", x=1070, y=486, size=26),
-            "page_number": Text(
-                "", x=367, y=650, size=26, align_mode="CENTER", color=(231, 225, 146)
-            ),
-            "train": Button(
-                text="train", x=900, y=700, on_click=lambda: self.model.open("training")
-            ),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -98,24 +84,24 @@ class CollectionScene(Scene):
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
         pet_image = IMAGE(os.path.join("assets/data/", pet.path, "display.png"), False)
-        max_width, max_height = 380, 320
+        max_width, max_height = 460, 700
         w, h = pet_image.get_size()
         if h / max_height < w / max_width:
             self.OTHERS["pet_image"].set_image(
                 image=pet_image, width=max_width
-            ).set_pos(830, 420)
-
+            ).set_pos(360, 360)
         else:
             self.OTHERS["pet_image"].set_image(
                 image=pet_image, height=max_height
-            ).set_pos(830, 420)
+            ).set_pos(360, 360)
+        self.OTHERS["pet_image"].image.set_alpha(100)
         self.OTHERS["pet_element"].set_image(
             image=ELEMENT_MAP.get(pet.element).image, width=100
-        ).set_pos(690, 110)
+        ).set_pos(190, 110)
         if pet.secondary_element is not None:
             self.OTHERS["pet_secondary_element"].set_image(
                 image=ELEMENT_MAP.get(pet.secondary_element).image, width=50
-            ).set_pos(736, 124)
+            ).set_pos(236, 124)
         else:
             self.OTHERS["pet_secondary_element"].set_image(EMPTY)
 
@@ -144,78 +130,12 @@ class CollectionScene(Scene):
         self.TEXTS["pet_talent_AP"].color = color
         self.TEXTS["pet_talent_MD"].color = color
         self.TEXTS["pet_talent_SP"].color = color
-        self.TEXTS["pet_id"].change_text(str(pet.number))
-        self.TEXTS["pet_description"].change_text(pet.desc)
         self.TEXTS["pet_talent_HP"].change_text(pet.stats[0])
         self.TEXTS["pet_talent_AD"].change_text(pet.stats[1])
         self.TEXTS["pet_talent_DF"].change_text(pet.stats[2])
         self.TEXTS["pet_talent_AP"].change_text(pet.stats[3])
         self.TEXTS["pet_talent_MD"].change_text(pet.stats[4])
         self.TEXTS["pet_talent_SP"].change_text(pet.stats[5])
-        self.TEXTS["pet_weight"].change_text("体重：" + pet.weight)
-        self.TEXTS["pet_height"].change_text("身高：" + pet.height)
-
-    def init_page(self):
-        index = 0
-        new_texts = {}
-        new_others = {}
-        new_buttons = {}
-        new_on_clicks = {}
-        for i in range(3):
-            for j in range(3):
-                offset = int(str(i * 3 + j + 1))
-                new_on_clicks[f"slot_{index+1}"] = offset
-                new_buttons[f"slot_{index+1}"] = Button(
-                    animation="none",
-                    image=EMPTY,
-                    x=205 + j * 161,
-                    y=257 + i * 146,
-                    align_mode="CENTER",
-                    width=100,
-                )
-                new_others[f"slot_{index+1}"] = Container(
-                    image=IMAGE("tag2.png"),
-                    x=210 + j * 161,
-                    y=313 + i * 146,
-                    align_mode="CENTER",
-                )
-                new_texts[f"slot_{index+1}"] = Text(
-                    text="",
-                    x=202 + j * 163,
-                    y=316 + i * 146,
-                    align_mode="CENTER",
-                    size=24,
-                )
-                index += 1
-        for name, comp in new_texts.items():
-            self.TEXTS[name] = comp
-        for name, comp in new_buttons.items():
-            self.BUTTONS[name] = comp
-        for name, comp in new_others.items():
-            self.OTHERS[name] = comp
-        self.BUTTONS["slot_1"].on_click = lambda: self.model.set_info(1)
-        self.BUTTONS["slot_2"].on_click = lambda: self.model.set_info(2)
-        self.BUTTONS["slot_3"].on_click = lambda: self.model.set_info(3)
-        self.BUTTONS["slot_4"].on_click = lambda: self.model.set_info(4)
-        self.BUTTONS["slot_5"].on_click = lambda: self.model.set_info(5)
-        self.BUTTONS["slot_6"].on_click = lambda: self.model.set_info(6)
-        self.BUTTONS["slot_7"].on_click = lambda: self.model.set_info(7)
-        self.BUTTONS["slot_8"].on_click = lambda: self.model.set_info(8)
-        self.BUTTONS["slot_9"].on_click = lambda: self.model.set_info(9)
-
-    def set_page(self, pet_page):
-        index = 0
-        for pet_info in pet_page:
-            self.TEXTS[f"slot_{index+1}"].change_text(pet_info.name)
-            index += 1
-        for i in range(index, 9):
-            self.TEXTS[f"slot_{i+1}"].change_text("")
-            self.BUTTONS[f"slot_{i+1}"].image = EMPTY
-        self.TEXTS["page_number"].change_text(str(self.model.pet_page_number))
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
-        for index in range(9):
-            pet_number = (self.model.pet_page_number - 1) * 9 + index + 1
-            pet_image = self.model.pet_rects.get(pet_number)
-            self.BUTTONS[f"slot_{index+1}"].image = pet_image or EMPTY

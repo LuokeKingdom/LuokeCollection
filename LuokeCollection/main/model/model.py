@@ -26,6 +26,7 @@ class Model:
         self.MAX_PAGE = len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1)
         self.pet_select_rect = None
         self.pet_number_select_rect = 1
+        self.pet_number_training = 1
 
         self.pet_rects = {}
 
@@ -83,8 +84,10 @@ class Model:
             pet_page.append(self.PETS[pet_number])
         self.get_scene().set_page(pet_page)
 
-    def set_info(self, offset):
-        self.get_scene().set_info(self.PETS[(self.pet_page_number - 1) * 9 + offset])
+    def set_info(self, offset=None):
+        if offset is not None:
+            self.pet_number_training = (self.pet_page_number - 1) * 9 + offset
+        self.get_scene().set_info(self.PETS[self.pet_number_training])
 
     def previous_page(self):
         if self.pet_page_number == 1:
