@@ -1,8 +1,6 @@
 import pygame
-from pygame.locals import *
-from ..utils import vec
+from pygame.locals import *  # noqa
 from .container import Container
-from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 pygame.font.init()
 

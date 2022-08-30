@@ -1,7 +1,5 @@
 from LuokeCollection.main.scene.scene import Scene
-from pygame.locals import *
 from ..components.button import Button
-from ..components.text import Text
 from ..model.sound import Channel
 from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
