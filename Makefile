@@ -23,4 +23,4 @@ build:
 	python build_utils.py
 
 lint:
-	poetry run flake8 --ignore=E501,W503 ./
+	poetry run flake8 --ignore=E501,W503 ./LuokeCollection
