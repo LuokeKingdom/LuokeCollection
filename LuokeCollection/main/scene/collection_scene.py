@@ -1,7 +1,6 @@
 import os
-from turtle import width
 import pygame
-from pygame.locals import *
+from pygame.locals import *  # noqa
 from ..model.sound import Channel
 
 from LuokeCollection.main.components.container import Container
@@ -9,7 +8,7 @@ from .scene import Scene
 from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
-from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import SOUND, IMAGE
 from ..utils import ELEMENT_MAP
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
