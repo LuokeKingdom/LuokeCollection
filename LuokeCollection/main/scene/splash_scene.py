@@ -1,14 +1,9 @@
-from email.mime import image
-from pydoc import ModuleScanner
 import pygame
-from pygame.locals import *
+from pygame.locals import *  # noqa
 
-from ..model.sound import Channel
 from .scene import Scene
-from ..components.button import Button
 from ..components.container import Container
-from ..components.text import Text
-from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import IMAGE
 
 
 class SplashScene(Scene):
