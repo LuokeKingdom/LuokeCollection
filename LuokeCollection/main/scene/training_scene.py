@@ -1,6 +1,6 @@
 import os
 import pygame
-from pygame.locals import * # noqa
+from pygame.locals import *  # noqa
 from ..model.sound import Channel
 
 from .scene import Scene
@@ -65,12 +65,12 @@ class TrainingScene(Scene):
             "talent_icon_SP": Sprite(EMPTY, width=36),
             "talent_icon_AP": Sprite(EMPTY, width=36),
             "talent_icon_MD": Sprite(EMPTY, width=36),
-            "pet_talent_HP": Text("", x=1070, y=286, size=26),
-            "pet_talent_AD": Text("", x=1070, y=326, size=26),
-            "pet_talent_DF": Text("", x=1070, y=366, size=26),
-            "pet_talent_SP": Text("", x=1070, y=406, size=26),
-            "pet_talent_AP": Text("", x=1070, y=446, size=26),
-            "pet_talent_MD": Text("", x=1070, y=486, size=26),
+            "pet_talent_HP": Text("", x=220, y=186, size=26),
+            "pet_talent_AD": Text("", x=220, y=266, size=26),
+            "pet_talent_DF": Text("", x=220, y=346, size=26),
+            "pet_talent_SP": Text("", x=220, y=426, size=26),
+            "pet_talent_AP": Text("", x=220, y=506, size=26),
+            "pet_talent_MD": Text("", x=220, y=586, size=26),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -106,29 +106,22 @@ class TrainingScene(Scene):
 
         self.OTHERS["talent_icon_HP"].set_image(
             image=IMAGE("HP.png"), width=36
-        ).set_pos(1040, 300)
+        ).set_pos(190, 200)
         self.OTHERS["talent_icon_AD"].set_image(
             image=IMAGE("AD.png"), width=36
-        ).set_pos(1040, 340)
+        ).set_pos(190, 280)
         self.OTHERS["talent_icon_DF"].set_image(
             image=IMAGE("DF.png"), width=36
-        ).set_pos(1040, 380)
+        ).set_pos(190, 360)
         self.OTHERS["talent_icon_SP"].set_image(
             image=IMAGE("SP.png"), width=36
-        ).set_pos(1040, 420)
+        ).set_pos(190, 440)
         self.OTHERS["talent_icon_AP"].set_image(
             image=IMAGE("AP.png"), width=36
-        ).set_pos(1040, 460)
+        ).set_pos(190, 520)
         self.OTHERS["talent_icon_MD"].set_image(
             image=IMAGE("MD.png"), width=36
-        ).set_pos(1040, 500)
-        color = tuple(map(lambda x: max(0, x - 40), ELEMENT_MAP.get(pet.element).color))
-        self.TEXTS["pet_talent_HP"].color = color
-        self.TEXTS["pet_talent_AD"].color = color
-        self.TEXTS["pet_talent_DF"].color = color
-        self.TEXTS["pet_talent_AP"].color = color
-        self.TEXTS["pet_talent_MD"].color = color
-        self.TEXTS["pet_talent_SP"].color = color
+        ).set_pos(190, 600)
         self.TEXTS["pet_talent_HP"].change_text(pet.stats[0])
         self.TEXTS["pet_talent_AD"].change_text(pet.stats[1])
         self.TEXTS["pet_talent_DF"].change_text(pet.stats[2])
