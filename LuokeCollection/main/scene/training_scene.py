@@ -18,6 +18,7 @@ class TrainingScene(Scene):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(TrainingScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
+        self.skill_dict = {}
         self.BUTTONS = {
             "close": Button(
                 image=IMAGE("close.png"),
@@ -128,6 +129,14 @@ class TrainingScene(Scene):
         self.TEXTS["pet_talent_AP"].change_text(pet.stats[3])
         self.TEXTS["pet_talent_MD"].change_text(pet.stats[4])
         self.TEXTS["pet_talent_SP"].change_text(pet.stats[5])
+
+    def init_skill(self):
+        self.skill_dict[0] = (700, 300)
+        pass
+
+    def set_skill(self, index, skill_info):
+        self.OTHERS[f"skill_{index}_name"].change_text(skill_info.name)
+        pass
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
