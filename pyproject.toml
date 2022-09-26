@@ -5,7 +5,7 @@ description = ""
 authors = ["Ruoqi Huang <huangruoqi374@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "*"
 black = "^22.6.0"
 pygame = "^2.1.2"
 typing-extensions = "^4.3.0"
