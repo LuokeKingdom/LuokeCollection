@@ -27,12 +27,6 @@ class SelectRectScene(Scene):
                 on_click=lambda: self.save_rect(),
                 text="保存",
             ),
-            "previous_pet": Button(
-                x=1030, y=300, on_click=lambda: model.previous_pet(), text="上一个"
-            ),
-            "next_pet": Button(
-                x=1170, y=300, on_click=lambda: model.next_pet(), text="下一个"
-            ),
         }
         self.OTHERS = {
             "image": Container(
@@ -40,6 +34,7 @@ class SelectRectScene(Scene):
                 align_mode="TOPLEFT",
             )
         }
+        
         self.TEXTS = {
             "warning": Text(
                 x=1100,
@@ -53,6 +48,11 @@ class SelectRectScene(Scene):
         self.shrink_rate = False
         self.rect = None
 
+    def side_effect(self):
+        super().side_effect()
+        self.model.set_pet_select_rect()
+        self.rect = None
+
     def set_pet_image(self, image):
         w, h = image.get_size()
         self.ratio = h / int(HEIGHT * 0.9)
@@ -64,12 +64,9 @@ class SelectRectScene(Scene):
             self.image_rect_h,
         ) = self.OTHERS["image"].image.get_rect()
 
-    def side_effect(self):
-        super().side_effect()
-        self.model.set_pet_select_rect(self.model.pet_number_select_rect)
-
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
+        print(self.rect)
 
         if mouse_pos.x < self.rect_side // 2:
             if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
@@ -151,6 +148,7 @@ class SelectRectScene(Scene):
 
     def save_rect(self):
         if self.rect is not None:
+            print(self.rect)
             self.model.save_rect(*self.rect)
             self.model.saved_sound.play()
             self.TEXTS["warning"].color = (100, 200, 100)

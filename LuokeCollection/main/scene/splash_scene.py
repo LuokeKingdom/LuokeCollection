@@ -55,14 +55,14 @@ class SplashScene(Scene):
         )
         self.frame = (self.frame + 1) % 40
         self.OTHERS["progress_pet"].set_pos(
-            self.progress, self.screen.get_height() - 300
+            self.progress * self.screen.get_width(), self.screen.get_height() - 300
         )
         self.OTHERS["progress_bar"].set_image(
-            self.OTHERS["progress_bar"].original_image, height=100, width=self.progress
+            self.OTHERS["progress_bar"].original_image, height=100, width=self.progress*self.screen.get_width()
         ).set_pos(x=0, y=self.screen.get_height() - 50)
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
-        self.progress += 5
-        if self.progress > self.screen.get_width():
+        self.progress = len(self.model.pet_rects) / len(self.model.PETS)
+        if self.progress >= 0.99:
             self.model.close_pop_up()

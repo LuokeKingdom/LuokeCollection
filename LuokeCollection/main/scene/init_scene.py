@@ -16,11 +16,5 @@ class InitScene(Scene):
                 y=HEIGHT / 2,
                 on_click=lambda: model.open("collection"),
             ),
-            "select_rect": Button(
-                x=WIDTH / 5,
-                y=HEIGHT / 2 + 100,
-                on_click=lambda: model.open("select_rect"),
-                text="修改头像",
-            ),
         }
         self.OTHERS = {}

@@ -24,7 +24,6 @@ class Model:
         self.pet_page_number = 1
         self.MAX_PAGE = len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1)
         self.pet_select_rect = None
-        self.pet_number_select_rect = 1
         self.pet_number_training = 1
 
         self.pet_rects = {}
@@ -102,15 +101,15 @@ class Model:
         self.set_page()
 
     # select_rect
-    def set_pet_select_rect(self, pet_number):
-        self.pet_select_rect = self.PETS[pet_number]
+    def set_pet_select_rect(self):
+        self.pet_select_rect = self.PETS[self.pet_number_training]
         image_path = os.path.join(
             "assets/data/", self.pet_select_rect.path, "display.png"
         )
         scene = self.get_scene()
         scene.set_pet_image(IMAGE(image_path, False))
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
-        scene.rect = self.DATA["pet_rects"].get(pet_number)
+        scene.rect = self.DATA["pet_rects"].get(self.pet_number_training)
         scene.TEXTS["warning"].change_text("")
 
     def _load_pet_rect(self, pet_number):
@@ -127,17 +126,9 @@ class Model:
             pet_image = pygame.transform.smoothscale(canvas, (100, 100))
         self.pet_rects[pet_number] = pet_image if rect else None
 
-    def previous_pet(self):
-        self.pet_number_select_rect = max(1, self.pet_number_select_rect - 1)
-        self.set_pet_select_rect(self.pet_number_select_rect)
-
-    def next_pet(self):
-        self.pet_number_select_rect = min(200, self.pet_number_select_rect + 1)
-        self.set_pet_select_rect(self.pet_number_select_rect)
-
     def save_rect(self, x, y, w, h):
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
-        pet_num = int(self.pet_number_select_rect)
+        pet_num = int(self.pet_number_training)
 
         if self.DATA["pet_rects"].get(pet_num) is None:
             self.DATA["pet_rects"][pet_num] = [x, y, w, h]
