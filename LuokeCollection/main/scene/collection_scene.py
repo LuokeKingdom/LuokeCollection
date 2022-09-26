@@ -86,8 +86,11 @@ class CollectionScene(Scene):
                 text="train", x=900, y=700, on_click=lambda: self.model.open("training")
             ),
             "edit_avatar": Button(
-                text="edit", x=750, y=700, on_click=lambda: self.model.open("select_rect")
-            )
+                text="edit",
+                x=750,
+                y=700,
+                on_click=lambda: self.model.open("select_rect"),
+            ),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):

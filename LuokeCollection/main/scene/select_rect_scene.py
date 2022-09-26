@@ -34,7 +34,7 @@ class SelectRectScene(Scene):
                 align_mode="TOPLEFT",
             )
         }
-        
+
         self.TEXTS = {
             "warning": Text(
                 x=1100,

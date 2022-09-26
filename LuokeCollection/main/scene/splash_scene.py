@@ -58,7 +58,9 @@ class SplashScene(Scene):
             self.progress * self.screen.get_width(), self.screen.get_height() - 300
         )
         self.OTHERS["progress_bar"].set_image(
-            self.OTHERS["progress_bar"].original_image, height=100, width=self.progress*self.screen.get_width()
+            self.OTHERS["progress_bar"].original_image,
+            height=100,
+            width=self.progress * self.screen.get_width(),
         ).set_pos(x=0, y=self.screen.get_height() - 50)
 
     def update(self, mouse_pos, clicked):
