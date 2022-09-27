@@ -63,8 +63,8 @@ class SplashScene(Scene):
             width=self.progress * self.screen.get_width(),
         ).set_pos(x=0, y=self.screen.get_height() - 50)
 
-    def update(self, mouse_pos, clicked):
-        super().update(mouse_pos, clicked)
+    def update(self, mouse_pos, clicked, pressed):
+        super().update(mouse_pos, clicked, pressed)
         self.progress = len(self.model.pet_rects) / len(self.model.PETS)
         if self.progress >= 0.99:
             self.model.close_pop_up()

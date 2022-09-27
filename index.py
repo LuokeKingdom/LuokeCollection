@@ -41,7 +41,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pressing = True
 
-    app.update(mouse_pos, clicked)
+    app.update(mouse_pos, clicked, pressing)
     app.display(mouse_pos, clicked)
     clock.tick(60)
     pygame.display.flip()

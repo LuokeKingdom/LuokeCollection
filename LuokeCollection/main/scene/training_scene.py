@@ -7,6 +7,7 @@ from .scene import Scene
 from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
+from ..components.slider import Slider
 from LuokeCollection.settings.dev import SOUND, IMAGE
 from ..utils import ELEMENT_MAP, type2element
 
@@ -75,6 +76,7 @@ class TrainingScene(Scene):
             "pet_talent_SP": Text("", x=220, y=426, size=26),
             "pet_talent_AP": Text("", x=220, y=506, size=26),
             "pet_talent_MD": Text("", x=220, y=586, size=26),
+            "train": Slider(x=700, y=700, on_click=lambda: print("clicked")),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -220,5 +222,5 @@ class TrainingScene(Scene):
         self.TEXTS[f"skill_{index}_effect_2"].show()
         self.TEXTS[f"skill_{index}_effect_3"].show()
 
-    def update(self, mouse_pos, clicked):
-        super().update(mouse_pos, clicked)
+    def update(self, mouse_pos, clicked, pressed):
+        super().update(mouse_pos, clicked, pressed)
