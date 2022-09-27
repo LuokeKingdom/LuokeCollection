@@ -1,3 +1,4 @@
+from LuokeCollection.main.animation.button.patterns.custom import CustomMixin
 from ..mixin import Mixin
 from .patterns.opacity import OpacityMixin
 from .patterns.scale import ScaleMixin
@@ -75,3 +76,10 @@ class FrameButtonAnimation(ButtonAnimation, FrameMixin):
         self.current_frame = 1
         self.path = "assets/images/" + self.parameter["path"] + "/"
         self.original_x, self.original_y = self.button.get_pos()
+
+class CustomButtonAnimation(ButtonAnimation, CustomMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.done = False
+        self.on_hover = self.parameter["on_hover"]
+        self.not_hover = self.parameter["not_hover"]

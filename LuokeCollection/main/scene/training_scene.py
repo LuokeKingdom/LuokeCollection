@@ -140,19 +140,41 @@ class TrainingScene(Scene):
                 x, y = 1000, 200 + (i - 4) * 120
             self.skill_pos_dict[i] = (x, y)
             self.TEXTS[f"skill_{i}_name"] = Text("", x=x - 40, y=y - 36, size=22)
-            self.BUTTONS[f"skill_{i}_background"] = Button(
-                image=EMPTY,
-                x=-1000,
-                y=-1000,
-                animation="opacity",
-                parameter={"factor": 0.3},
-                on_click=lambda: print("Skill clicked!"),
-            )
             self.OTHERS[f"skill_{i}_element"] = Sprite(EMPTY)
             self.OTHERS[f"skill_{i}_damage_icon"] = Sprite(EMPTY)
             self.OTHERS[f"skill_{i}_pp_icon"] = Sprite(EMPTY)
             self.TEXTS[f"skill_{i}_damage"] = Text("", x=x - 30, y=y + 10, size=20)
             self.TEXTS[f"skill_{i}_pp"] = Text("", x=x + 45, y=y + 10, size=20)
+            self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y = y-32, size=18)
+            self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x -82, y = y-8, size=18)
+            self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y = y+16, size=18)
+
+        buttons = map(
+            lambda x: Button(
+                image=EMPTY,
+                x=-1000,
+                y=-1000,
+                animation="custom",
+                parameter={
+                    "on_hover": lambda:self.pop_up_effect(x), 
+                    "not_hover": lambda:self.model.load_skills()
+                },
+                on_click=lambda: print("Skill clicked!"),
+            ), range(8)
+        )
+        for i, button in enumerate(buttons):
+            self.BUTTONS[f"skill_{i}_background"] = button
+        # self.BUTTONS[f"skill_4_background"] = Button(
+        #     image=EMPTY,
+        #     x=-1000,
+        #     y=-1000,
+        #     animation="custom",
+        #     parameter={
+        #         "on_hover": lambda:self.pop_up_effect(4), 
+        #         "not_hover": lambda:self.model.load_skills()
+        #     },
+        #     on_click=lambda: print("Skill clicked!"),
+        # )
 
     def set_skill(self, index, skill_info):
         if skill_info is None:
@@ -180,6 +202,23 @@ class TrainingScene(Scene):
         ).set_pos(x + 25, y + 20)
         self.TEXTS[f"skill_{index}_damage"].change_text(str(skill_info.power))
         self.TEXTS[f"skill_{index}_pp"].change_text(str(skill_info.PP))
+        self.TEXTS[f"skill_{index}_effect_1"].change_text(skill_info.effect[:12])
+        self.TEXTS[f"skill_{index}_effect_2"].change_text(skill_info.effect[12:24])
+        self.TEXTS[f"skill_{index}_effect_3"].change_text(skill_info.effect[24:36])
+        self.TEXTS[f"skill_{index}_effect_1"].hide()
+        self.TEXTS[f"skill_{index}_effect_2"].hide()
+        self.TEXTS[f"skill_{index}_effect_3"].hide()
+
+    def pop_up_effect(self,index):
+        self.TEXTS[f"skill_{index}_name"].hide()
+        self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
+        self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
+        self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
+        self.TEXTS[f"skill_{index}_damage"].hide()
+        self.TEXTS[f"skill_{index}_pp"].hide()
+        self.TEXTS[f"skill_{index}_effect_1"].show()
+        self.TEXTS[f"skill_{index}_effect_2"].show()
+        self.TEXTS[f"skill_{index}_effect_3"].show()
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)

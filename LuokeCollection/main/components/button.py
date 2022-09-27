@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *  # noqa
 
 from ..animation.button.button_animations import (
+    CustomButtonAnimation,
     OpacityButtonAnimation,
     ScaleButtonAnimation,
     JumpButtonAnimation,
@@ -22,6 +23,7 @@ class Button(Container):
         "rotate": RotateButtonAnimation,
         "jump": JumpButtonAnimation,
         "frame": FrameButtonAnimation,
+        "custom": CustomButtonAnimation,
         "none": lambda *args, **kwargs: None,
     }
 
