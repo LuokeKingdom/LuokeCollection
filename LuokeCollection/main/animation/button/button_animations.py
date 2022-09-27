@@ -77,6 +77,7 @@ class FrameButtonAnimation(ButtonAnimation, FrameMixin):
         self.path = "assets/images/" + self.parameter["path"] + "/"
         self.original_x, self.original_y = self.button.get_pos()
 
+
 class CustomButtonAnimation(ButtonAnimation, CustomMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

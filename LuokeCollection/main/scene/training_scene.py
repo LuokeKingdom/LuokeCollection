@@ -147,9 +147,9 @@ class TrainingScene(Scene):
             self.OTHERS[f"skill_{i}_pp_icon"] = Sprite(EMPTY)
             self.TEXTS[f"skill_{i}_damage"] = Text("", x=x - 30, y=y + 10, size=20)
             self.TEXTS[f"skill_{i}_pp"] = Text("", x=x + 45, y=y + 10, size=20)
-            self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y = y-32, size=18)
-            self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x -82, y = y-8, size=18)
-            self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y = y+16, size=18)
+            self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y=y - 32, size=18)
+            self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
+            self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
 
         buttons = map(
             lambda x: Button(
@@ -158,11 +158,12 @@ class TrainingScene(Scene):
                 y=-1000,
                 animation="custom",
                 parameter={
-                    "on_hover": lambda:self.pop_up_effect(x), 
-                    "not_hover": lambda:self.model.load_skills()
+                    "on_hover": lambda: self.pop_up_effect(x),
+                    "not_hover": lambda: self.model.load_skills(),
                 },
                 on_click=lambda: print("Skill clicked!"),
-            ), range(8)
+            ),
+            range(8),
         )
         for i, button in enumerate(buttons):
             self.BUTTONS[f"skill_{i}_background"] = button
@@ -172,7 +173,7 @@ class TrainingScene(Scene):
         #     y=-1000,
         #     animation="custom",
         #     parameter={
-        #         "on_hover": lambda:self.pop_up_effect(4), 
+        #         "on_hover": lambda:self.pop_up_effect(4),
         #         "not_hover": lambda:self.model.load_skills()
         #     },
         #     on_click=lambda: print("Skill clicked!"),
@@ -211,7 +212,7 @@ class TrainingScene(Scene):
         self.TEXTS[f"skill_{index}_effect_2"].hide()
         self.TEXTS[f"skill_{index}_effect_3"].hide()
 
-    def pop_up_effect(self,index):
+    def pop_up_effect(self, index):
         self.TEXTS[f"skill_{index}_name"].hide()
         self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
         self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)

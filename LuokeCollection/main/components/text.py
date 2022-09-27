@@ -49,8 +49,6 @@ class Text(Container):
     def show(self):
         self.change_text(self.text)
 
-
-
     def update(self):
         pass
 
