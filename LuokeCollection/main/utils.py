@@ -11,6 +11,17 @@ def save_file(pathname, content):
     f.close()
 
 
+SkillInfo = namedtuple(
+    "SkillInfo",
+    [
+        "name",
+        "type",
+        "power",
+        "PP",
+        "effect"
+    ],
+)
+
 PetInfo = namedtuple(
     "PetInfo",
     [

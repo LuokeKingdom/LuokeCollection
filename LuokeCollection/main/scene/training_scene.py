@@ -18,7 +18,7 @@ class TrainingScene(Scene):
         kwargs["bg"] = IMAGE("temp_bg.png")
         super(TrainingScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
-        self.skill_dict = {}
+        self.skill_pos_dict = {}
         self.BUTTONS = {
             "close": Button(
                 image=IMAGE("close.png"),
@@ -31,28 +31,31 @@ class TrainingScene(Scene):
             ),
             "next_page": Button(
                 image=pygame.transform.flip(IMAGE("previous.png"), True, False),
-                x=421,
+                x=1060,
                 y=649,
-                on_click=lambda: model.next_page(),
+                on_click=lambda: model.next_skill_page(),
                 animation="opacity",
                 parameter={"factor": 0.2},
                 width=48,
             ),
             "previous_page": Button(
                 image=IMAGE("previous.png"),
-                x=308,
+                x=940,
                 y=649,
-                on_click=lambda: model.previous_page(),
+                on_click=lambda: model.previous_skill_page(),
                 animation="opacity",
                 parameter={"factor": 0.2},
                 width=48,
             ),
         }
         self.init_info()
+        self.init_skills()
 
     def side_effect(self):
         super().side_effect()
         self.model.set_info()
+        self.model.skill_page_number = 1
+        self.model.load_skills()
 
     def init_info(self):
         info_compoments = {
@@ -130,13 +133,47 @@ class TrainingScene(Scene):
         self.TEXTS["pet_talent_MD"].change_text(pet.stats[4])
         self.TEXTS["pet_talent_SP"].change_text(pet.stats[5])
 
-    def init_skill(self):
-        self.skill_dict[0] = (700, 300)
-        pass
+    def init_skills(self):
+        for i in range(8):
+            x, y = 750, 200 + i * 120
+            if i > 3:
+                x, y = 1000, 200 + (i - 4) * 120
+            self.skill_pos_dict[i] = (x, y)
+            self.TEXTS[f"skill_{i}_name"] = Text("", x=x - 40, y=y - 36, size=22)
+            self.OTHERS[f"skill_{i}_background"] = Sprite(EMPTY)
+            self.OTHERS[f"skill_{i}_element"] = Sprite(EMPTY)
+            self.OTHERS[f"skill_{i}_damage_icon"] = Sprite(EMPTY)
+            self.OTHERS[f"skill_{i}_pp_icon"] = Sprite(EMPTY)
+            self.TEXTS[f"skill_{i}_damage"] = Text("", x=x - 30, y=y+10, size = 20)
+            self.TEXTS[f"skill_{i}_pp"] = Text("", x=x +45, y=y+10, size = 20)
 
     def set_skill(self, index, skill_info):
-        self.OTHERS[f"skill_{index}_name"].change_text(skill_info.name)
-        pass
+        if skill_info is None:
+            self.TEXTS[f"skill_{index}_name"].change_text("")
+            self.OTHERS[f"skill_{index}_background"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
+            self.TEXTS[f"skill_{index}_damage"].change_text("")
+            self.TEXTS[f"skill_{index}_pp"].change_text("")
+            return
+        self.TEXTS[f"skill_{index}_name"].change_text(skill_info.name)
+        x, y = self.skill_pos_dict[index]
+        self.OTHERS[f"skill_{index}_background"].set_image(
+            IMAGE("skill_temp.png"), width=180, height=100
+        ).set_pos(x, y)
+        self.OTHERS[f"skill_{index}_element"].set_image(
+            image=ELEMENT_MAP.get("水").image, width=56
+        ).set_pos(x - 65, y - 26)
+        self.OTHERS[f"skill_{index}_damage_icon"].set_image(
+            IMAGE("damage.png"), width=30
+        ).set_pos(x - 50, y + 20)
+        self.OTHERS[f"skill_{index}_pp_icon"].set_image(
+            IMAGE("pp.png"), width=30
+        ).set_pos(x + 25, y + 20)
+        self.TEXTS[f"skill_{index}_damage"].change_text(str(skill_info.power))
+        self.TEXTS[f"skill_{index}_pp"].change_text(str(skill_info.PP))
+
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)
