@@ -58,7 +58,7 @@ class Model:
                 info_path = os.path.join(str(i).zfill(4), "info.json")
                 skill_path = os.path.join(str(i).zfill(4), "skills.json")
                 info = JSON(info_path)
-                info["skills"] = list(map(lambda x: SkillInfo(**x),JSON(skill_path)))
+                info["skills"] = list(map(lambda x: SkillInfo(**x), JSON(skill_path)))
                 info["secondary_element"] = info.get("secondary_element")
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
@@ -149,10 +149,12 @@ class Model:
         scene = self.get_scene()
         for i in range(4, 8):
             try:
-                scene.set_skill(i, pet_info.skills[self.skill_page_number*4 + i - 8])
+                scene.set_skill(i, pet_info.skills[self.skill_page_number * 4 + i - 8])
             except:
                 scene.set_skill(i, None)
-        self.MAX_SKILL_PAGE = len(pet_info.skills) // 4 + (0 if len(pet_info.skills)%4==0 else 1)
+        self.MAX_SKILL_PAGE = len(pet_info.skills) // 4 + (
+            0 if len(pet_info.skills) % 4 == 0 else 1
+        )
 
     def previous_skill_page(self):
         if self.skill_page_number == 1:
@@ -167,4 +169,3 @@ class Model:
             return
         self.skill_page_number += 1
         self.load_skills()
-        

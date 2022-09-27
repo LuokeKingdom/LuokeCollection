@@ -8,7 +8,7 @@ from ..components.button import Button
 from ..components.text import Text
 from ..components.sprite import Sprite
 from LuokeCollection.settings.dev import SOUND, IMAGE
-from ..utils import ELEMENT_MAP
+from ..utils import ELEMENT_MAP, type2element
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
@@ -140,17 +140,24 @@ class TrainingScene(Scene):
                 x, y = 1000, 200 + (i - 4) * 120
             self.skill_pos_dict[i] = (x, y)
             self.TEXTS[f"skill_{i}_name"] = Text("", x=x - 40, y=y - 36, size=22)
-            self.OTHERS[f"skill_{i}_background"] = Sprite(EMPTY)
+            self.BUTTONS[f"skill_{i}_background"] = Button(
+                image=EMPTY,
+                x=-1000,
+                y=-1000,
+                animation="opacity",
+                parameter={"factor": 0.3},
+                on_click=lambda: print("Skill clicked!"),
+            )
             self.OTHERS[f"skill_{i}_element"] = Sprite(EMPTY)
             self.OTHERS[f"skill_{i}_damage_icon"] = Sprite(EMPTY)
             self.OTHERS[f"skill_{i}_pp_icon"] = Sprite(EMPTY)
-            self.TEXTS[f"skill_{i}_damage"] = Text("", x=x - 30, y=y+10, size = 20)
-            self.TEXTS[f"skill_{i}_pp"] = Text("", x=x +45, y=y+10, size = 20)
+            self.TEXTS[f"skill_{i}_damage"] = Text("", x=x - 30, y=y + 10, size=20)
+            self.TEXTS[f"skill_{i}_pp"] = Text("", x=x + 45, y=y + 10, size=20)
 
     def set_skill(self, index, skill_info):
         if skill_info is None:
             self.TEXTS[f"skill_{index}_name"].change_text("")
-            self.OTHERS[f"skill_{index}_background"].set_image(EMPTY)
+            self.BUTTONS[f"skill_{index}_background"].set_image(EMPTY)
             self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
             self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
             self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
@@ -159,11 +166,11 @@ class TrainingScene(Scene):
             return
         self.TEXTS[f"skill_{index}_name"].change_text(skill_info.name)
         x, y = self.skill_pos_dict[index]
-        self.OTHERS[f"skill_{index}_background"].set_image(
+        self.BUTTONS[f"skill_{index}_background"].set_image(
             IMAGE("skill_temp.png"), width=180, height=100
         ).set_pos(x, y)
         self.OTHERS[f"skill_{index}_element"].set_image(
-            image=ELEMENT_MAP.get("水").image, width=56
+            image=ELEMENT_MAP.get(type2element(skill_info.type)).image, width=56
         ).set_pos(x - 65, y - 26)
         self.OTHERS[f"skill_{index}_damage_icon"].set_image(
             IMAGE("damage.png"), width=30
@@ -173,7 +180,6 @@ class TrainingScene(Scene):
         ).set_pos(x + 25, y + 20)
         self.TEXTS[f"skill_{index}_damage"].change_text(str(skill_info.power))
         self.TEXTS[f"skill_{index}_pp"].change_text(str(skill_info.PP))
-
 
     def update(self, mouse_pos, clicked):
         super().update(mouse_pos, clicked)

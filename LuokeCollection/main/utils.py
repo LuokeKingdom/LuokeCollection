@@ -13,13 +13,7 @@ def save_file(pathname, content):
 
 SkillInfo = namedtuple(
     "SkillInfo",
-    [
-        "name",
-        "type",
-        "power",
-        "PP",
-        "effect"
-    ],
+    ["name", "type", "power", "PP", "effect"],
 )
 
 PetInfo = namedtuple(
@@ -115,6 +109,12 @@ def add_average_color(image_map):
 ELEMENT_MAP = {
     key: ELEMENT(IMAGE(val), ELEMENT2COLOR[key]) for key, val in ELEMENT_FILES.items()
 }
+
+
+def type2element(t):
+    if t[1] == "系":
+        return t[0]
+    return t[:2]
 
 
 class vec(list):
