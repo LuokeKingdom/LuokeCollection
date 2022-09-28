@@ -76,7 +76,7 @@ class TrainingScene(Scene):
             "pet_talent_SP": Text("", x=220, y=426, size=26),
             "pet_talent_AP": Text("", x=220, y=506, size=26),
             "pet_talent_MD": Text("", x=220, y=586, size=26),
-            "train": Slider(x=700, y=700, on_click=lambda: print("clicked")),
+            "train": Slider(x=700, y=700, on_click=lambda: print("clicked"), on_change=lambda x: print(x)),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
