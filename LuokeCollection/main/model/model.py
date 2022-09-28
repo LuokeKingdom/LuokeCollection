@@ -1,6 +1,8 @@
 import copy
+
+from LuokeCollection.main.scene.collection_scene import CollectionScene
 from .sound import Channel
-from ..utils import PetInfo
+from ..utils import PetInfo, SkillInfo
 import os
 import json
 import threading
@@ -23,8 +25,10 @@ class Model:
         self.saved_sound = SOUND("saved.wav", Channel.GAME)
         self.pet_page_number = 1
         self.MAX_PAGE = len(self.PETS) // 9 + (0 if len(self.PETS) % 9 == 0 else 1)
+        self.MAX_SKILL_PAGE = 0
         self.pet_select_rect = None
-        self.pet_number_select_rect = 1
+        self.pet_number_training = 1
+        self.skill_page_number = 1
 
         self.pet_rects = {}
 
@@ -56,7 +60,7 @@ class Model:
                 info_path = os.path.join(str(i).zfill(4), "info.json")
                 skill_path = os.path.join(str(i).zfill(4), "skills.json")
                 info = JSON(info_path)
-                info["skills"] = JSON(skill_path)
+                info["skills"] = list(map(lambda x: SkillInfo(**x), JSON(skill_path)))
                 info["secondary_element"] = info.get("secondary_element")
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
@@ -82,8 +86,21 @@ class Model:
             pet_page.append(self.PETS[pet_number])
         self.get_scene().set_page(pet_page)
 
-    def set_info(self, offset):
-        self.get_scene().set_info(self.PETS[(self.pet_page_number - 1) * 9 + offset])
+    def set_info(self, offset=None):
+        scene = self.get_scene()
+        if offset is not None:
+            self.pet_number_training = (self.pet_page_number - 1) * 9 + offset
+        scene.set_info(self.PETS[self.pet_number_training])
+        if isinstance(scene, CollectionScene):
+            if offset is None:
+                offset = (self.pet_number_training - 1) % 9
+            else:
+                offset -= 1
+            i = offset // 3
+            j = offset % 3
+            x = 272 + j * 161
+            y = 204 + i * 146
+            scene.BUTTONS["edit_avatar"].set_pos(x, y)
 
     def previous_page(self):
         if self.pet_page_number == 1:
@@ -94,20 +111,21 @@ class Model:
 
     def next_page(self):
         if self.pet_page_number == self.MAX_PAGE:
+            self.error_sound.play()
             return
         self.pet_page_number += 1
         self.set_page()
 
     # select_rect
-    def set_pet_select_rect(self, pet_number):
-        self.pet_select_rect = self.PETS[pet_number]
+    def set_pet_select_rect(self):
+        self.pet_select_rect = self.PETS[self.pet_number_training]
         image_path = os.path.join(
             "assets/data/", self.pet_select_rect.path, "display.png"
         )
         scene = self.get_scene()
         scene.set_pet_image(IMAGE(image_path, False))
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
-        scene.rect = self.DATA["pet_rects"].get(pet_number)
+        scene.rect = self.DATA["pet_rects"].get(self.pet_number_training)
         scene.TEXTS["warning"].change_text("")
 
     def _load_pet_rect(self, pet_number):
@@ -124,17 +142,9 @@ class Model:
             pet_image = pygame.transform.smoothscale(canvas, (100, 100))
         self.pet_rects[pet_number] = pet_image if rect else None
 
-    def previous_pet(self):
-        self.pet_number_select_rect = max(1, self.pet_number_select_rect - 1)
-        self.set_pet_select_rect(self.pet_number_select_rect)
-
-    def next_pet(self):
-        self.pet_number_select_rect = min(200, self.pet_number_select_rect + 1)
-        self.set_pet_select_rect(self.pet_number_select_rect)
-
     def save_rect(self, x, y, w, h):
         self.DATA["pet_rects"] = self.DATA.get("pet_rects", {})
-        pet_num = int(self.pet_number_select_rect)
+        pet_num = int(self.pet_number_training)
 
         if self.DATA["pet_rects"].get(pet_num) is None:
             self.DATA["pet_rects"][pet_num] = [x, y, w, h]
@@ -145,3 +155,30 @@ class Model:
         content = json.dumps(self.DATA, ensure_ascii=False)
         save_file("assets/data.json", content)
         self._load_pet_rect(pet_num)
+
+    # training
+    def load_skills(self):
+        pet_info = self.PETS[self.pet_number_training]
+        scene = self.get_scene()
+        for i in range(4, 8):
+            try:
+                scene.set_skill(i, pet_info.skills[self.skill_page_number * 4 + i - 8])
+            except Exception:
+                scene.set_skill(i, None)
+        self.MAX_SKILL_PAGE = len(pet_info.skills) // 4 + (
+            0 if len(pet_info.skills) % 4 == 0 else 1
+        )
+
+    def previous_skill_page(self):
+        if self.skill_page_number == 1:
+            self.error_sound.play()
+            return
+        self.skill_page_number -= 1
+        self.load_skills()
+
+    def next_skill_page(self):
+        if self.skill_page_number == self.MAX_SKILL_PAGE:
+            self.error_sound.play()
+            return
+        self.skill_page_number += 1
+        self.load_skills()

@@ -45,11 +45,11 @@ class App:
         else:
             self.scene.display(mouse_pos, clicked)
 
-    def update(self, mouse_pos, clicked):
+    def update(self, mouse_pos, clicked, pressed):
         if self.pop_up is not None:
-            self.pop_up.update(mouse_pos, clicked)
+            self.pop_up.update(mouse_pos, clicked, pressed)
         else:
-            self.scene.update(mouse_pos, clicked)
+            self.scene.update(mouse_pos, clicked, pressed)
 
     def on_scene_change(self):
         if self.scene.background_music is not None:

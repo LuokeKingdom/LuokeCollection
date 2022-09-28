@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *  # noqa
 
 from ..animation.button.button_animations import (
+    CustomButtonAnimation,
     OpacityButtonAnimation,
     ScaleButtonAnimation,
     JumpButtonAnimation,
@@ -22,6 +23,7 @@ class Button(Container):
         "rotate": RotateButtonAnimation,
         "jump": JumpButtonAnimation,
         "frame": FrameButtonAnimation,
+        "custom": CustomButtonAnimation,
         "none": lambda *args, **kwargs: None,
     }
 
@@ -79,7 +81,7 @@ class Button(Container):
         else:
             raise NotImplementedError("Function: <on_click> not implemented!!")
 
-    def update(self, mouse_pos, clicked):
+    def update(self, mouse_pos, clicked, pressed):
         current_time = time.time()
         if self.check_collide(mouse_pos):
             self.hovered = True

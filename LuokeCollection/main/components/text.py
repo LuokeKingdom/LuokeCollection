@@ -39,6 +39,16 @@ class Text(Container):
         self.rect = self.image.get_rect()
         self.set_pos(temp_pos)
 
+    def hide(self):
+        self.image = Text.get_font(self.size).render(self.text, True, self.color)
+        self.image.set_alpha(0)
+        temp_pos = self.get_pos()
+        self.rect = self.image.get_rect()
+        self.set_pos(temp_pos)
+
+    def show(self):
+        self.change_text(self.text)
+
     def update(self):
         pass
 

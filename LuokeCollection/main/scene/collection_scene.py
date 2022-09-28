@@ -16,7 +16,7 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class CollectionScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = IMAGE("temp_bg.png")
+        kwargs["bg"] = IMAGE("bg.png")
         super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
         self.BUTTONS = {
@@ -54,6 +54,7 @@ class CollectionScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.model.set_page()
+        self.model.set_info()
 
     def init_info(self):
         info_compoments = {
@@ -81,6 +82,24 @@ class CollectionScene(Scene):
             "pet_talent_MD": Text("", x=1070, y=486, size=26),
             "page_number": Text(
                 "", x=367, y=650, size=26, align_mode="CENTER", color=(231, 225, 146)
+            ),
+            "train": Button(
+                image=IMAGE("battle.png"),
+                x=1020,
+                y=600,
+                on_click=lambda: self.model.open("training"),
+                width=100,
+                animation="opacity",
+                parameter={"factor": 0.4},
+            ),
+            "edit_avatar": Button(
+                image=IMAGE("edit.png"),
+                x=200,
+                y=650,
+                on_click=lambda: self.model.open("select_rect"),
+                animation="opacity",
+                parameter={"factor": 0.4},
+                width=34,
             ),
         }
         for name, comp in info_compoments.items():
@@ -209,8 +228,8 @@ class CollectionScene(Scene):
             self.BUTTONS[f"slot_{i+1}"].image = EMPTY
         self.TEXTS["page_number"].change_text(str(self.model.pet_page_number))
 
-    def update(self, mouse_pos, clicked):
-        super().update(mouse_pos, clicked)
+    def update(self, mouse_pos, clicked, pressed):
+        super().update(mouse_pos, clicked, pressed)
         for index in range(9):
             pet_number = (self.model.pet_page_number - 1) * 9 + index + 1
             pet_image = self.model.pet_rects.get(pet_number)
