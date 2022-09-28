@@ -16,10 +16,20 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class TrainingScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = IMAGE("temp_bg.png")
+        kwargs["bg"] = IMAGE("training.png")
         super(TrainingScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
         self.skill_pos_dict = {}
+        self.talent_map = {
+            "level": 1,
+            "HP": 0,
+            "AD": 0,
+            "DF": 0,
+            "SP": 0,
+            "AP": 0,
+            "MD": 0,
+        }
+        self.stat_map = None
         self.BUTTONS = {
             "close": Button(
                 image=IMAGE("close.png"),
@@ -76,7 +86,70 @@ class TrainingScene(Scene):
             "pet_talent_SP": Text("", x=220, y=426, size=26),
             "pet_talent_AP": Text("", x=220, y=506, size=26),
             "pet_talent_MD": Text("", x=220, y=586, size=26),
-            "train": Slider(x=700, y=700, on_click=lambda: print("clicked"), on_change=lambda x: print(x)),
+            "pet_talent_label_HP": Text("天赋：0", x=320, y=186, size=26),
+            "pet_talent_label_AD": Text("天赋：0", x=320, y=266, size=26),
+            "pet_talent_label_DF": Text("天赋：0", x=320, y=346, size=26),
+            "pet_talent_label_SP": Text("天赋：0", x=320, y=426, size=26),
+            "pet_talent_label_AP": Text("天赋：0", x=320, y=506, size=26),
+            "pet_talent_label_MD": Text("天赋：0", x=320, y=586, size=26),
+            "pet_talent_slider_HP": Slider(
+                x=500,
+                y=200,
+                animation="opacity",
+                on_click=lambda: 0,
+                parameter={"factor": 0.5},
+                on_change=lambda x: self.recalculate(HP=x),
+            ),
+            "pet_talent_slider_AD": Slider(
+                x=500,
+                y=280,
+                animation="opacity",
+                on_click=lambda: 0,
+                parameter={"factor": 0.5},
+                on_change=lambda x: self.recalculate(AD=x),
+            ),
+            "pet_talent_slider_DF": Slider(
+                x=500,
+                y=360,
+                animation="opacity",
+                on_click=lambda: 0,
+                parameter={"factor": 0.5},
+                on_change=lambda x: self.recalculate(DF=x),
+            ),
+            "pet_talent_slider_SP": Slider(
+                x=500,
+                y=440,
+                animation="opacity",
+                on_click=lambda: 0,
+                parameter={"factor": 0.5},
+                on_change=lambda x: self.recalculate(SP=x),
+            ),
+            "pet_talent_slider_AP": Slider(
+                x=500,
+                y=520,
+                animation="opacity",
+                on_click=lambda: 0,
+                parameter={"factor": 0.5},
+                on_change=lambda x: self.recalculate(AP=x),
+            ),
+            "pet_talent_slider_MD": Slider(
+                x=500,
+                y=600,
+                animation="opacity",
+                on_click=lambda: 0,
+                parameter={"factor": 0.5},
+                on_change=lambda x: self.recalculate(MD=x),
+            ),
+            "pet_level_label": Text("等级：1", x=450, y=60, size=26),
+            "pet_level_slider": Slider(
+                x=500,
+                y=114,
+                interval=[1, 100],
+                animation="opacity",
+                on_click=lambda: 0,
+                parameter={"factor": 0.5},
+                on_change=lambda x: self.recalculate(level=x),
+            ),
         }
         for name, comp in info_compoments.items():
             if isinstance(comp, Button):
@@ -85,6 +158,20 @@ class TrainingScene(Scene):
                 self.TEXTS[name] = comp
             else:
                 self.OTHERS[name] = comp
+
+    def recalculate(self, **changes):
+        for k, v in changes.items():
+            self.talent_map[k] = v
+        level = self.talent_map["level"]
+        for k, v in self.talent_map.items():
+            if k == "level":
+                self.TEXTS["pet_level_label"].change_text("等级：" + str(v))
+            else:
+                self.TEXTS[f"pet_talent_label_{k}"].change_text("天赋：" + str(v))
+                val = (self.stat_map[k] * 2 + v) * level / 100 + (
+                    (level + 10) if k == "HP" else 5
+                )
+                self.TEXTS[f"pet_talent_{k}"].change_text(str(int(val)))
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
@@ -99,7 +186,7 @@ class TrainingScene(Scene):
             self.OTHERS["pet_image"].set_image(
                 image=pet_image, height=max_height
             ).set_pos(360, 360)
-        self.OTHERS["pet_image"].image.set_alpha(100)
+        self.OTHERS["pet_image"].image.set_alpha(60)
         self.OTHERS["pet_element"].set_image(
             image=ELEMENT_MAP.get(pet.element).image, width=100
         ).set_pos(190, 110)
@@ -128,12 +215,15 @@ class TrainingScene(Scene):
         self.OTHERS["talent_icon_MD"].set_image(
             image=IMAGE("MD.png"), width=36
         ).set_pos(190, 600)
-        self.TEXTS["pet_talent_HP"].change_text(pet.stats[0])
-        self.TEXTS["pet_talent_AD"].change_text(pet.stats[1])
-        self.TEXTS["pet_talent_DF"].change_text(pet.stats[2])
-        self.TEXTS["pet_talent_AP"].change_text(pet.stats[3])
-        self.TEXTS["pet_talent_MD"].change_text(pet.stats[4])
-        self.TEXTS["pet_talent_SP"].change_text(pet.stats[5])
+        self.stat_map = {
+            "HP": int(pet.stats[0]),
+            "AD": int(pet.stats[1]),
+            "DF": int(pet.stats[2]),
+            "AP": int(pet.stats[3]),
+            "MD": int(pet.stats[4]),
+            "SP": int(pet.stats[5]),
+        }
+        self.recalculate()
 
     def init_skills(self):
         for i in range(8):
@@ -167,17 +257,6 @@ class TrainingScene(Scene):
         )
         for i, button in enumerate(buttons):
             self.BUTTONS[f"skill_{i}_background"] = button
-        # self.BUTTONS[f"skill_4_background"] = Button(
-        #     image=EMPTY,
-        #     x=-1000,
-        #     y=-1000,
-        #     animation="custom",
-        #     parameter={
-        #         "on_hover": lambda:self.pop_up_effect(4),
-        #         "not_hover": lambda:self.model.load_skills()
-        #     },
-        #     on_click=lambda: print("Skill clicked!"),
-        # )
 
     def set_skill(self, index, skill_info):
         if skill_info is None:
