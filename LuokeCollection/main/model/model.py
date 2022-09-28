@@ -150,7 +150,7 @@ class Model:
         for i in range(4, 8):
             try:
                 scene.set_skill(i, pet_info.skills[self.skill_page_number * 4 + i - 8])
-            except:
+            except Exception:
                 scene.set_skill(i, None)
         self.MAX_SKILL_PAGE = len(pet_info.skills) // 4 + (
             0 if len(pet_info.skills) % 4 == 0 else 1
