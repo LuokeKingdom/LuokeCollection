@@ -54,6 +54,7 @@ class CollectionScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.model.set_page()
+        self.model.set_info()
 
     def init_info(self):
         info_compoments = {
@@ -83,13 +84,22 @@ class CollectionScene(Scene):
                 "", x=367, y=650, size=26, align_mode="CENTER", color=(231, 225, 146)
             ),
             "train": Button(
-                text="train", x=900, y=700, on_click=lambda: self.model.open("training")
+                image=IMAGE("battle.png"),
+                x=1020,
+                y=600,
+                on_click=lambda: self.model.open("training"),
+                width=100,
+                animation="opacity",
+                parameter={"factor": 0.4},
             ),
             "edit_avatar": Button(
-                text="edit",
-                x=750,
-                y=700,
+                image=IMAGE("edit.png"),
+                x=200,
+                y=650,
                 on_click=lambda: self.model.open("select_rect"),
+                animation="opacity",
+                parameter={"factor": 0.4},
+                width=34,
             ),
         }
         for name, comp in info_compoments.items():

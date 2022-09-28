@@ -1,4 +1,6 @@
 import copy
+
+from LuokeCollection.main.scene.collection_scene import CollectionScene
 from .sound import Channel
 from ..utils import PetInfo, SkillInfo
 import os
@@ -85,9 +87,20 @@ class Model:
         self.get_scene().set_page(pet_page)
 
     def set_info(self, offset=None):
+        scene = self.get_scene()
         if offset is not None:
             self.pet_number_training = (self.pet_page_number - 1) * 9 + offset
-        self.get_scene().set_info(self.PETS[self.pet_number_training])
+        scene.set_info(self.PETS[self.pet_number_training])
+        if isinstance(scene, CollectionScene):
+            if offset is None:
+                offset = (self.pet_number_training - 1) % 9
+            else:
+                offset -= 1
+            i = offset // 3
+            j = offset % 3
+            x = 272 + j * 161
+            y = 204 + i * 146
+            scene.BUTTONS["edit_avatar"].set_pos(x, y)
 
     def previous_page(self):
         if self.pet_page_number == 1:

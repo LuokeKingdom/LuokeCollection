@@ -6,7 +6,7 @@ from LuokeCollection.main.components.button import Button
 
 class Slider(Button):
     def __init__(self, on_change, interval=[0, 31], *args, **kwargs):
-        kwargs["image"] = pygame.Surface([20, 20])
+        kwargs["image"] = pygame.Surface([30, 30])
         kwargs["image"].fill((0, 0, 0))
         super().__init__(*args, **kwargs)
         self.dragged = False
