@@ -3,6 +3,7 @@ from .scene.splash_scene import SplashScene
 from .scene.init_scene import InitScene
 from .scene.collection_scene import CollectionScene
 from .scene.select_rect_scene import SelectRectScene
+from .scene.battle_prep_scene import BattlePrepScene
 
 
 class SceneFactory:
@@ -13,6 +14,7 @@ class SceneFactory:
             "collection": CollectionScene(screen, model),
             "select_rect": SelectRectScene(screen, model),
             "training": TrainingScene(screen, model),
+            "battle_prep": BattlePrepScene(screen, model),
         }
 
     def get_scene(self, name):
