@@ -1,5 +1,6 @@
 from LuokeCollection.main.scene.scene import Scene
 from ..components.button import Button
+from ..components.text import Text
 from ..model.sound import Channel
 from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
@@ -18,3 +19,14 @@ class BattlePrepScene(Scene):
             ),
         }
         self.OTHERS = {}
+        self.init_pets()
+    
+    def init_pets(self):
+        for i in range(6):
+            self.BUTTONS[f"pet_container_{i}"] = Button("opacity", text="", x=200+i*150, y = 250)
+            self.TEXTS[f"pet_name_{i}"] = Text("ac", x=200 + i*150, y=250, align_mode="CENTER")
+
+    
+    def pet_circle(self, id, name, x, y):
+        self.BUTTONS[f"pet_container_{id}"] = Button("opacity",image=IMAGE("placeholder.png"),width=100,x=x,y=y)
+        self.TEXTS[f"pet_name_{id}"] = Text(name,x=x,y=y)
