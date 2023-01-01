@@ -29,6 +29,7 @@ class Model:
         self.pet_select_rect = None
         self.pet_number_training = 1
         self.skill_page_number = 1
+        self.battle_prep_pet_number = 0
 
         self.pet_rects = {}
 
@@ -182,3 +183,14 @@ class Model:
             return
         self.skill_page_number += 1
         self.load_skills()
+
+    # battle preparation
+    def set_battle_prep(self, offset=None):
+        scene = self.get_scene()
+        def get_battle_pet_number(offset):
+            return 1
+        self.pet_number_training = get_battle_pet_number(offset)
+        scene.set_info(self.PETS[self.pet_number_training])
+            
+
+

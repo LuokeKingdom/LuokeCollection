@@ -17,9 +17,31 @@ class BattlePrepScene(Scene):
                 y=100,
                 on_click=lambda: model.close()
             ),
+            "train": Button(
+                image=IMAGE("battle.png"),
+                x=1020,
+                y=600,
+                on_click=lambda: self.model.open("training"),
+                width=100,
+                animation="opacity",
+                parameter={"factor": 0.4},
+            ),
+            "battle": Button(
+                image=IMAGE("battle.png"),
+                on_click=lambda: self.model.open("battle"),
+                x=1100,
+                y=600,
+                width=100,
+                animation="opacity",
+                parameter={"factor": 0.4},
+            )
         }
-        self.OTHERS = {}
+        self.OTHERS = {
+        }
         self.init_pets()
+
+    def side_effect(self):
+        super().side_effect()
     
     def init_pets(self):
         for i in range(6):
@@ -30,3 +52,6 @@ class BattlePrepScene(Scene):
     def pet_circle(self, id, name, x, y):
         self.BUTTONS[f"pet_container_{id}"] = Button("opacity",image=IMAGE("placeholder.png"),width=100,x=x,y=y)
         self.TEXTS[f"pet_name_{id}"] = Text(name,x=x,y=y)
+
+    def set_info(self, pet):
+        pass
