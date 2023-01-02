@@ -69,7 +69,7 @@ class TrainingScene(Scene):
         self.model.load_skills()
 
     def init_info(self):
-        info_compoments = {
+        info_components = {
             "pet_name": Text("", x=260, y=100, size=32),
             "pet_image": Sprite(EMPTY),
             "pet_element": Sprite(EMPTY),
@@ -151,7 +151,7 @@ class TrainingScene(Scene):
                 on_change=lambda x: self.recalculate(level=x),
             ),
         }
-        for name, comp in info_compoments.items():
+        for name, comp in info_components.items():
             if isinstance(comp, Button):
                 self.BUTTONS[name] = comp
             elif isinstance(comp, Text):

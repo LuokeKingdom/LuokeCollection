@@ -185,10 +185,10 @@ class Model:
         self.load_skills()
 
     # battle preparation
-    def set_battle_prep(self, offset=None):
+    def set_battle_prep(self, offset=0):
         scene = self.get_scene()
         def get_battle_pet_number(offset):
-            return 1
+            return offset+1
         self.pet_number_training = get_battle_pet_number(offset)
         scene.set_info(self.PETS[self.pet_number_training])
             
