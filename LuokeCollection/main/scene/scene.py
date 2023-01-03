@@ -1,7 +1,6 @@
 import pygame
 from pygame.locals import *  # noqa
 from ..utils import Mouse
-from ..components.button import Button
 from ..components.background import Background
 from LuokeCollection.settings.dev import WIDTH, HEIGHT
 

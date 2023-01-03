@@ -19,8 +19,8 @@ class InitScene(Scene):
             "battle": Button(
                 text="战斗",
                 x=WIDTH / 5,
-                y=HEIGHT / 2+100,
+                y=HEIGHT / 2 + 100,
                 on_click=lambda: model.open("battle_prep"),
-            )
+            ),
         }
         self.OTHERS = {}

@@ -67,11 +67,16 @@ class Model:
                 info_path = os.path.join(str(i).zfill(4), "info.json")
                 skill_path = os.path.join(str(i).zfill(4), "skills.json")
                 info = JSON(info_path)
-                info["skills"] = list(map(lambda x: SkillInfo(index=x[0], **(x[1])), enumerate(JSON(skill_path))))
+                info["skills"] = list(
+                    map(
+                        lambda x: SkillInfo(index=x[0], **(x[1])),
+                        enumerate(JSON(skill_path)),
+                    )
+                )
                 info["secondary_element"] = info.get("secondary_element")
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
-            except Exception as e:
+            except Exception:
                 # print(e)
                 continue
 
@@ -165,19 +170,21 @@ class Model:
         self._load_pet_rect(pet_num)
 
     # training
-    def load_skills(self, saved_skills=[-1,-1,-1,-1]):
+    def load_skills(self, saved_skills=[-1, -1, -1, -1]):
         pet_info = self.PETS[self.pet_number_training]
         scene = self.get_scene()
         for i in range(4):
             try:
-                scene.set_skill(i, pet_info.skills[(self.skill_page_number-1) * 4 + i])
+                scene.set_skill(
+                    i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
+                )
             except Exception:
                 scene.set_skill(i, None)
         for i in range(4):
-            if saved_skills[i]>=0:
-                scene.set_skill(i+4, pet_info.skills[saved_skills[i]])
+            if saved_skills[i] >= 0:
+                scene.set_skill(i + 4, pet_info.skills[saved_skills[i]])
             else:
-                scene.set_skill(i+4, None)
+                scene.set_skill(i + 4, None)
         self.MAX_SKILL_PAGE = len(pet_info.skills) // 4 + (
             0 if len(pet_info.skills) % 4 == 0 else 1
         )
@@ -191,7 +198,9 @@ class Model:
         scene = self.get_scene()
         for i in range(4):
             try:
-                scene.set_skill(i, pet_info.skills[(self.skill_page_number-1) * 4 + i])
+                scene.set_skill(
+                    i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
+                )
             except Exception:
                 scene.set_skill(i, None)
 
@@ -204,7 +213,9 @@ class Model:
         scene = self.get_scene()
         for i in range(4):
             try:
-                scene.set_skill(i, pet_info.skills[(self.skill_page_number-1) * 4 + i])
+                scene.set_skill(
+                    i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
+                )
             except Exception:
                 scene.set_skill(i, None)
 
@@ -223,12 +234,12 @@ class Model:
 
     def replace_skills(self, current_slots):
         for i in range(4):
-                pet_info = self.PETS[self.pet_number_training]
-                scene = self.get_scene()
-                if current_slots[i]==-1:
-                    scene.set_skill(i+4, None)
-                else:
-                    scene.set_skill(i+4, pet_info.skills[current_slots[i]])
+            pet_info = self.PETS[self.pet_number_training]
+            scene = self.get_scene()
+            if current_slots[i] == -1:
+                scene.set_skill(i + 4, None)
+            else:
+                scene.set_skill(i + 4, pet_info.skills[current_slots[i]])
 
     # battle preparation
     def set_battle_prep(self, offset=-1):
@@ -243,13 +254,19 @@ class Model:
             scene.talent_map = battle_pet["talent_map"]
             scene.set_info(self.PETS[self.pet_number_training])
             for i in range(4):
-                if battle_pet["skills"][i]==-1:
+                if battle_pet["skills"][i] == -1:
                     scene.set_skill(i, None)
                 else:
-                    scene.set_skill(i, self.PETS[self.pet_number_training].skills[battle_pet["skills"][i]])
+                    scene.set_skill(
+                        i,
+                        self.PETS[self.pet_number_training].skills[
+                            battle_pet["skills"][i]
+                        ],
+                    )
 
     def get_battle_pet(self, offset):
-        if offset==-1: return self.pet_number_training
+        if offset == -1:
+            return self.pet_number_training
         pet_path = os.path.join("assets/battle/", f"pet_{offset}.json")
         if os.path.exists(pet_path):
             return JSON(pet_path, False)

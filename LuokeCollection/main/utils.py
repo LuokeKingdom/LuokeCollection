@@ -187,7 +187,7 @@ class Mouse:
 
     def draw(screen, mouse_pos, is_pointer):
         screen.blit(
-            Mouse.cursor_hand if is_pointer else Mouse.cursor_arrow, 
-            mouse_pos-vec(10,0) if is_pointer else mouse_pos
+            Mouse.cursor_hand if is_pointer else Mouse.cursor_arrow,
+            mouse_pos - vec(10, 0) if is_pointer else mouse_pos,
         )
         pass

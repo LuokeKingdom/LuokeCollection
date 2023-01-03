@@ -1,5 +1,4 @@
 from LuokeCollection.main.scene_factory import SceneFactory
-from LuokeCollection.main.utils import vec
 from .model.model import Model
 
 
@@ -33,7 +32,7 @@ class App:
             self.scene = self.stack[len(self.stack) - 1]
             self.on_scene_change()
 
-    def open_pop_up(self, scene_name,**kwargs):
+    def open_pop_up(self, scene_name, **kwargs):
         self.pop_up = self.create_scene(scene_name)
         self.pop_up.side_effect(**kwargs)
 

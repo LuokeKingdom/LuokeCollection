@@ -18,7 +18,7 @@ class SceneFactory:
             "training": TrainingScene(screen, model),
             "battle_prep": BattlePrepScene(screen, model),
             "battle": BattleScene(screen, model),
-            "pet_position_select": PetPositionSelectScene(screen, model)
+            "pet_position_select": PetPositionSelectScene(screen, model),
         }
 
     def get_scene(self, name):

@@ -1,9 +1,9 @@
 import os
 import pygame
-from pygame.locals import *
+from pygame.locals import *  # noqa
 
-from ...main.utils import ELEMENT_MAP, type2element  # noqa
-from ...settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
+from ...main.utils import ELEMENT_MAP, type2element
+from ...settings.dev import SOUND, IMAGE
 from ..components.sprite import Sprite
 from ..scene.scene import Scene
 from ..components.button import Button
@@ -13,9 +13,10 @@ from ..model.sound import Channel
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
+
 class BattlePrepScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = pygame.Surface((1,1)) 
+        kwargs["bg"] = pygame.Surface((1, 1))
         kwargs["bg"].fill((255, 223, 138))
         super(BattlePrepScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
@@ -30,21 +31,20 @@ class BattlePrepScene(Scene):
         }
         self.stat_map = None
         self.skill_pos_dict = {}
-        self.skills = [None]*4
+        self.skills = [None] * 4
         self.BUTTONS = {
-            "pop": Button(
-                text="X",
-                x=1100,
-                y=100,
-                on_click=lambda: model.close()
-            ),
+            "pop": Button(text="X", x=1100, y=100, on_click=lambda: model.close()),
             "train": Button(
                 image=IMAGE("edit.png"),
                 x=1000,
                 y=600,
-                on_click=lambda: self.model.open("training", talent_map=self.talent_map, skills=[
-                    (-1 if skill is None else skill.index) for skill in self.skills
-                ]),
+                on_click=lambda: self.model.open(
+                    "training",
+                    talent_map=self.talent_map,
+                    skills=[
+                        (-1 if skill is None else skill.index) for skill in self.skills
+                    ],
+                ),
                 width=100,
                 animation="opacity",
                 parameter={"factor": 0.4},
@@ -57,7 +57,7 @@ class BattlePrepScene(Scene):
                 width=100,
                 animation="opacity",
                 parameter={"factor": 0.4},
-            )
+            ),
         }
         self.init_pets()
         self.init_info()
@@ -67,21 +67,23 @@ class BattlePrepScene(Scene):
         super().side_effect()
         self.model.set_battle_prep(0)
 
-    
     def init_pets(self):
         def get_on_click(i):
-            return lambda:self.model.set_battle_prep(i)
+            return lambda: self.model.set_battle_prep(i)
+
         for i in range(6):
             self.BUTTONS[f"pet_container_{i}"] = Button(
-                animation="opacity", 
+                animation="opacity",
                 image=IMAGE("place_holder.png"),
-                width=100, 
-                x=200+i*150, 
+                width=100,
+                x=200 + i * 150,
                 y=100,
-                on_click=get_on_click(i)
+                on_click=get_on_click(i),
             )
-            self.TEXTS[f"pet_name_{i}"] = Text("",x=200+i*150,y=100, align_mode="CENTER")
-    
+            self.TEXTS[f"pet_name_{i}"] = Text(
+                "", x=200 + i * 150, y=100, align_mode="CENTER"
+            )
+
     def init_info(self):
         info_components = {
             "pet_name": Text("", x=260, y=200, size=32),
@@ -111,18 +113,15 @@ class BattlePrepScene(Scene):
             else:
                 self.OTHERS[name] = comp
 
-
-
     def set_pet_tabs(self, pets):
         for i, pet in enumerate(pets):
             self.pet_circle(i, pet["name"], pet["image"])
-    
+
     def pet_circle(self, i, name, image=None):
         if image is None:
             image = IMAGE("place_holder.png")
-        self.BUTTONS[f"pet_container_{i}"].set_image(image).set_pos(200+i*150,100)
+        self.BUTTONS[f"pet_container_{i}"].set_image(image).set_pos(200 + i * 150, 100)
         self.TEXTS[f"pet_name_{i}"].change_text(name)
-
 
     def set_info(self, pet):
         self.TEXTS["pet_name"].change_text(pet.name)
@@ -218,7 +217,6 @@ class BattlePrepScene(Scene):
         for i, button in enumerate(buttons):
             self.BUTTONS[f"skill_{i}_background"] = button
 
-
     def pop_up_effect(self, index, show):
         if show:
             self.TEXTS[f"skill_{index}_name"].hide()
@@ -234,7 +232,8 @@ class BattlePrepScene(Scene):
             x, y = self.skill_pos_dict[index]
             self.TEXTS[f"skill_{index}_name"].show()
             self.OTHERS[f"skill_{index}_element"].set_image(
-                image=ELEMENT_MAP.get(type2element(self.skills[index].type)).image, width=56
+                image=ELEMENT_MAP.get(type2element(self.skills[index].type)).image,
+                width=56,
             ).set_pos(x - 65, y - 26)
             self.OTHERS[f"skill_{index}_damage_icon"].set_image(
                 IMAGE("damage.png"), width=30
@@ -247,7 +246,6 @@ class BattlePrepScene(Scene):
             self.TEXTS[f"skill_{index}_effect_1"].hide()
             self.TEXTS[f"skill_{index}_effect_2"].hide()
             self.TEXTS[f"skill_{index}_effect_3"].hide()
-
 
     def set_skill(self, index, skill_info):
         self.skills[index] = skill_info
