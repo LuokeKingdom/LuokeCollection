@@ -62,11 +62,11 @@ class TrainingScene(Scene):
             "save_pet": Button(
                 image=IMAGE("place_holder.png"),
                 x=1000,
-                y=740,
-                on_click=lambda:0,
+                y=649,
+                on_click=lambda: self.model.open_pop_up("pet_position_select"),
                 animation="opacity",
                 parameter={"factor": 0.2},
-                width=50
+                width=48,
             )
         }
         self.init_info()

@@ -1,4 +1,5 @@
 from LuokeCollection.main.scene_factory import SceneFactory
+from LuokeCollection.main.utils import vec
 from .model.model import Model
 
 
@@ -41,6 +42,8 @@ class App:
 
     def display(self, mouse_pos, clicked):
         if self.pop_up is not None:
+            # self.scene.display(vec(-100,-100), False)
+            self.scene.display(mouse_pos, clicked)
             self.pop_up.display(mouse_pos, clicked)
         else:
             self.scene.display(mouse_pos, clicked)
