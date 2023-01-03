@@ -31,6 +31,7 @@ class TrainingScene(Scene):
         }
         self.stat_map = None
         self.skills = {} 
+        self.skill_indices = [-1]*4
         self.BUTTONS = {
             "close": Button(
                 image=IMAGE("close.png"),
@@ -63,7 +64,7 @@ class TrainingScene(Scene):
                 image=IMAGE("place_holder.png"),
                 x=1000,
                 y=649,
-                on_click=lambda: self.model.open_pop_up("pet_position_select"),
+                on_click=lambda: self.model.save_pet_content(self.talent_map, self.skill_indices),
                 animation="opacity",
                 parameter={"factor": 0.2},
                 width=48,

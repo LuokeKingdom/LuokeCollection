@@ -30,6 +30,7 @@ class Model:
         self.pet_number_training = 1
         self.skill_page_number = 1
         self.battle_prep_pet_number = 0
+        self.battle_pet_content = ""
 
         self.pet_rects = {}
 
@@ -187,6 +188,19 @@ class Model:
         self.skill_page_number += 1
         self.load_skills()
 
+    def save_pet_content(self, talent_map, skills):
+        object = {
+            "number": self.pet_number_training,
+            "talent_map": talent_map,
+            "skills": skills,
+        }
+        self.battle_pet_content = json.dumps(object, ensure_ascii=False)
+        self.open_pop_up("pet_position_select")
+
+    def save_pet_file(self, index):
+        save_file(f"assets/battle/pet_{index}.json", self.battle_pet_content)
+        self.close_pop_up()
+
     # battle preparation
     def set_battle_prep(self, offset=-1):
         scene = self.get_scene()
@@ -197,6 +211,3 @@ class Model:
         scene.set_info(self.PETS[self.pet_number_training])
         for i in range(4):
             scene.set_skill(i, self.PETS[self.pet_number_training].skills[i])
-            
-
-
