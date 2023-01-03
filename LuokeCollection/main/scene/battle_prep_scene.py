@@ -2,20 +2,21 @@ import os
 import pygame
 from pygame.locals import *
 
-from LuokeCollection.main.utils import ELEMENT_MAP  # noqa
+from ...main.utils import ELEMENT_MAP, type2element  # noqa
+from ...settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 from ..components.sprite import Sprite
 from ..scene.scene import Scene
 from ..components.button import Button
 from ..components.text import Text
 from ..model.sound import Channel
-from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class BattlePrepScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = IMAGE("skill_temp.png")
+        kwargs["bg"] = pygame.Surface((1,1)) 
+        kwargs["bg"].fill((255, 223, 138))
         super(BattlePrepScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
         self.talent_map = {
@@ -28,6 +29,7 @@ class BattlePrepScene(Scene):
             "MD": 0,
         }
         self.stat_map = None
+        self.skill_pos_dict = {}
         self.BUTTONS = {
             "pop": Button(
                 text="X",
@@ -36,7 +38,7 @@ class BattlePrepScene(Scene):
                 on_click=lambda: model.close()
             ),
             "train": Button(
-                image=IMAGE("battle.png"),
+                image=IMAGE("edit.png"),
                 x=1020,
                 y=600,
                 on_click=lambda: self.model.open("training"),
@@ -56,10 +58,11 @@ class BattlePrepScene(Scene):
         }
         self.init_pets()
         self.init_info()
+        self.init_skills()
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_battle_prep()
+        self.model.set_battle_prep(0)
 
     
     def init_pets(self):
@@ -103,6 +106,8 @@ class BattlePrepScene(Scene):
                 self.TEXTS[name] = comp
             else:
                 self.OTHERS[name] = comp
+
+
 
     def set_pet_tabs(self, pets):
         for i, pet in enumerate(pets):
@@ -179,3 +184,78 @@ class BattlePrepScene(Scene):
                     (level + 10) if k == "HP" else 5
                 )
                 self.TEXTS[f"pet_{k}"].change_text(str(int(val)))
+
+    def init_skills(self):
+        for i in range(4):
+            x, y = 750, 300 + i * 120
+            self.skill_pos_dict[i] = (x, y)
+            self.TEXTS[f"skill_{i}_name"] = Text("", x=x - 40, y=y - 36, size=22)
+            self.OTHERS[f"skill_{i}_element"] = Sprite(EMPTY)
+            self.OTHERS[f"skill_{i}_damage_icon"] = Sprite(EMPTY)
+            self.OTHERS[f"skill_{i}_pp_icon"] = Sprite(EMPTY)
+            self.TEXTS[f"skill_{i}_damage"] = Text("", x=x - 30, y=y + 10, size=20)
+            self.TEXTS[f"skill_{i}_pp"] = Text("", x=x + 45, y=y + 10, size=20)
+            self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y=y - 32, size=18)
+            self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
+            self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
+
+        buttons = map(
+            lambda x: Button(
+                image=EMPTY,
+                x=-1000,
+                y=-1000,
+                animation="custom",
+                parameter={
+                    "on_hover": lambda: self.pop_up_effect(x),
+                    "not_hover": lambda: self.model.set_battle_prep(),
+                },
+                on_click=lambda: print("Skill clicked!"),
+            ),
+            range(4),
+        )
+        for i, button in enumerate(buttons):
+            self.BUTTONS[f"skill_{i}_background"] = button
+
+    def pop_up_effect(self, index):
+        self.TEXTS[f"skill_{index}_name"].hide()
+        self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
+        self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
+        self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
+        self.TEXTS[f"skill_{index}_damage"].hide()
+        self.TEXTS[f"skill_{index}_pp"].hide()
+        self.TEXTS[f"skill_{index}_effect_1"].show()
+        self.TEXTS[f"skill_{index}_effect_2"].show()
+        self.TEXTS[f"skill_{index}_effect_3"].show()
+
+    def set_skill(self, index, skill_info):
+        if skill_info is None:
+            self.TEXTS[f"skill_{index}_name"].change_text("")
+            self.BUTTONS[f"skill_{index}_background"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
+            self.TEXTS[f"skill_{index}_damage"].change_text("")
+            self.TEXTS[f"skill_{index}_pp"].change_text("")
+            return
+        self.TEXTS[f"skill_{index}_name"].change_text(skill_info.name)
+        x, y = self.skill_pos_dict[index]
+        self.BUTTONS[f"skill_{index}_background"].set_image(
+            IMAGE("skill_temp.png"), width=180, height=100
+        ).set_pos(x, y)
+        self.OTHERS[f"skill_{index}_element"].set_image(
+            image=ELEMENT_MAP.get(type2element(skill_info.type)).image, width=56
+        ).set_pos(x - 65, y - 26)
+        self.OTHERS[f"skill_{index}_damage_icon"].set_image(
+            IMAGE("damage.png"), width=30
+        ).set_pos(x - 50, y + 20)
+        self.OTHERS[f"skill_{index}_pp_icon"].set_image(
+            IMAGE("pp.png"), width=30
+        ).set_pos(x + 25, y + 20)
+        self.TEXTS[f"skill_{index}_damage"].change_text(str(skill_info.power))
+        self.TEXTS[f"skill_{index}_pp"].change_text(str(skill_info.PP))
+        self.TEXTS[f"skill_{index}_effect_1"].change_text(skill_info.effect[:12])
+        self.TEXTS[f"skill_{index}_effect_2"].change_text(skill_info.effect[12:24])
+        self.TEXTS[f"skill_{index}_effect_3"].change_text(skill_info.effect[24:36])
+        self.TEXTS[f"skill_{index}_effect_1"].hide()
+        self.TEXTS[f"skill_{index}_effect_2"].hide()
+        self.TEXTS[f"skill_{index}_effect_3"].hide()
