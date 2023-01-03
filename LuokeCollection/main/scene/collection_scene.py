@@ -84,7 +84,7 @@ class CollectionScene(Scene):
                 "", x=367, y=650, size=26, align_mode="CENTER", color=(231, 225, 146)
             ),
             "train": Button(
-                image=IMAGE("battle.png"),
+                image=IMAGE("edit.png"),
                 x=1020,
                 y=600,
                 on_click=lambda: self.model.open("training"),

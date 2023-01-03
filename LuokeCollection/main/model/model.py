@@ -1,6 +1,7 @@
 import copy
 
 from LuokeCollection.main.scene.collection_scene import CollectionScene
+from LuokeCollection.main.scene.battle_prep_scene import BattlePrepScene
 from .sound import Channel
 from ..utils import PetInfo, SkillInfo
 import os
@@ -29,6 +30,9 @@ class Model:
         self.pet_select_rect = None
         self.pet_number_training = 1
         self.skill_page_number = 1
+        self.battle_prep_pet_number = 0
+        self.battle_pet_content = ""
+        self.battle_prep_offset = 0
 
         self.pet_rects = {}
 
@@ -45,8 +49,11 @@ class Model:
     def close(self):
         self.app.pop_scene()
 
-    def open(self, name):
-        self.app.push_scene(name)
+    def open(self, name, **kwargs):
+        self.app.push_scene(name, **kwargs)
+
+    def open_pop_up(self, name, **kwargs):
+        self.app.open_pop_up(name, **kwargs)
 
     def close_pop_up(self):
         self.app.close_pop_up()
@@ -60,11 +67,17 @@ class Model:
                 info_path = os.path.join(str(i).zfill(4), "info.json")
                 skill_path = os.path.join(str(i).zfill(4), "skills.json")
                 info = JSON(info_path)
-                info["skills"] = list(map(lambda x: SkillInfo(**x), JSON(skill_path)))
+                info["skills"] = list(
+                    map(
+                        lambda x: SkillInfo(index=x[0], **(x[1])),
+                        enumerate(JSON(skill_path)),
+                    )
+                )
                 info["secondary_element"] = info.get("secondary_element")
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
             except Exception:
+                # print(e)
                 continue
 
     def load_current_data(self):
@@ -157,14 +170,21 @@ class Model:
         self._load_pet_rect(pet_num)
 
     # training
-    def load_skills(self):
+    def load_skills(self, saved_skills=[-1, -1, -1, -1]):
         pet_info = self.PETS[self.pet_number_training]
         scene = self.get_scene()
-        for i in range(4, 8):
+        for i in range(4):
             try:
-                scene.set_skill(i, pet_info.skills[self.skill_page_number * 4 + i - 8])
+                scene.set_skill(
+                    i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
+                )
             except Exception:
                 scene.set_skill(i, None)
+        for i in range(4):
+            if saved_skills[i] >= 0:
+                scene.set_skill(i + 4, pet_info.skills[saved_skills[i]])
+            else:
+                scene.set_skill(i + 4, None)
         self.MAX_SKILL_PAGE = len(pet_info.skills) // 4 + (
             0 if len(pet_info.skills) % 4 == 0 else 1
         )
@@ -174,11 +194,80 @@ class Model:
             self.error_sound.play()
             return
         self.skill_page_number -= 1
-        self.load_skills()
+        pet_info = self.PETS[self.pet_number_training]
+        scene = self.get_scene()
+        for i in range(4):
+            try:
+                scene.set_skill(
+                    i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
+                )
+            except Exception:
+                scene.set_skill(i, None)
 
     def next_skill_page(self):
         if self.skill_page_number == self.MAX_SKILL_PAGE:
             self.error_sound.play()
             return
         self.skill_page_number += 1
-        self.load_skills()
+        pet_info = self.PETS[self.pet_number_training]
+        scene = self.get_scene()
+        for i in range(4):
+            try:
+                scene.set_skill(
+                    i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
+                )
+            except Exception:
+                scene.set_skill(i, None)
+
+    def save_pet_content(self, talent_map, skills):
+        object = {
+            "number": self.pet_number_training,
+            "talent_map": talent_map,
+            "skills": skills,
+        }
+        self.battle_pet_content = json.dumps(object, ensure_ascii=False)
+        self.open_pop_up("pet_position_select")
+
+    def save_pet_file(self, index):
+        save_file(f"assets/battle/pet_{index}.json", self.battle_pet_content)
+        self.close_pop_up()
+
+    def replace_skills(self, current_slots):
+        for i in range(4):
+            pet_info = self.PETS[self.pet_number_training]
+            scene = self.get_scene()
+            if current_slots[i] == -1:
+                scene.set_skill(i + 4, None)
+            else:
+                scene.set_skill(i + 4, pet_info.skills[current_slots[i]])
+
+    # battle preparation
+    def set_battle_prep(self, offset=-1):
+        scene = self.get_scene()
+        if isinstance(scene, BattlePrepScene):
+            battle_pet = self.get_battle_pet(offset)
+            if battle_pet is None:
+                self.error_sound.play()
+                return
+            self.battle_prep_offset = offset
+            self.pet_number_training = battle_pet["number"]
+            scene.talent_map = battle_pet["talent_map"]
+            scene.set_info(self.PETS[self.pet_number_training])
+            for i in range(4):
+                if battle_pet["skills"][i] == -1:
+                    scene.set_skill(i, None)
+                else:
+                    scene.set_skill(
+                        i,
+                        self.PETS[self.pet_number_training].skills[
+                            battle_pet["skills"][i]
+                        ],
+                    )
+
+    def get_battle_pet(self, offset):
+        if offset == -1:
+            return self.pet_number_training
+        pet_path = os.path.join("assets/battle/", f"pet_{offset}.json")
+        if os.path.exists(pet_path):
+            return JSON(pet_path, False)
+        return None

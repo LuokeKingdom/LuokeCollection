@@ -1,17 +1,19 @@
 import pygame
 from pygame.locals import *  # noqa
 from ..utils import Mouse
-from ..components.button import Button
 from ..components.background import Background
 from LuokeCollection.settings.dev import WIDTH, HEIGHT
 
 
 class Scene:
-    def __init__(self, screen, model, bg=None):
+    def __init__(self, screen, model, bg=None, width=None, height=None):
         if not bg:
             bg = pygame.Surface([WIDTH, HEIGHT])
             bg.fill((0, 0, 0))
-        self.background = Background(bg)
+        if width is None or height is None:
+            self.background = Background(bg)
+        else:
+            self.background = Background(bg, width, height)
         self.background_music = None
         self.screen = screen
         self.model = model
@@ -19,9 +21,7 @@ class Scene:
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
         self.texts_group = pygame.sprite.Group()
-        self.BUTTONS = {
-            "pop": Button(x=700, y=100, on_click=lambda: self.model.close())
-        }
+        self.BUTTONS = {}
         self.OTHERS = {}
         self.TEXTS = {}
 
@@ -53,5 +53,5 @@ class Scene:
         self.buttons_group.add(list(self.BUTTONS.values()))
         self.texts_group.add(list(self.TEXTS.values()))
 
-    def side_effect(self):
+    def side_effect(self, **kwargs):
         self.load_items()

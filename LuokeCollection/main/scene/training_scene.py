@@ -30,30 +30,56 @@ class TrainingScene(Scene):
             "MD": 0,
         }
         self.stat_map = None
+        self.skills = {}
+        self.current_slots = [-1] * 4
+        self.battle_skill_selected = -1
+        self.factory_skill_selected = -1
         self.BUTTONS = {
             "close": Button(
                 image=IMAGE("close.png"),
                 x=1100,
                 y=70,
-                on_click=lambda: model.close(),
+                on_click=lambda: self.model.close()
+                or self.model.set_battle_prep(self.model.battle_prep_offset),
                 animation="opacity",
                 parameter={"factor": 0.2},
                 width=120,
             ),
             "next_page": Button(
                 image=pygame.transform.flip(IMAGE("previous.png"), True, False),
-                x=1060,
+                x=810,
                 y=649,
-                on_click=lambda: model.next_skill_page(),
+                on_click=lambda: self.model.next_skill_page(),
                 animation="opacity",
                 parameter={"factor": 0.2},
                 width=48,
             ),
             "previous_page": Button(
                 image=IMAGE("previous.png"),
-                x=940,
+                x=690,
                 y=649,
                 on_click=lambda: model.previous_skill_page(),
+                animation="opacity",
+                parameter={"factor": 0.2},
+                width=48,
+            ),
+            "replace_skill": Button(
+                image=IMAGE("place_holder.png"),
+                x=750,
+                y=649,
+                on_click=lambda: self.update_slots()
+                and self.model.replace_skills(self.current_slots),
+                animation="opacity",
+                parameter={"factor": 0.2},
+                width=48,
+            ),
+            "save_pet": Button(
+                image=IMAGE("place_holder.png"),
+                x=1000,
+                y=649,
+                on_click=lambda: self.model.save_pet_content(
+                    self.talent_map, self.current_slots
+                ),
                 animation="opacity",
                 parameter={"factor": 0.2},
                 width=48,
@@ -62,14 +88,22 @@ class TrainingScene(Scene):
         self.init_info()
         self.init_skills()
 
-    def side_effect(self):
-        super().side_effect()
-        self.model.set_info()
+    def side_effect(self, **kwargs):
+        super().side_effect(**kwargs)
         self.model.skill_page_number = 1
-        self.model.load_skills()
+        if len(kwargs):
+            self.talent_map = kwargs["talent_map"]
+            self.model.load_skills(kwargs["skills"])
+        else:
+            self.model.load_skills()
+        self.model.set_info()
 
     def init_info(self):
-        info_compoments = {
+        active_image_1 = IMAGE("place_holder.png")
+        active_image_1.set_alpha(50)
+        active_image_2 = IMAGE("place_holder.png")
+        active_image_2.set_alpha(50)
+        info_components = {
             "pet_name": Text("", x=260, y=100, size=32),
             "pet_image": Sprite(EMPTY),
             "pet_element": Sprite(EMPTY),
@@ -150,8 +184,18 @@ class TrainingScene(Scene):
                 parameter={"factor": 0.5},
                 on_change=lambda x: self.recalculate(level=x),
             ),
+            "factory_skill_selected": Sprite(
+                active_image_1,
+                width=180,
+                height=100,
+                x=-200,
+                y=-200,
+            ),
+            "battle_skill_selected": Sprite(
+                active_image_2, width=180, height=100, x=-200, y=-200
+            ),
         }
-        for name, comp in info_compoments.items():
+        for name, comp in info_components.items():
             if isinstance(comp, Button):
                 self.BUTTONS[name] = comp
             elif isinstance(comp, Text):
@@ -241,6 +285,9 @@ class TrainingScene(Scene):
             self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
             self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
 
+        def get_click_function(i):
+            return lambda: self.select_skill(i)
+
         buttons = map(
             lambda x: Button(
                 image=EMPTY,
@@ -248,20 +295,46 @@ class TrainingScene(Scene):
                 y=-1000,
                 animation="custom",
                 parameter={
-                    "on_hover": lambda: self.pop_up_effect(x),
-                    "not_hover": lambda: self.model.load_skills(),
+                    "on_hover": lambda: self.pop_up_effect(x, True),
+                    "not_hover": lambda: self.pop_up_effect(x, False),
                 },
-                on_click=lambda: print("Skill clicked!"),
+                on_click=get_click_function(x),
             ),
             range(8),
         )
         for i, button in enumerate(buttons):
             self.BUTTONS[f"skill_{i}_background"] = button
 
+    def select_skill(self, i):
+        x, y = self.skill_pos_dict[i]
+        if i < 4:
+            if self.factory_skill_selected == i:
+                self.factory_skill_selected = -1
+                self.OTHERS["factory_skill_selected"].set_pos(-200, -200)
+            else:
+                self.factory_skill_selected = i
+                self.OTHERS["factory_skill_selected"].set_pos(x, y)
+        else:
+            if self.battle_skill_selected == i - 4:
+                self.battle_skill_selected = -1
+                self.OTHERS["battle_skill_selected"].set_pos(-200, -200)
+            else:
+                self.battle_skill_selected = i - 4
+                self.OTHERS["battle_skill_selected"].set_pos(x, y)
+
     def set_skill(self, index, skill_info):
+        self.skills[index] = skill_info
+        x, y = self.skill_pos_dict[index]
+        if index > 3:
+            if skill_info is None:
+                self.current_slots[index - 4] = -1
+            else:
+                self.current_slots[index - 4] = skill_info.index
         if skill_info is None:
             self.TEXTS[f"skill_{index}_name"].change_text("")
-            self.BUTTONS[f"skill_{index}_background"].set_image(EMPTY)
+            self.BUTTONS[f"skill_{index}_background"].set_image(
+                IMAGE("skill_temp.png"), width=180, height=100
+            ).set_pos(x, y)
             self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
             self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
             self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
@@ -269,7 +342,6 @@ class TrainingScene(Scene):
             self.TEXTS[f"skill_{index}_pp"].change_text("")
             return
         self.TEXTS[f"skill_{index}_name"].change_text(skill_info.name)
-        x, y = self.skill_pos_dict[index]
         self.BUTTONS[f"skill_{index}_background"].set_image(
             IMAGE("skill_temp.png"), width=180, height=100
         ).set_pos(x, y)
@@ -291,16 +363,60 @@ class TrainingScene(Scene):
         self.TEXTS[f"skill_{index}_effect_2"].hide()
         self.TEXTS[f"skill_{index}_effect_3"].hide()
 
-    def pop_up_effect(self, index):
-        self.TEXTS[f"skill_{index}_name"].hide()
-        self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
-        self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
-        self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
-        self.TEXTS[f"skill_{index}_damage"].hide()
-        self.TEXTS[f"skill_{index}_pp"].hide()
-        self.TEXTS[f"skill_{index}_effect_1"].show()
-        self.TEXTS[f"skill_{index}_effect_2"].show()
-        self.TEXTS[f"skill_{index}_effect_3"].show()
+    def pop_up_effect(self, index, show):
+        if index > 3 and self.current_slots[index - 4] < 0:
+            return
+        if show:
+            self.TEXTS[f"skill_{index}_name"].hide()
+            self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
+            self.TEXTS[f"skill_{index}_damage"].hide()
+            self.TEXTS[f"skill_{index}_pp"].hide()
+            self.TEXTS[f"skill_{index}_effect_1"].show()
+            self.TEXTS[f"skill_{index}_effect_2"].show()
+            self.TEXTS[f"skill_{index}_effect_3"].show()
+        else:
+            x, y = self.skill_pos_dict[index]
+            self.TEXTS[f"skill_{index}_name"].show()
+            self.OTHERS[f"skill_{index}_element"].set_image(
+                image=ELEMENT_MAP.get(type2element(self.skills[index].type)).image,
+                width=56,
+            ).set_pos(x - 65, y - 26)
+            self.OTHERS[f"skill_{index}_damage_icon"].set_image(
+                IMAGE("damage.png"), width=30
+            ).set_pos(x - 50, y + 20)
+            self.OTHERS[f"skill_{index}_pp_icon"].set_image(
+                IMAGE("pp.png"), width=30
+            ).set_pos(x + 25, y + 20)
+            self.TEXTS[f"skill_{index}_damage"].show()
+            self.TEXTS[f"skill_{index}_pp"].show()
+            self.TEXTS[f"skill_{index}_effect_1"].hide()
+            self.TEXTS[f"skill_{index}_effect_2"].hide()
+            self.TEXTS[f"skill_{index}_effect_3"].hide()
+
+    def update_slots(self):
+        if self.battle_skill_selected < 0 or self.factory_skill_selected < 0:
+            self.model.error_sound.play()
+            return False
+        if self.factory_skill_selected > 3:
+            if self.current_slots[self.battle_skill_selected] != -1:
+                self.current_slots[self.battle_skill_selected] = -1
+                self.OTHERS["battle_skill_selected"].set_pos(-200, -200)
+                return True
+            else:
+                self.model.error_sound.play()
+                return False
+        for i in range(4):
+            if self.current_slots[i] == self.skills[self.factory_skill_selected].index:
+                self.model.error_sound.play()
+                return False
+        self.current_slots[self.battle_skill_selected] = self.skills[
+            self.factory_skill_selected
+        ].index
+        self.OTHERS["battle_skill_selected"].set_pos(-200, -200)
+        self.OTHERS["factory_skill_selected"].set_pos(-200, -200)
+        return True
 
     def update(self, mouse_pos, clicked, pressed):
         super().update(mouse_pos, clicked, pressed)
