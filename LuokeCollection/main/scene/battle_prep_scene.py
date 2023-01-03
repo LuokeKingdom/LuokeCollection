@@ -39,7 +39,7 @@ class BattlePrepScene(Scene):
             ),
             "train": Button(
                 image=IMAGE("edit.png"),
-                x=1020,
+                x=1000,
                 y=600,
                 on_click=lambda: self.model.open("training"),
                 width=100,
