@@ -54,5 +54,5 @@ class Scene:
         self.buttons_group.add(list(self.BUTTONS.values()))
         self.texts_group.add(list(self.TEXTS.values()))
 
-    def side_effect(self):
+    def side_effect(self, **kwargs):
         self.load_items()

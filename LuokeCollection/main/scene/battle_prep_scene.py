@@ -30,7 +30,7 @@ class BattlePrepScene(Scene):
         }
         self.stat_map = None
         self.skill_pos_dict = {}
-        self.skills = {} 
+        self.skills = [None]*4
         self.BUTTONS = {
             "pop": Button(
                 text="X",
@@ -42,7 +42,9 @@ class BattlePrepScene(Scene):
                 image=IMAGE("edit.png"),
                 x=1000,
                 y=600,
-                on_click=lambda: self.model.open("training"),
+                on_click=lambda: self.model.open("training", talent_map=self.talent_map, skills=[
+                    (-1 if skill is None else skill.index) for skill in self.skills
+                ]),
                 width=100,
                 animation="opacity",
                 parameter={"factor": 0.4},
@@ -98,6 +100,7 @@ class BattlePrepScene(Scene):
             "pet_SP": Text("", x=220, y=526, size=26),
             "pet_AP": Text("", x=220, y=606, size=26),
             "pet_MD": Text("", x=220, y=686, size=26),
+            "pet_level_label": Text("等级：1", x=450, y=230, size=26),
         }
 
         for name, comp in info_components.items():
@@ -173,13 +176,11 @@ class BattlePrepScene(Scene):
         }
         self.recalculate()
 
-    def recalculate(self, **changes):
-        for k, v in changes.items():
-            self.talent_map[k] = v
+    def recalculate(self):
         level = self.talent_map["level"]
         for k, v in self.talent_map.items():
             if k == "level":
-                pass
+                self.TEXTS["pet_level_label"].change_text("等级：" + str(v))
             else:
                 val = (self.stat_map[k] * 2 + v) * level / 100 + (
                     (level + 10) if k == "HP" else 5

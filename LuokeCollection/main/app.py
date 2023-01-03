@@ -21,10 +21,10 @@ class App:
         self.push_scene(scene_name)
         pass
 
-    def push_scene(self, scene_name):
+    def push_scene(self, scene_name, **kwargs):
         self.scene = self.create_scene(scene_name)
         self.on_scene_change()
-        self.scene.side_effect()
+        self.scene.side_effect(**kwargs)
         self.stack.append(self.scene)
 
     def pop_scene(self):
@@ -33,9 +33,9 @@ class App:
             self.scene = self.stack[len(self.stack) - 1]
             self.on_scene_change()
 
-    def open_pop_up(self, scene_name):
+    def open_pop_up(self, scene_name,**kwargs):
         self.pop_up = self.create_scene(scene_name)
-        self.pop_up.side_effect()
+        self.pop_up.side_effect(**kwargs)
 
     def close_pop_up(self):
         self.pop_up = None
