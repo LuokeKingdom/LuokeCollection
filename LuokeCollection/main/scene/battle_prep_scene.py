@@ -30,6 +30,7 @@ class BattlePrepScene(Scene):
         }
         self.stat_map = None
         self.skill_pos_dict = {}
+        self.skills = {} 
         self.BUTTONS = {
             "pop": Button(
                 text="X",
@@ -206,8 +207,8 @@ class BattlePrepScene(Scene):
                 y=-1000,
                 animation="custom",
                 parameter={
-                    "on_hover": lambda: self.pop_up_effect(x),
-                    "not_hover": lambda: self.model.set_battle_prep(),
+                    "on_hover": lambda: self.pop_up_effect(x, True),
+                    "not_hover": lambda: self.pop_up_effect(x, False),
                 },
                 on_click=lambda: print("Skill clicked!"),
             ),
@@ -216,18 +217,39 @@ class BattlePrepScene(Scene):
         for i, button in enumerate(buttons):
             self.BUTTONS[f"skill_{i}_background"] = button
 
-    def pop_up_effect(self, index):
-        self.TEXTS[f"skill_{index}_name"].hide()
-        self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
-        self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
-        self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
-        self.TEXTS[f"skill_{index}_damage"].hide()
-        self.TEXTS[f"skill_{index}_pp"].hide()
-        self.TEXTS[f"skill_{index}_effect_1"].show()
-        self.TEXTS[f"skill_{index}_effect_2"].show()
-        self.TEXTS[f"skill_{index}_effect_3"].show()
+
+    def pop_up_effect(self, index, show):
+        if show:
+            self.TEXTS[f"skill_{index}_name"].hide()
+            self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_damage_icon"].set_image(EMPTY)
+            self.OTHERS[f"skill_{index}_pp_icon"].set_image(EMPTY)
+            self.TEXTS[f"skill_{index}_damage"].hide()
+            self.TEXTS[f"skill_{index}_pp"].hide()
+            self.TEXTS[f"skill_{index}_effect_1"].show()
+            self.TEXTS[f"skill_{index}_effect_2"].show()
+            self.TEXTS[f"skill_{index}_effect_3"].show()
+        else:
+            x, y = self.skill_pos_dict[index]
+            self.TEXTS[f"skill_{index}_name"].show()
+            self.OTHERS[f"skill_{index}_element"].set_image(
+                image=ELEMENT_MAP.get(type2element(self.skills[index].type)).image, width=56
+            ).set_pos(x - 65, y - 26)
+            self.OTHERS[f"skill_{index}_damage_icon"].set_image(
+                IMAGE("damage.png"), width=30
+            ).set_pos(x - 50, y + 20)
+            self.OTHERS[f"skill_{index}_pp_icon"].set_image(
+                IMAGE("pp.png"), width=30
+            ).set_pos(x + 25, y + 20)
+            self.TEXTS[f"skill_{index}_damage"].show()
+            self.TEXTS[f"skill_{index}_pp"].show()
+            self.TEXTS[f"skill_{index}_effect_1"].hide()
+            self.TEXTS[f"skill_{index}_effect_2"].hide()
+            self.TEXTS[f"skill_{index}_effect_3"].hide()
+
 
     def set_skill(self, index, skill_info):
+        self.skills[index] = skill_info
         if skill_info is None:
             self.TEXTS[f"skill_{index}_name"].change_text("")
             self.BUTTONS[f"skill_{index}_background"].set_image(EMPTY)
