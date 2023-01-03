@@ -161,9 +161,9 @@ class Model:
     def load_skills(self):
         pet_info = self.PETS[self.pet_number_training]
         scene = self.get_scene()
-        for i in range(4, 8):
+        for i in range(4):
             try:
-                scene.set_skill(i, pet_info.skills[self.skill_page_number * 4 + i - 8])
+                scene.set_skill(i, pet_info.skills[(self.skill_page_number-1) * 4 + i])
             except Exception:
                 scene.set_skill(i, None)
         self.MAX_SKILL_PAGE = len(pet_info.skills) // 4 + (

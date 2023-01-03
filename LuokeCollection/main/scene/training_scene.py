@@ -43,7 +43,7 @@ class TrainingScene(Scene):
             ),
             "next_page": Button(
                 image=pygame.transform.flip(IMAGE("previous.png"), True, False),
-                x=1060,
+                x=810,
                 y=649,
                 on_click=lambda: model.next_skill_page(),
                 animation="opacity",
@@ -52,13 +52,22 @@ class TrainingScene(Scene):
             ),
             "previous_page": Button(
                 image=IMAGE("previous.png"),
-                x=940,
+                x=690,
                 y=649,
                 on_click=lambda: model.previous_skill_page(),
                 animation="opacity",
                 parameter={"factor": 0.2},
                 width=48,
             ),
+            "save_pet": Button(
+                image=IMAGE("place_holder.png"),
+                x=1000,
+                y=740,
+                on_click=lambda:0,
+                animation="opacity",
+                parameter={"factor": 0.2},
+                width=50
+            )
         }
         self.init_info()
         self.init_skills()
