@@ -8,7 +8,7 @@ from LuokeCollection.settings.dev import IMAGE
 
 class SplashScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(SplashScene, self).__init__(screen, model, *args, **kwargs)
+        super(SplashScene, self).__init__(screen, model,'light_orange.png', *args, **kwargs)
         self.progress = 0
         self.frame = 0
         bar = pygame.Surface([1, 1])

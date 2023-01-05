@@ -16,7 +16,7 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class CollectionScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
+        super(CollectionScene, self).__init__(screen, model,'bg.png', *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
         self.BUTTONS = {
             "close": Button(

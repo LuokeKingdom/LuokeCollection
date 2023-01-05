@@ -16,7 +16,7 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class BattlePrepScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(BattlePrepScene, self).__init__(screen, model, *args, **kwargs)
+        super(BattlePrepScene, self).__init__(screen, model, 'light_orange.png', *args, **kwargs)
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
         self.talent_map = {
             "level": 1,

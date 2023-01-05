@@ -16,7 +16,7 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class TrainingScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(TrainingScene, self).__init__(screen, model, *args, **kwargs)
+        super(TrainingScene, self).__init__(screen, model, 'training.png', *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
         self.skill_pos_dict = {}
         self.talent_map = {

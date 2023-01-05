@@ -8,7 +8,7 @@ from LuokeCollection.settings.dev import IMAGE
 
 class PetPositionSelectScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(PetPositionSelectScene, self).__init__(screen, model, width=800, height=200)
+        super(PetPositionSelectScene, self).__init__(screen, model, 'white.png', width=800, height=200)
         self.BUTTONS = {
             "pop": Button(
                 text="X", x=1030, y=300, on_click=lambda: self.model.close_pop_up()

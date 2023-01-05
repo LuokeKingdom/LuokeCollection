@@ -10,11 +10,8 @@ from .scene.pet_position_select_scene import PetPositionSelectScene
 
 class SceneFactory:
     def __init__(self, screen, model):
-        print(0)
         init = InitScene(screen, model)
-        print(1)
         splash = SplashScene(screen, model)
-        print(2)
         collection = CollectionScene(screen, model)
         select_rect = SelectRectScene(screen, model)
         training = TrainingScene(screen, model)
