@@ -2,15 +2,13 @@ import pygame
 from pygame.locals import *  # noqa
 from ..utils import Mouse
 from ..components.background import Background
-from LuokeCollection.settings.dev import WIDTH, HEIGHT
+from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
 
 
 class Scene:
-    def __init__(self, screen, model, bg=None, width=None, height=None):
-        if not bg:
-            bg = pygame.Surface([WIDTH, HEIGHT])
-            bg.fill((0, 0, 0))
-        if width is None or height is None:
+    def __init__(self, screen, model, bg_file="place_holder.png", width=None, height=None):
+        bg = IMAGE(bg_file)
+        if (width is None) or (height is None):
             self.background = Background(bg)
         else:
             self.background = Background(bg, width, height)

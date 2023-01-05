@@ -8,8 +8,6 @@ from LuokeCollection.settings.dev import IMAGE
 
 class SplashScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = pygame.Surface([1, 1])
-        kwargs["bg"].fill((255, 255, 255))
         super(SplashScene, self).__init__(screen, model, *args, **kwargs)
         self.progress = 0
         self.frame = 0
@@ -65,6 +63,6 @@ class SplashScene(Scene):
 
     def update(self, mouse_pos, clicked, pressed):
         super().update(mouse_pos, clicked, pressed)
-        self.progress = len(self.model.pet_rects) / len(self.model.PETS)
+        self.progress = len(self.model.pet_rects) / (len(self.model.PETS)+1)
         if self.progress >= 0.99:
             self.model.close_pop_up()

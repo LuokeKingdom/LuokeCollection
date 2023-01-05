@@ -13,8 +13,6 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class SelectRectScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = pygame.Surface([1, 1])
-        kwargs["bg"].fill((200, 200, 245))
         super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("sky_gym.wav", Channel.BACKGROUND)
         self.BUTTONS = {

@@ -6,7 +6,6 @@ from LuokeCollection.settings.dev import SOUND, WIDTH, HEIGHT, IMAGE
 
 class InitScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = IMAGE("init_bg.jpg")
         super(InitScene, self).__init__(screen, model, *args, **kwargs)
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
         self.BUTTONS = {

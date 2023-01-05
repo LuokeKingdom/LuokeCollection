@@ -63,6 +63,7 @@ class Model:
 
     def load_pets(self):
         for i in range(201):
+            if i==100: continue
             try:
                 info_path = os.path.join(str(i).zfill(4), "info.json")
                 skill_path = os.path.join(str(i).zfill(4), "skills.json")
@@ -76,8 +77,8 @@ class Model:
                 info["secondary_element"] = info.get("secondary_element")
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
-            except Exception:
-                # print(e)
+            except Exception as e:
+                print(e)
                 continue
 
     def load_current_data(self):
@@ -178,7 +179,8 @@ class Model:
                 scene.set_skill(
                     i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
                 )
-            except Exception:
+            except Exception as e:
+                print(e)
                 scene.set_skill(i, None)
         for i in range(4):
             if saved_skills[i] >= 0:
@@ -201,7 +203,8 @@ class Model:
                 scene.set_skill(
                     i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
                 )
-            except Exception:
+            except Exception as e:
+                print(e)
                 scene.set_skill(i, None)
 
     def next_skill_page(self):
@@ -216,7 +219,8 @@ class Model:
                 scene.set_skill(
                     i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
                 )
-            except Exception:
+            except Exception as e:
+                print(e)
                 scene.set_skill(i, None)
 
     def save_pet_content(self, talent_map, skills):
@@ -271,3 +275,18 @@ class Model:
         if os.path.exists(pet_path):
             return JSON(pet_path, False)
         return None
+
+    def set_battle_display(self):
+        scene = self.get_scene()
+        battle_pet = self.get_battle_pet(0)
+        scene.set_info(self.PETS[self.pet_number_training])
+        for i in range(4):
+            if battle_pet["skills"][i] == -1:
+                scene.set_skill(i, None)
+            else:
+                scene.set_skill(
+                    i,
+                    self.PETS[self.pet_number_training].skills[
+                        battle_pet["skills"][i]
+                    ],
+                )
