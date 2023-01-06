@@ -1,4 +1,5 @@
 import copy
+from LuokeCollection.main.battle.battle_system import BattleSystem
 
 from LuokeCollection.main.scene.collection_scene import CollectionScene
 from LuokeCollection.main.scene.battle_prep_scene import BattlePrepScene
@@ -276,17 +277,21 @@ class Model:
             return JSON(pet_path, False)
         return None
 
-    def set_battle_display(self):
-        scene = self.get_scene()
-        battle_pet = self.get_battle_pet(0)
-        scene.set_info(self.PETS[self.pet_number_training])
-        for i in range(4):
-            if battle_pet["skills"][i] == -1:
-                scene.set_skill(i, None)
-            else:
-                scene.set_skill(
-                    i,
-                    self.PETS[self.pet_number_training].skills[
-                        battle_pet["skills"][i]
-                    ],
-                )
+    def get_battle_system(self):
+        pet_array_1 = []
+        for i in range(6):
+            battle_pet = self.get_battle_pet(i)
+            if battle_pet is None:
+                pet_array_1.append(None)
+                continue
+            pet_array_1.append((self.PETS[battle_pet["number"]], battle_pet["talent_map"], battle_pet["skills"]))
+        pet_array_2 = []
+        for i in range(6):
+            battle_pet = self.get_battle_pet(i)
+            if battle_pet is None:
+                pet_array_1.append(None)
+                continue
+            pet_array_2.append((self.PETS[battle_pet["number"]], battle_pet["talent_map"], battle_pet["skills"]))
+
+        return BattleSystem(pet_array_1, pet_array_2)
+        

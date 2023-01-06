@@ -25,23 +25,41 @@ class BattleScene(Scene):
 
         self.skill_pos_dict = {}
         self.skills = [None] * 4
+        self.system = None
 
         self.init_info()
         self.init_skills()
 
     def side_effect(self):
         super().side_effect()
-        self.model.set_battle_display()
+        self.system = self.model.get_battle_system()
+        self.display_battle()
+
+    def display_battle(self):
+        pet1, pet2 = self.system.get_pets()
+        self.update_info(pet1, pet2)
+        for i in range(4):
+            if pet1.skill_indices[i] == -1:
+                self.set_skill(i, None)
+            else:
+                self.set_skill(i, pet1.info.skills[pet1.skill_indices[i]],)
 
     def init_info(self):
         info_components = {
-            "pet_name": Text("", x=200, y=200, size=32),
-            "pet_image": Sprite(EMPTY),
-            "pet_element": Sprite(EMPTY),
-            "pet_secondary_element": Sprite(EMPTY),
-            "talent_icon_HP": Sprite(EMPTY, width=36),
-            "pet_HP": Text("", x=160, y=286, size=26),
-            "pet_level_label": Text("等级：1", x=390, y=230, size=26),
+            "pet_name_1": Text("", x=200, y=100, size=32),
+            "pet_image_1": Sprite(EMPTY),
+            "pet_element_1": Sprite(EMPTY),
+            "pet_secondary_element_1": Sprite(EMPTY),
+            "talent_icon_HP_1": Sprite(EMPTY, width=36),
+            "pet_HP_1": Text("", x=160, y=186, size=26),
+            "pet_level_label_1": Text("等级：1", x=390, y=130, size=26),
+            "pet_name_2": Text("", x=1179, y=100, size=32),
+            "pet_image_2": Sprite(EMPTY),
+            "pet_element_2": Sprite(EMPTY),
+            "pet_secondary_element_2": Sprite(EMPTY),
+            "talent_icon_HP_2": Sprite(EMPTY, width=36),
+            "pet_HP_2": Text("", x=1079, y=186, size=26),
+            "pet_level_label_2": Text("等级：1", x=849, y=130, size=26),
         }
 
         for name, comp in info_components.items():
@@ -52,34 +70,64 @@ class BattleScene(Scene):
             else:
                 self.OTHERS[name] = comp
 
-    def set_info(self, pet):
-        self.TEXTS["pet_name"].change_text(pet.name)
-        pet_image = IMAGE(os.path.join("assets/data/", pet.path, "display.png"), False)
+    def update_info(self, pet1, pet2):
+        # 1
+        self.TEXTS["pet_name_1"].change_text(pet1.info.name)
+        pet_image = pygame.transform.flip(IMAGE(os.path.join("assets/data/", pet1.info.path, "display.png"), False), True, False)
         max_width, max_height = 400, 600
         w, h = pet_image.get_size()
         if h / max_height < w / max_width:
-            self.OTHERS["pet_image"].set_image(
+            self.OTHERS["pet_image_1"].set_image(
                 image=pet_image, width=max_width
-            ).set_pos(300, 460)
+            ).set_pos(300, 360)
         else:
-            self.OTHERS["pet_image"].set_image(
+            self.OTHERS["pet_image_1"].set_image(
                 image=pet_image, height=max_height
-            ).set_pos(300, 460)
-        self.OTHERS["pet_element"].set_image(
-            image=ELEMENT_MAP.get(pet.element).image, width=100
-        ).set_pos(130, 210)
-        if pet.secondary_element is not None:
-            self.OTHERS["pet_secondary_element"].set_image(
-                image=ELEMENT_MAP.get(pet.secondary_element).image, width=50
-            ).set_pos(176, 224)
+            ).set_pos(300, 360)
+        self.OTHERS["pet_element_1"].set_image(
+            image=ELEMENT_MAP.get(pet1.info.element).image, width=100
+        ).set_pos(130, 110)
+        if pet1.info.secondary_element is not None:
+            self.OTHERS["pet_secondary_element_1"].set_image(
+                image=ELEMENT_MAP.get(pet1.info.secondary_element).image, width=50
+            ).set_pos(176, 124)
         else:
-            self.OTHERS["pet_secondary_element"].set_image(EMPTY)
+            self.OTHERS["pet_secondary_element_1"].set_image(EMPTY)
 
-        self.OTHERS["talent_icon_HP"].set_image(
+        self.OTHERS["talent_icon_HP_1"].set_image(
             image=IMAGE("HP.png"), width=36
-        ).set_pos(130, 300)
-        self.TEXTS["pet_level_label"].change_text("等级：100")
-        self.TEXTS["pet_HP"].change_text("200")
+        ).set_pos(130, 200)
+        self.TEXTS["pet_level_label_1"].change_text(f"等级：{pet1.level}")
+        self.TEXTS["pet_HP_1"].change_text(str(pet1.HP))
+
+        # 2
+        self.TEXTS["pet_name_2"].change_text(pet2.info.name)
+        pet_image = IMAGE(os.path.join("assets/data/", pet2.info.path, "display.png"), False)
+        max_width, max_height = 400, 600
+        w, h = pet_image.get_size()
+        if h / max_height < w / max_width:
+            self.OTHERS["pet_image_2"].set_image(
+                image=pet_image, width=max_width
+            ).set_pos(939, 360)
+        else:
+            self.OTHERS["pet_image_2"].set_image(
+                image=pet_image, height=max_height
+            ).set_pos(939, 360)
+        self.OTHERS["pet_element_2"].set_image(
+            image=ELEMENT_MAP.get(pet2.info.element).image, width=100
+        ).set_pos(1109, 110)
+        if pet2.info.secondary_element is not None:
+            self.OTHERS["pet_secondary_element_2"].set_image(
+                image=ELEMENT_MAP.get(pet2.info.secondary_element).image, width=50
+            ).set_pos(1155, 124)
+        else:
+            self.OTHERS["pet_secondary_element_2"].set_image(EMPTY)
+
+        self.OTHERS["talent_icon_HP_2"].set_image(
+            image=IMAGE("HP.png"), width=36
+        ).set_pos(1049, 200)
+        self.TEXTS["pet_level_label_2"].change_text(f"等级：{pet2.level}")
+        self.TEXTS["pet_HP_2"].change_text(str(pet2.HP))
 
 
     def init_skills(self):
