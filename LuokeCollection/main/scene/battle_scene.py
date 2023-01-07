@@ -37,7 +37,7 @@ class BattleScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.system = self.model.get_battle_system()
-        self.display_battle()
+        self.display_pets()
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
@@ -46,12 +46,12 @@ class BattleScene(Scene):
             if self.timer > self.max_wait_time:
                 self.choose_action(0)
         else:
-            print(self.system.has_animation())
             if self.system.has_animation():
                 self.system.update_animation(delta_time)
             else:
                 self.is_preparing = True
                 self.timer = 0
+                self.display_pets()
 
     def choose_action(self, i):
         if self.is_preparing:
@@ -60,7 +60,7 @@ class BattleScene(Scene):
             self.system.act()
 
 
-    def display_battle(self):
+    def display_pets(self):
         pet1, pet2 = self.system.get_pets()
         self.update_info(pet1, pet2)
         for i in range(4):

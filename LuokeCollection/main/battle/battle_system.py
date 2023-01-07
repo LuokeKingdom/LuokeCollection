@@ -46,27 +46,28 @@ class BattleSystem:
 
     def act(self):
         pet1, pet2 = self.get_pets()
+        choice1, choice2 = self.choice1, self.choice2
         pet1_first = pet1.SP > pet2.SP
         if pet1.SP == pet2.SP:
             pet1_first = random.choice([True, False])
         if not pet1_first:
             pet1, pet2 = pet2, pet1
+            choice1, choice2 = choice2, choice1
         if (self.preaction(pet1, pet2)):
-            self.action(pet1, pet2)
+            self.action(pet1, pet2, choice1)
         self.postaction(pet1, pet2)
         if (self.preaction(pet2, pet1)):
-            self.action(pet2, pet1)
+            self.action(pet2, pet1, choice2)
         self.postaction(pet2, pet1)
 
     def preaction(self, primary, secondary):
         return True
 
-    def action(self, primary, secondary):
+    def action(self, primary, secondary, choice):
         self.animation_queue1.put(self.anim('none', primary, interval=1))
         self.animation_queue2.put(self.anim('none', secondary, interval=1))
-        damage = secondary.AD + int(primary.skills[self.choice1].power)
-        primary.HP -= damage
-        print(primary.HP)
+        damage = primary.AD + int(primary.skills[choice].power)
+        secondary.HP -= damage
         pass
 
     def postaction(self, primary, secondary):
