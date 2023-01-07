@@ -227,8 +227,8 @@ class CollectionScene(Scene):
             self.BUTTONS[f"slot_{i+1}"].image = EMPTY
         self.TEXTS["page_number"].change_text(str(self.model.pet_page_number))
 
-    def update(self, mouse_pos, clicked, pressed):
-        super().update(mouse_pos, clicked, pressed)
+    def update(self, delta_time, mouse_pos, clicked, pressed):
+        super().update(delta_time, mouse_pos, clicked, pressed)
         for index in range(9):
             pet_number = (self.model.pet_page_number - 1) * 9 + index + 1
             pet_image = self.model.pet_rects.get(pet_number)

@@ -416,6 +416,3 @@ class TrainingScene(Scene):
         self.OTHERS["battle_skill_selected"].set_pos(-200, -200)
         self.OTHERS["factory_skill_selected"].set_pos(-200, -200)
         return True
-
-    def update(self, mouse_pos, clicked, pressed):
-        super().update(mouse_pos, clicked, pressed)

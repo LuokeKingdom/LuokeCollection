@@ -30,7 +30,7 @@ class Scene:
         self.texts_group.draw(self.screen)
         Mouse.draw(self.screen, mouse_pos, self.is_pointer)
 
-    def update(self, mouse_pos, clicked, pressed):
+    def update(self, delta_time, mouse_pos, clicked, pressed):
         btns = self.BUTTONS.values()
         others = self.OTHERS.values()
         self.is_pointer = False

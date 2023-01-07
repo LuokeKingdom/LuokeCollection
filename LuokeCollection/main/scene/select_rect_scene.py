@@ -122,8 +122,8 @@ class SelectRectScene(Scene):
                 2,
             )
 
-    def update(self, mouse_pos, clicked, pressed):
-        super().update(mouse_pos, clicked, pressed)
+    def update(self, delta_time, mouse_pos, clicked, pressed):
+        super().update(delta_time, mouse_pos, clicked, pressed)
         if clicked == 5:
             self.rect_side = max(50, self.rect_side - self.rate)
             self.rate += 1

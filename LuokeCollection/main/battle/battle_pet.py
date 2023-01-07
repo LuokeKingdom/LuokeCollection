@@ -4,6 +4,7 @@ class BattlePet:
         self.talent_map = talent_map
         self.info = info
         self.skill_indices = skill_indices
+        self.skills = [self.info.skills[i] for i in skill_indices]
         self.HP = 0
         self.AD = 0
         self.DF = 0

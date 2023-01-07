@@ -30,10 +30,35 @@ class BattleScene(Scene):
         self.init_info()
         self.init_skills()
 
+        self.is_preparing = True
+        self.timer = 0
+        self.max_wait_time = 10
+
     def side_effect(self):
         super().side_effect()
         self.system = self.model.get_battle_system()
         self.display_battle()
+
+    def update(self, delta_time, mouse_pos, clicked, pressed):
+        super().update(delta_time, mouse_pos, clicked, pressed)
+        if self.is_preparing:
+            self.timer += delta_time
+            if self.timer > self.max_wait_time:
+                self.choose_action(0)
+        else:
+            print(self.system.has_animation())
+            if self.system.has_animation():
+                self.system.update_animation(delta_time)
+            else:
+                self.is_preparing = True
+                self.timer = 0
+
+    def choose_action(self, i):
+        if self.is_preparing:
+            self.is_preparing = False
+            self.system.prepare(i, 0)
+            self.system.act()
+
 
     def display_battle(self):
         pet1, pet2 = self.system.get_pets()
@@ -143,6 +168,9 @@ class BattleScene(Scene):
             # self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y=y - 32, size=18)
             # self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
             # self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
+        
+        def get_click_function(i):
+            return lambda: self.choose_action(i)
 
         buttons = map(
             lambda x: Button(
@@ -155,7 +183,7 @@ class BattleScene(Scene):
                 #     "not_hover": lambda: self.pop_up_effect(x, False),
                 # },
                 animation="none",
-                on_click=lambda: print("Skill clicked!"),
+                on_click=get_click_function(x),
             ),
             range(4),
         )
