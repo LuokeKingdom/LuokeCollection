@@ -48,6 +48,12 @@ class BattleScene(Scene):
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
+        if self.system.done:
+            self.TEXTS["timer_display"].change_text("")
+            if self.system.has_animation():
+                self.system.update_animation(delta_time)
+            return
+
         if self.is_preparing:
             prev = int(self.timer)
             self.timer += delta_time
@@ -66,7 +72,7 @@ class BattleScene(Scene):
                 self.display_pets()
 
     def choose_action(self, i):
-        if self.is_preparing:
+        if self.is_preparing and not self.system.done:
             self.is_preparing = False
             self.system.prepare(i, 0)
             self.system.act()
