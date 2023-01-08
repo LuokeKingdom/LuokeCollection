@@ -5,10 +5,9 @@ import random
 
 class BattleSystem:
     def __init__(self, pet_array_1, pet_array_2):
-        self.queue_number = 4
-        self.current_queue_index = 0
-        self.animation_queues = [queue.Queue(10) for i in range(self.queue_number)]
-        self.current_animations = [None]*self.queue_number
+        self.anim_queue = queue.Queue(20)
+        self.temp_anim = []
+        self.curr_anim = [None]
 
         self.team1 = [None if args is None else BattlePet(*args) for args in pet_array_1]
         self.choice1 = None
@@ -30,18 +29,17 @@ class BattleSystem:
                 i.damage_display = display2
     
     def has_animation(self):
-        return all([i is None for i in self.current_animations]) and all([i.empty() for i in self.animation_queues])
+        return not all([i is None for i in self.curr_anim]) or not self.anim_queue.empty()
 
     def update_animation(self, delta_time):
-        if all([i is None for i in self.current_animations]) and self.has_animation():
-            for i in range(self.queue_number):
-                self.current_animations[i] = self.animation_queues[i].get()
-        for i in range(self.queue_number):
-            current_animation = self.current_animations[i]
-            if current_animation is not None and current_animation.done:
-                self.current_animations[i] = None
-            if current_animation is not None:
-                current_animation.update(delta_time)
+        if all([i is None for i in self.curr_anim]):
+            self.curr_anim = self.anim_queue.get()
+        for i in range(len(self.curr_anim)):
+            anim = self.curr_anim[i]
+            if anim is not None and anim.done:
+                self.curr_anim[i] = None
+            if anim is not None:
+                anim.update(delta_time)
 
     def prepare(self, team1_choice, team2_choice):
         self.choice1 = team1_choice
@@ -71,21 +69,18 @@ class BattleSystem:
 
     def action(self, primary, secondary, choice):
         self.push_anim('none', pet=primary, interval=1).next_anim()
-        self.push_anim('damage', damage=-100, pet=secondary, interval=1).next_anim()
-        damage = primary.AD + int(primary.skills[choice].power)
-        secondary.HP -= damage
+        damage = min(0, -primary.AD - int(primary.skills[choice].power) + secondary.DF)
+        self.push_anim('damage', damage=damage, pet=secondary, interval=1).next_anim()
+        secondary.health += damage
         pass
 
     def postaction(self, primary, secondary):
         pass
 
     def push_anim(self, name, **kwargs):
-        self.animation_queues[self.current_queue_index].put(BattleAnimation.get(name, **kwargs))
+        self.temp_anim.append(BattleAnimation.get(name, **kwargs))
         return self
 
     def next_anim(self):
-        # add None to unused queues
-        for i in range(self.current_queue_index, self.queue_number):
-            self.animation_queues[i].put(None)
-        # reset animation pipeline
-        self.current_queue_index = 0
+        self.anim_queue.put(self.temp_anim)
+        self.temp_anim = []

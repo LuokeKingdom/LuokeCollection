@@ -82,7 +82,7 @@ class BattleScene(Scene):
             "talent_icon_HP_1": Sprite(EMPTY, width=36),
             "pet_HP_1": Text("", x=160, y=186, size=26),
             "pet_level_label_1": Text("", x=390, y=130, size=26),
-            "pet_battle_damage_1": Text("", x=200, y=250, size=40),
+            "pet_battle_damage_1": Text("", x=200, y=200, size=50, color=(255,255,255)),
             "pet_name_2": Text("", x=1179, y=100, size=32),
             "pet_image_2": Sprite(EMPTY),
             "pet_element_2": Sprite(EMPTY),
@@ -90,7 +90,7 @@ class BattleScene(Scene):
             "talent_icon_HP_2": Sprite(EMPTY, width=36),
             "pet_HP_2": Text("", x=1079, y=186, size=26),
             "pet_level_label_2": Text("", x=849, y=130, size=26),
-            "pet_battle_damage_2": Text("", x=939, y=250, size=40),
+            "pet_battle_damage_2": Text("", x=939, y=200, size=50, color=(255,255,255)),
         }
 
         for name, comp in info_components.items():
@@ -129,7 +129,7 @@ class BattleScene(Scene):
             image=IMAGE("HP.png"), width=36
         ).set_pos(130, 200)
         self.TEXTS["pet_level_label_1"].change_text(f"等级：{pet1.level}")
-        self.TEXTS["pet_HP_1"].change_text(str(pet1.HP))
+        self.TEXTS["pet_HP_1"].change_text(str(pet1.health))
 
         # 2
         self.TEXTS["pet_name_2"].change_text(pet2.info.name)
@@ -158,7 +158,7 @@ class BattleScene(Scene):
             image=IMAGE("HP.png"), width=36
         ).set_pos(1049, 200)
         self.TEXTS["pet_level_label_2"].change_text(f"等级：{pet2.level}")
-        self.TEXTS["pet_HP_2"].change_text(str(pet2.HP))
+        self.TEXTS["pet_HP_2"].change_text(str(pet2.health))
 
 
     def init_skills(self):

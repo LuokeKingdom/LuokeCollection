@@ -22,7 +22,7 @@ class DamageAnimation(BaseBattleAnimation):
     def __init__(self, damage, pet, interval):
         super(DamageAnimation, self).__init__()
         self.interval = interval
-        self.display = pet.display
+        self.display = pet.damage_display
         self.damage = damage
 
     def update(self, delta_time):
