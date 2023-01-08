@@ -19,15 +19,24 @@ class Scene:
         self.buttons_group = pygame.sprite.Group()
         self.others_group = pygame.sprite.Group()
         self.texts_group = pygame.sprite.Group()
-        self.BUTTONS = {}
-        self.OTHERS = {}
-        self.TEXTS = {}
+        self.layer_number = 6
+        self.LAYERS = [{} for i in range(self.layer_number)]
+        self.GROUPS = [pygame.sprite.Group() for i in range(self.layer_number)]
+
+    def __getattr__(self, name):
+        if name=="BUTTONS":
+            return self.LAYERS[1]
+        if name=="OTHERS":
+            return self.LAYERS[2]
+        if name=="TEXTS":
+            return self.LAYERS[3]
+        else:
+            raise Exception("ATTRIBUTE NOT FOUND")
 
     def display(self, mouse_pos, clicked):
         self.background.draw(self.screen)
-        self.buttons_group.draw(self.screen)
-        self.others_group.draw(self.screen)
-        self.texts_group.draw(self.screen)
+        for i in range(self.layer_number):
+            self.GROUPS[i].draw(self.screen)
         Mouse.draw(self.screen, mouse_pos, self.is_pointer)
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
@@ -44,12 +53,9 @@ class Scene:
             other.update()
 
     def load_items(self):
-        self.buttons_group.empty()
-        self.others_group.empty()
-        self.texts_group.empty()
-        self.others_group.add(list(self.OTHERS.values()))
-        self.buttons_group.add(list(self.BUTTONS.values()))
-        self.texts_group.add(list(self.TEXTS.values()))
+        for i in range(self.layer_number):
+            self.GROUPS[i].empty()
+            self.GROUPS[i].add(list(self.LAYERS[i].values()))
 
     def side_effect(self, **kwargs):
         self.load_items()

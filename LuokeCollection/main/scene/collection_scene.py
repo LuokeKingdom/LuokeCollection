@@ -18,35 +18,33 @@ class CollectionScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
         super(CollectionScene, self).__init__(screen, model,'bg.png', *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
-        self.BUTTONS = {
-            "close": Button(
-                image=IMAGE("close.png"),
-                x=1100,
-                y=70,
-                on_click=lambda: model.close(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=120,
-            ),
-            "next_page": Button(
-                image=pygame.transform.flip(IMAGE("previous.png"), True, False),
-                x=421,
-                y=649,
-                on_click=lambda: model.next_page(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-            "previous_page": Button(
-                image=IMAGE("previous.png"),
-                x=308,
-                y=649,
-                on_click=lambda: model.previous_page(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-        }
+        self.BUTTONS["close"] = Button(
+            image=IMAGE("close.png"),
+            x=1100,
+            y=70,
+            on_click=lambda: model.close(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=120,
+        )
+        self.BUTTONS["next_page"] = Button(
+            image=pygame.transform.flip(IMAGE("previous.png"), True, False),
+            x=421,
+            y=649,
+            on_click=lambda: model.next_page(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
+        self.BUTTONS["previous_page"] = Button(
+            image=IMAGE("previous.png"),
+            x=308,
+            y=649,
+            on_click=lambda: model.previous_page(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
         self.init_info()
         self.init_page()
 

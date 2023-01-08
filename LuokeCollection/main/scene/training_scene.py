@@ -33,57 +33,54 @@ class TrainingScene(Scene):
         self.current_slots = [-1] * 4
         self.battle_skill_selected = -1
         self.factory_skill_selected = -1
-        self.BUTTONS = {
-            "close": Button(
-                image=IMAGE("close.png"),
-                x=1100,
-                y=70,
-                on_click=lambda: self.model.close()
-                or self.model.set_battle_prep(self.model.battle_prep_offset),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=120,
+        self.BUTTONS["close"] = Button(
+            image=IMAGE("close.png"),
+            x=1100,
+            y=70,
+            on_click=lambda: self.model.close() or self.model.set_battle_prep(self.model.battle_prep_offset),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=120,
+        )
+        self.BUTTONS["next_page"] = Button(
+            image=pygame.transform.flip(IMAGE("previous.png"), True, False),
+            x=810,
+            y=649,
+            on_click=lambda: self.model.next_skill_page(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
+        self.BUTTONS["previous_page"] = Button(
+            image=IMAGE("previous.png"),
+            x=690,
+            y=649,
+            on_click=lambda: model.previous_skill_page(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
+        self.BUTTONS["replace_skill"] = Button(
+            image=IMAGE("place_holder.png"),
+            x=750,
+            y=649,
+            on_click=lambda: self.update_slots()
+            and self.model.replace_skills(self.current_slots),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
+        self.BUTTONS["save_pet"] = Button(
+            image=IMAGE("place_holder.png"),
+            x=1000,
+            y=649,
+            on_click=lambda: self.model.save_pet_content(
+                self.talent_map, self.current_slots
             ),
-            "next_page": Button(
-                image=pygame.transform.flip(IMAGE("previous.png"), True, False),
-                x=810,
-                y=649,
-                on_click=lambda: self.model.next_skill_page(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-            "previous_page": Button(
-                image=IMAGE("previous.png"),
-                x=690,
-                y=649,
-                on_click=lambda: model.previous_skill_page(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-            "replace_skill": Button(
-                image=IMAGE("place_holder.png"),
-                x=750,
-                y=649,
-                on_click=lambda: self.update_slots()
-                and self.model.replace_skills(self.current_slots),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-            "save_pet": Button(
-                image=IMAGE("place_holder.png"),
-                x=1000,
-                y=649,
-                on_click=lambda: self.model.save_pet_content(
-                    self.talent_map, self.current_slots
-                ),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-        }
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
         self.init_info()
         self.init_skills()
 
