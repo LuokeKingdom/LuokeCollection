@@ -5,6 +5,7 @@ class BattlePet:
         self.info = info
         self.skill_indices = skill_indices
         self.damage_display = None
+        self.health_display = None
         self.skills = [self.info.skills[i] for i in skill_indices]
         self.init_stat_map = {
             "HP": int(info.stats[0]),

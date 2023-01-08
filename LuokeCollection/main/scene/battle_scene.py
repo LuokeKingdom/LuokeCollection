@@ -30,7 +30,7 @@ class BattleScene(Scene):
         self.init_info()
         self.init_skills()
 
-        self.is_preparing = True
+        self.is_preparing = False
         self.timer = 0
         self.max_wait_time = 10
 
@@ -41,15 +41,26 @@ class BattleScene(Scene):
             self.TEXTS["pet_battle_damage_1"],
             self.TEXTS["pet_battle_damage_2"]
         )
+        self.system.set_health_display(
+            self.TEXTS["pet_HP_1"],
+            self.TEXTS["pet_HP_2"]
+        )
         self.display_pets()
+        self.system.push_anim("text", text="战斗开始", display=self.TEXTS["hint_display"], interval=1).next_anim()
+        self.system.push_anim("text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1).next_anim()
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
         if self.is_preparing:
+            prev = int(self.timer)
             self.timer += delta_time
+            curr = int(self.timer)
+            if curr > prev:
+                self.TEXTS["timer_display"].change_text(str(self.max_wait_time - curr))
             if self.timer > self.max_wait_time:
                 self.choose_action(0)
         else:
+            self.TEXTS["timer_display"].change_text("")
             if self.system.has_animation():
                 self.system.update_animation(delta_time)
             else:
@@ -62,6 +73,7 @@ class BattleScene(Scene):
             self.is_preparing = False
             self.system.prepare(i, 0)
             self.system.act()
+            self.system.push_anim("text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1).next_anim()
 
 
     def display_pets(self):
@@ -91,6 +103,8 @@ class BattleScene(Scene):
             "pet_HP_2": Text("", x=1079, y=186, size=26),
             "pet_level_label_2": Text("", x=849, y=130, size=26),
             "pet_battle_damage_2": Text("", x=939, y=200, size=50, color=(255,255,255)),
+            "hint_display": Text("", align_mode="CENTER", x=620, y=413, size=60),
+            "timer_display": Text("", align_mode="CENTER", x=620, y=313, size=60),
         }
 
         for name, comp in info_components.items():

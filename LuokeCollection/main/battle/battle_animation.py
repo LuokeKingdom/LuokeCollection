@@ -18,25 +18,35 @@ class NoAnimation(BaseBattleAnimation):
         super(NoAnimation, self).__init__()
         self.interval = interval
 
-class DamageAnimation(BaseBattleAnimation):
-    def __init__(self, damage, pet, interval):
-        super(DamageAnimation, self).__init__()
+class TextDisplayAnimation(BaseBattleAnimation):
+    def __init__(self, text, display, interval):
+        super(TextDisplayAnimation, self).__init__()
         self.interval = interval
-        self.display = pet.damage_display
-        self.damage = damage
+        self.display = display
+        self.text = text
 
     def update(self, delta_time):
         if self.timer==0:
-            self.display.change_text(str(self.damage))
-        if not super(DamageAnimation, self).update(delta_time):
+            self.display.change_text(str(self.text))
+        if not super(TextDisplayAnimation, self).update(delta_time):
             self.display.change_text("")
 
+class TextChangeAnimation(BaseBattleAnimation):
+    def __init__(self, text, display):
+        super(TextChangeAnimation, self).__init__()
+        self.display = display
+        self.text = text
+
+    def update(self, delta_time):
+        self.done = True
+        self.display.change_text(str(self.text))
 
 # exposure
 class BattleAnimation:
     animations = {
         "none": NoAnimation,
-        "damage": DamageAnimation,
+        "text": TextDisplayAnimation,
+        "text_change": TextChangeAnimation,
     }
     def get(name, **kwargs):
         return BattleAnimation.animations[name](**kwargs)

@@ -27,6 +27,14 @@ class BattleSystem:
         for i in self.team2:
             if i is not None:
                 i.damage_display = display2
+
+    def set_health_display(self, display1, display2):
+        for i in self.team1:
+            if i is not None:
+                i.health_display = display1
+        for i in self.team2:
+            if i is not None:
+                i.health_display = display2
     
     def has_animation(self):
         return not all([i is None for i in self.curr_anim]) or not self.anim_queue.empty()
@@ -70,8 +78,9 @@ class BattleSystem:
     def action(self, primary, secondary, choice):
         self.push_anim('none', pet=primary, interval=1).next_anim()
         damage = min(0, -primary.AD - int(primary.skills[choice].power) + secondary.DF)
-        self.push_anim('damage', damage=damage, pet=secondary, interval=1).next_anim()
         secondary.health += damage
+        self.push_anim('text', text=damage, display=secondary.damage_display, interval=1)
+        self.push_anim('text_change', text=secondary.health, display=secondary.health_display).next_anim()
         pass
 
     def postaction(self, primary, secondary):
