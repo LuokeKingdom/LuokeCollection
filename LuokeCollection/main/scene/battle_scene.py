@@ -37,6 +37,10 @@ class BattleScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.system = self.model.get_battle_system()
+        self.system.set_damage_display(
+            self.TEXTS["pet_battle_damage_1"],
+            self.TEXTS["pet_battle_damage_2"]
+        )
         self.display_pets()
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
@@ -77,14 +81,16 @@ class BattleScene(Scene):
             "pet_secondary_element_1": Sprite(EMPTY),
             "talent_icon_HP_1": Sprite(EMPTY, width=36),
             "pet_HP_1": Text("", x=160, y=186, size=26),
-            "pet_level_label_1": Text("等级：1", x=390, y=130, size=26),
+            "pet_level_label_1": Text("", x=390, y=130, size=26),
+            "pet_battle_damage_1": Text("", x=200, y=250, size=40),
             "pet_name_2": Text("", x=1179, y=100, size=32),
             "pet_image_2": Sprite(EMPTY),
             "pet_element_2": Sprite(EMPTY),
             "pet_secondary_element_2": Sprite(EMPTY),
             "talent_icon_HP_2": Sprite(EMPTY, width=36),
             "pet_HP_2": Text("", x=1079, y=186, size=26),
-            "pet_level_label_2": Text("等级：1", x=849, y=130, size=26),
+            "pet_level_label_2": Text("", x=849, y=130, size=26),
+            "pet_battle_damage_2": Text("", x=939, y=250, size=40),
         }
 
         for name, comp in info_components.items():
