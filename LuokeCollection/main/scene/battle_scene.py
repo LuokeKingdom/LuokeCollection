@@ -30,9 +30,11 @@ class BattleScene(Scene):
         self.is_preparing = False
         self.timer = 0
         self.max_wait_time = 10
+        self.done = False
 
     def side_effect(self):
         super().side_effect()
+        self.done = False
         self.system = self.model.get_battle_system()
         self.system.set_damage_display(
             self.TEXTS["pet_battle_damage_1"],
@@ -48,12 +50,16 @@ class BattleScene(Scene):
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
-        if self.system.done:
+        if self.done:
             self.TEXTS["timer_display"].change_text("")
             if self.system.has_animation():
                 self.system.update_animation(delta_time)
             return
-
+        if self.system.done:
+            text = "胜利" if self.system.win else "失败"
+            self.system.push_anim("text_change", text=text, display=self.TEXTS["hint_display"]).next_anim()
+            self.done = True
+            return
         if self.is_preparing:
             prev = int(self.timer)
             self.timer += delta_time
@@ -76,7 +82,8 @@ class BattleScene(Scene):
             self.is_preparing = False
             self.system.prepare(i, 0)
             self.system.act()
-            self.system.push_anim("text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1).next_anim()
+            if not self.system.done:
+                self.system.push_anim("text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1).next_anim()
 
 
     def display_pets(self):

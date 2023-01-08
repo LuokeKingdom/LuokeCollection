@@ -6,6 +6,7 @@ import random
 class BattleSystem:
     def __init__(self, pet_array_1, pet_array_2):
         self.done = False
+        self.win = None
         self.anim_queue = queue.Queue(20)
         self.temp_anim = []
         self.curr_anim = [None]
@@ -73,7 +74,8 @@ class BattleSystem:
                 self.action(pet2, pet1, choice2)
             self.postaction(pet2, pet1)
         except:
-            pass
+            pet1, pet2 = self.get_pets()
+            self.win = pet1.health!=0
 
 
     def preaction(self, primary, secondary):
@@ -83,11 +85,11 @@ class BattleSystem:
         self.push_anim('none', pet=primary, interval=1).next_anim()
         damage = min(0, -primary.AD - int(primary.skills[choice].power) + secondary.DF)
         secondary.health = max(0, secondary.health + damage)
+        self.push_anim('text', text=damage, display=secondary.damage_display, interval=1)
+        self.push_anim('text_change', text=secondary.health, display=secondary.health_display).next_anim()
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")
-        self.push_anim('text', text=damage, display=secondary.damage_display, interval=1)
-        self.push_anim('text_change', text=secondary.health, display=secondary.health_display).next_anim()
 
     def postaction(self, primary, secondary):
         pass
