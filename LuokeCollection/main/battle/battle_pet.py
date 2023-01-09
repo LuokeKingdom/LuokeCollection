@@ -1,7 +1,11 @@
+from .pet_status import PetStatus
+
+
 class BattlePet:
     def __init__(self, info, talent_map, skill_indices):
-        self.level = talent_map["level"]
+        self.level = int(talent_map["level"])
         self.is_self = False
+        self.status = PetStatus()
         self.talent_map = talent_map
         self.info = info
         self.skill_indices = skill_indices
@@ -17,16 +21,17 @@ class BattlePet:
             "MD": int(info.stats[4]),
             "SP": int(info.stats[5]),
         }
-        self.final_stat_map = {k:v for k, v in self.init_stat_map.items()}
-        self.recalculate()
+        self.final_stat_map = {
+            k: int((self.init_stat_map[k] * 2 + v) * self.level // 100
+            + ((self.level + 10) if k == "HP" else 5))
+            for k, v in self.init_stat_map.items()
+        }
         self.health = self.final_stat_map["HP"]
+        self.current_stat_map = self.get_current_stats()
 
-    def recalculate(self):
-        for k, v in self.talent_map.items():
-            if k != "level":
-                self.final_stat_map[k] = (self.init_stat_map[k] * 2 + v) * self.level // 100 + (
-                    (self.level + 10) if k == "HP" else 5
-                )
-                
+    def get_current_stats(self):
+        return {k: int(v*(1+0.5*self.status.stat_buffs[k] if self.status.stat_buffs[k] >= 0 else 1/(1+self.status.stat_buffs[k])))
+        for k, v in self.final_stat_map.items() if k!="HP"}
+
     def __getattr__(self, name):
-        return self.final_stat_map.get(name)
+        return self.current_stat_map.get(name)

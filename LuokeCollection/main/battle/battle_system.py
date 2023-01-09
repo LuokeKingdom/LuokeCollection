@@ -2,6 +2,7 @@ from .battle_pet import BattlePet
 from .battle_animation import BattleAnimation
 import queue
 import random
+from .action_solver import ActionSolver
 
 class BattleSystem:
     def __init__(self, pet_array_1, pet_array_2):
@@ -94,7 +95,8 @@ class BattleSystem:
         return True
 
     def action(self, primary, secondary, choice):
-        damage = min(0, -primary.AD - int(primary.skills[choice].power) + secondary.DF)
+        result = ActionSolver(choice, primary, secondary)
+        damage = -result.damage_taker
         secondary.health = max(0, secondary.health + damage)
 
         pos_data1, rev_data1 = self.get_position_data([
@@ -106,6 +108,7 @@ class BattleSystem:
             (.1, (310, 0)),
             (.2, (300, 0)),
         ], not primary.is_self)
+
         self.push_anim('position', data=pos_data1, display=primary.sprite_display).next_anim()
         self.push_anim('position', data=pos_data2, display=primary.sprite_display)
         self.push_anim('text', text=damage, display=secondary.damage_display, interval=1)
