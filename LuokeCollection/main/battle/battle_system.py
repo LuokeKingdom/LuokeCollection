@@ -7,13 +7,16 @@ class BattleSystem:
     def __init__(self, pet_array_1, pet_array_2):
         self.done = False
         self.win = None
-        self.anim_queue = queue.Queue(20)
+        self.anim_queue = queue.Queue()
         self.temp_anim = []
         self.curr_anim = [None]
 
         self.team1 = [None if args is None else BattlePet(*args) for args in pet_array_1]
         self.choice1 = None
         self.log1 = []
+        for i in self.team1:
+            if i is not None:
+                i.is_self = True
 
         self.team2 = [None if args is None else BattlePet(*args) for args in pet_array_2]
         self.choice2 = None
@@ -37,6 +40,14 @@ class BattleSystem:
         for i in self.team2:
             if i is not None:
                 i.health_display = display2
+
+    def set_sprite_display(self, display1, display2):
+        for i in self.team1:
+            if i is not None:
+                i.sprite_display = display1
+        for i in self.team2:
+            if i is not None:
+                i.sprite_display = display2
     
     def has_animation(self):
         return not all([i is None for i in self.curr_anim]) or not self.anim_queue.empty()
@@ -73,7 +84,8 @@ class BattleSystem:
             if (self.preaction(pet2, pet1)):
                 self.action(pet2, pet1, choice2)
             self.postaction(pet2, pet1)
-        except:
+        except Exception as e:
+            print(e)
             pet1, pet2 = self.get_pets()
             self.win = pet1.health!=0
 
@@ -82,11 +94,26 @@ class BattleSystem:
         return True
 
     def action(self, primary, secondary, choice):
-        self.push_anim('none', pet=primary, interval=1).next_anim()
         damage = min(0, -primary.AD - int(primary.skills[choice].power) + secondary.DF)
         secondary.health = max(0, secondary.health + damage)
+
+        pos_data1, rev_data1 = self.get_position_data([
+            (0, (0, 0)),
+            (.6, (200, 0)),
+            (.7, (265, 0)),
+        ], not primary.is_self)
+        pos_data2, rev_data2 = self.get_position_data([
+            (.1, (310, 0)),
+            (.2, (300, 0)),
+        ], not primary.is_self)
+        self.push_anim('position', data=pos_data1, display=primary.sprite_display).next_anim()
+        self.push_anim('position', data=pos_data2, display=primary.sprite_display)
         self.push_anim('text', text=damage, display=secondary.damage_display, interval=1)
         self.push_anim('text_change', text=secondary.health, display=secondary.health_display).next_anim()
+        self.push_anim('none', pet=primary, interval=0.5).next_anim()
+        self.push_anim('position', data=rev_data2, display=primary.sprite_display).next_anim()
+        self.push_anim('position', data=rev_data1, display=primary.sprite_display).next_anim()
+
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")
@@ -101,3 +128,13 @@ class BattleSystem:
     def next_anim(self):
         self.anim_queue.put(self.temp_anim)
         self.temp_anim = []
+
+    def get_position_data(self, data, inversed):
+        position_data = list(map(lambda x: (x[0], (-x[1][0], -x[1][1])) if inversed else x, data))
+        reversed_data = list(zip(
+            list(reversed([position_data[-1][0] - position_data[i][0] for i in range(len(position_data))])), 
+            list(reversed(list(zip(*position_data))[1]))
+        ))
+        print(position_data, reversed_data)
+        return position_data, reversed_data
+

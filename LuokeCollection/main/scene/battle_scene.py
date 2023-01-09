@@ -44,6 +44,10 @@ class BattleScene(Scene):
             self.TEXTS["pet_HP_1"],
             self.TEXTS["pet_HP_2"]
         )
+        self.system.set_sprite_display(
+            self.OTHERS["pet_image_1"],
+            self.OTHERS["pet_image_2"],
+        )
         self.display_pets()
         self.system.push_anim("text", text="战斗开始", display=self.TEXTS["hint_display"], interval=1).next_anim()
         self.system.push_anim("text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1).next_anim()

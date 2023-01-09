@@ -1,11 +1,13 @@
 class BattlePet:
     def __init__(self, info, talent_map, skill_indices):
         self.level = talent_map["level"]
+        self.is_self = False
         self.talent_map = talent_map
         self.info = info
         self.skill_indices = skill_indices
         self.damage_display = None
         self.health_display = None
+        self.sprite_display = None
         self.skills = [self.info.skills[i] for i in skill_indices]
         self.init_stat_map = {
             "HP": int(info.stats[0]),
