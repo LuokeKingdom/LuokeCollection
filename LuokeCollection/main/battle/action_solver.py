@@ -21,6 +21,8 @@ class ActionSolver:
         skill = user.skills[skill_index]
         self.user_status_change.skill_PPs[skill_index][0] = -1
         skill_element = type2element(skill.type)
+        if skill_element:
+            pass
         element_ratio = 1
         critical = 1
 

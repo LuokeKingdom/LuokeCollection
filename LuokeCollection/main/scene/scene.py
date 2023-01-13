@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *  # noqa
 from ..utils import Mouse
 from ..components.background import Background
-from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
+from LuokeCollection.settings.dev import IMAGE
 
 
 class Scene:

@@ -1,15 +1,13 @@
 import os
 import pygame
 from pygame.locals import *  # noqa
-from LuokeCollection.main.scene.scene import Scene
-from ..components.button import Button
 from ..model.sound import Channel
 from ...main.utils import ELEMENT_MAP, type2element
 from ...settings.dev import SOUND, IMAGE
 
+from ..components.button import Button
 from ..components.sprite import Sprite
 from ..scene.scene import Scene
-from ..components.button import Button
 from ..components.text import Text
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)

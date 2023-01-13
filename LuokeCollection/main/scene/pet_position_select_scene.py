@@ -1,6 +1,3 @@
-import pygame
-from pygame.locals import *  # noqa
-
 from .scene import Scene
 from ..components.button import Button
 from LuokeCollection.settings.dev import IMAGE
