@@ -40,7 +40,8 @@ class ButtonAnimation:
 class OpacityButtonAnimation(ButtonAnimation, OpacityMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.opacity = self.parameter["factor"]
+        self.start = self.button.opacity
+        self.end = self.parameter["factor"]
 
 
 class ScaleButtonAnimation(ButtonAnimation, ScaleMixin):
