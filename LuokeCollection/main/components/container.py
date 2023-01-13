@@ -5,15 +5,24 @@ from ..utils import vec
 
 class Container(pygame.sprite.Sprite):
     def __init__(
-        self, image, width=None, height=None, ratio=1, align_mode="CENTER", x=0, y=0
+        self,
+        image,
+        width=None,
+        height=None,
+        ratio=1,
+        align_mode="CENTER",
+        x=0,
+        y=0,
+        opacity=1,
     ):
         super().__init__()
-        self.set_image(image, width, height, ratio)
+        self.set_image(image, width, height, ratio, opacity)
         self.align_mode = align_mode
+        self.opacity = opacity
         self.set_pos(x, y)
         self.check_collide_original_rect = False
 
-    def set_image(self, image, width=None, height=None, ratio=1):
+    def set_image(self, image, width=None, height=None, ratio=1, opacity=1):
         if width and height:
             self.image = pygame.transform.smoothscale(image, (width, height))
         elif width:
@@ -31,6 +40,7 @@ class Container(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.original_image = self.image.copy()
         self.original_rect = self.original_image.get_rect()
+        if opacity!=1: self.image.set_alpha(opacity*255)
         return self
 
     def set_pos(self, x, y=None):

@@ -19,9 +19,9 @@ class NoAnimation(BaseBattleAnimation):
         self.interval = interval
 
 
-class TextDisplayAnimation(BaseBattleAnimation):
+class TextDisplay(BaseBattleAnimation):
     def __init__(self, text, display, color=None, interval=1):
-        super(TextDisplayAnimation, self).__init__()
+        super(TextDisplay, self).__init__()
         self.interval = interval
         self.display = display
         self.text = text
@@ -32,17 +32,18 @@ class TextDisplayAnimation(BaseBattleAnimation):
     def update(self, delta_time):
         if self.timer == 0:
             self.display.change_text(str(self.text), self.color)
-        if not super(TextDisplayAnimation, self).update(delta_time):
+        if not super(TextDisplay, self).update(delta_time):
             self.display.change_text("")
 
 
-class TextChangeAnimation(BaseBattleAnimation):
+class TextChange(BaseBattleAnimation):
     def __init__(self, text, display):
-        super(TextChangeAnimation, self).__init__()
+        super(TextChange, self).__init__()
         self.display = display
         self.text = text
 
     def update(self, delta_time):
+        if self.done: return
         self.done = True
         self.display.change_text(str(self.text))
 
@@ -78,14 +79,25 @@ class KeyframePosition(BaseBattleAnimation):
                 self.opx + x1 + x2 * progress, self.opy + y1 + y2 * progress
             )
 
+class LogChange(BaseBattleAnimation):
+    def __init__(self, on_update, text):
+        super(LogChange, self).__init__()
+        self.on_update = on_update
+        self.text = text
+
+    def update(self, delta_time):
+        if self.done: return
+        self.done = True
+        self.on_update(self.text)
 
 # exposure
 class BattleAnimation:
     animations = {
         "none": NoAnimation,
-        "text": TextDisplayAnimation,
-        "text_change": TextChangeAnimation,
+        "text": TextDisplay,
+        "text_change": TextChange,
         "position": KeyframePosition,
+        "log": LogChange,
     }
 
     def get(name, **kwargs):

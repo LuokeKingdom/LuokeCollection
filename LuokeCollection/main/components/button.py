@@ -33,6 +33,7 @@ class Button(Container):
         transition=0.2,
         parameter={"factor": 1.2},
         on_click=None,
+        can_hover=None,
         text=None,
         text_fontsize=24,
         text_color=(0, 0, 0),
@@ -60,6 +61,7 @@ class Button(Container):
             kwargs["image"] = image
         super().__init__(*args, **kwargs)
         self.on_click = on_click
+        self.can_hover = can_hover
         self.hovered = False
         self.transition = transition
         self.parameter = parameter
@@ -88,6 +90,9 @@ class Button(Container):
             if clicked:
                 self.click()
         if self.animation is None:
+            return
+        if self.can_hover is not None and not self.can_hover():
+            self.animation.stop()
             return
         if self.hovered:
             self.animation.play(current_time)

@@ -11,6 +11,7 @@ class ActionSolver:
         self.damage_taker = None
         self.heal_user = 10
         self.heal_taker = None
+        self.skill = None
 
         if action_index < 4:
             self.use_skill(action_index, user, taker)
@@ -19,6 +20,7 @@ class ActionSolver:
 
     def use_skill(self, skill_index, user, taker):
         skill = user.skills[skill_index]
+        self.skill = skill
         self.user_status_change.skill_PPs[skill_index][0] = -1
         skill_element = type2element(skill.type)
         if skill_element:

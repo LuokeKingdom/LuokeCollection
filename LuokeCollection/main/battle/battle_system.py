@@ -12,6 +12,7 @@ class BattleSystem:
         self.anim_queue = queue.Queue()
         self.temp_anim = []
         self.curr_anim = [None]
+        self.on_log_update = None
 
         self.team1 = [
             None if args is None else BattlePet(*args) for args in pet_array_1
@@ -104,6 +105,7 @@ class BattleSystem:
         result = ActionSolver(choice, primary, secondary)
         damage_taker, damage_user = result.get_damage()
         heal_taker, heal_user = result.get_heal()
+        self.append_log(f"对{secondary.info.name}使用了<{result.skill.name}>", primary.is_self)
         if damage_taker is not None:
             secondary.change_health(-damage_taker)
             self.animate_attack(primary, secondary, damage_taker)
@@ -116,13 +118,16 @@ class BattleSystem:
         if heal_taker is not None:
             secondary.change_health(heal_taker)
             self.animate_heal(secondary, heal_taker)
-
+        
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")
 
     def postaction(self, primary, secondary):
         pass
+
+    def append_log(self, text, is_self):
+        self.push_anim("log", on_update=self.on_log_update, text=f"你的{'宠物' if is_self else '对手'}"+text)
 
     def animate_attack(self, primary, secondary, damage):
 
@@ -168,6 +173,7 @@ class BattleSystem:
         self.push_anim("none", interval=0.5).next_anim()
 
     def animate_heal(self, pet, heal):
+        self.append_log("回复了体力", pet.is_self)
         pos_data1, rev_data1 = self.get_position_data(
             [
                 (0.0, (0, 0)),

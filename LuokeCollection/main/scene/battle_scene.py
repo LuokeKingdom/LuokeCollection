@@ -22,6 +22,7 @@ class BattleScene(Scene):
         self.BUTTONS["pop"] = Button(
             text="X", x=1000, y=100, on_click=lambda: model.close()
         )
+        self.logs = []
 
         self.skill_pos_dict = {}
         self.skills = [None] * 4
@@ -29,10 +30,11 @@ class BattleScene(Scene):
 
         self.init_info()
         self.init_skills()
+        self.init_battle_log()
 
         self.is_preparing = False
         self.timer = 0
-        self.max_wait_time = 10
+        self.max_wait_time = 11
         self.done = False
 
     def side_effect(self):
@@ -47,6 +49,7 @@ class BattleScene(Scene):
             self.OTHERS["pet_image_1"],
             self.OTHERS["pet_image_2"],
         )
+        self.system.on_log_update = self.append_battle_log
         self.display_pets()
         self.system.push_anim(
             "text", text="战斗开始", display=self.TEXTS["hint_display"], interval=1
@@ -224,18 +227,19 @@ class BattleScene(Scene):
         def get_click_function(i):
             return lambda: self.choose_action(i)
 
+        def get_hover_function():
+            return lambda: self.is_preparing
+
         buttons = map(
             lambda x: Button(
                 image=EMPTY,
                 x=-1000,
                 y=-1000,
-                # animation="custom",
-                # parameter={
-                #     "on_hover": lambda: self.pop_up_effect(x, True),
-                #     "not_hover": lambda: self.pop_up_effect(x, False),
-                # },
-                animation="none",
+                animation="opacity",
+                opacity=0.2,
+                parameter={ "factor": 0.3 },
                 on_click=get_click_function(x),
+                can_hover=get_hover_function(),
             ),
             range(4),
         )
@@ -307,3 +311,27 @@ class BattleScene(Scene):
         # self.TEXTS[f"skill_{index}_effect_1"].hide()
         # self.TEXTS[f"skill_{index}_effect_2"].hide()
         # self.TEXTS[f"skill_{index}_effect_3"].hide()
+
+    def init_battle_log(self):
+        log_components = {
+            f"log_line_{i}": Text("", size=15, x=9, y=691+i*17) for i in range(7)
+        }
+        log_components["log_background"] = Sprite(image=IMAGE("light_blue.png"),width=250, height=120, x=130, y=750)
+
+        for name, comp in log_components.items():
+            if isinstance(comp, Button):
+                self.BUTTONS[name] = comp
+            elif isinstance(comp, Text):
+                self.TEXTS[name] = comp
+            else:
+                self.OTHERS[name] = comp
+
+    def append_battle_log(self, log):
+        self.logs.append(log)
+        content = self.logs
+        if len(self.logs) > 7:
+            content = self.logs[-7:-1]
+        for i, v in enumerate(content):
+            self.TEXTS[f"log_line_{i}"].change_text(v)
+            
+
