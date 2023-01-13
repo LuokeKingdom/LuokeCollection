@@ -8,7 +8,7 @@ class ActionSolver:
         self.taker_status_change = PetStatus()
         self.damage_user  = None
         self.damage_taker = None
-        self.heal_user    = None
+        self.heal_user    = 10
         self.heal_taker   = None
 
         if action_index < 4:
@@ -30,3 +30,9 @@ class ActionSolver:
             self.damage_taker = int(((user.level*0.4+2) * int(skill.power) * user.AD / taker.DF / 50 + 2) * element_ratio * choice(range(217, 256)) * critical / 255)
         elif skill_type == "魔法":
             self.damage_taker = int(((user.level*0.4+2) * int(skill.power) * user.AP / taker.MD / 50 + 2) * element_ratio * choice(range(217, 256)) * critical / 255)
+
+    def get_damage(self):
+        return self.damage_taker, self.damage_user
+
+    def get_heal(self):
+        return self.heal_taker, self.heal_user

@@ -36,7 +36,7 @@ class BattleScene(Scene):
         super().side_effect()
         self.done = False
         self.system = self.model.get_battle_system()
-        self.system.set_damage_display(
+        self.system.set_number_display(
             self.TEXTS["pet_battle_damage_1"],
             self.TEXTS["pet_battle_damage_2"]
         )
@@ -108,7 +108,7 @@ class BattleScene(Scene):
             "talent_icon_HP_1": Sprite(EMPTY, width=36),
             "pet_HP_1": Text("", x=160, y=186, size=26),
             "pet_level_label_1": Text("", x=390, y=130, size=26),
-            "pet_battle_damage_1": Text("", x=200, y=200, size=50, color=(255,255,255)),
+            "pet_battle_damage_1": Text("", x=400, y=200, size=50, color=(255,255,255), align_mode="CENTER"),
             "pet_name_2": Text("", x=1179, y=100, size=32),
             "pet_image_2": Sprite(EMPTY),
             "pet_element_2": Sprite(EMPTY),
@@ -116,7 +116,7 @@ class BattleScene(Scene):
             "talent_icon_HP_2": Sprite(EMPTY, width=36),
             "pet_HP_2": Text("", x=1079, y=186, size=26),
             "pet_level_label_2": Text("", x=849, y=130, size=26),
-            "pet_battle_damage_2": Text("", x=939, y=200, size=50, color=(255,255,255)),
+            "pet_battle_damage_2": Text("", x=829, y=200, size=50, color=(255,255,255), align_mode="CENTER"),
             "hint_display": Text("", align_mode="CENTER", x=620, y=413, size=60),
             "timer_display": Text("", align_mode="CENTER", x=620, y=313, size=60),
         }

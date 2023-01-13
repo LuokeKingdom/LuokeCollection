@@ -31,9 +31,11 @@ class Text(Container):
         self.change_text(text)
         self.align_mode = align_mode
 
-    def change_text(self, text):
+    def change_text(self, text, color=None):
         self.text = text
-        self.image = Text.get_font(self.size).render(text, True, self.color)
+        if color is None:
+            color = self.color
+        self.image = Text.get_font(self.size).render(text, True, color)
         self.image.set_alpha(self.opacity)
         temp_pos = self.get_pos()
         self.rect = self.image.get_rect()

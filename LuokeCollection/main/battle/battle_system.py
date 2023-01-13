@@ -26,13 +26,13 @@ class BattleSystem:
     def get_pets(self):
         return self.team1[0], self.team2[0]
     
-    def set_damage_display(self, display1, display2):
+    def set_number_display(self, display1, display2):
         for i in self.team1:
             if i is not None:
-                i.damage_display = display1
+                i.number_display = display1
         for i in self.team2:
             if i is not None:
-                i.damage_display = display2
+                i.number_display = display2
 
     def set_health_display(self, display1, display2):
         for i in self.team1:
@@ -96,8 +96,34 @@ class BattleSystem:
 
     def action(self, primary, secondary, choice):
         result = ActionSolver(choice, primary, secondary)
-        damage = -result.damage_taker
-        secondary.health = max(0, secondary.health + damage)
+        damage_taker, damage_user = result.get_damage()
+        heal_taker, heal_user = result.get_heal()
+        if damage_taker is not None:
+            secondary.change_health(-damage_taker)
+            self.animate_attack(primary, secondary, damage_taker)
+        if damage_user is not None:
+            primary.change_health(-damage_user)
+            self.animate_number(primary, -damage_user)
+        if heal_user is not None:
+            primary.change_health(heal_user)
+            self.animate_heal(primary, heal_user)
+        if heal_taker is not None:
+            secondary.change_health(heal_taker)
+            self.animate_heal(secondary, heal_taker)
+
+
+        
+
+
+        if secondary.health == 0:
+            self.done = True
+            raise Exception("Battle Finish!!!")
+
+
+    def postaction(self, primary, secondary):
+        pass
+
+    def animate_attack(self, primary, secondary, damage):
 
         pos_data1, rev_data1 = self.get_position_data([
             (0, (0, 0)),
@@ -111,18 +137,25 @@ class BattleSystem:
 
         self.push_anim('position', data=pos_data1, display=primary.sprite_display).next_anim()
         self.push_anim('position', data=pos_data2, display=primary.sprite_display)
-        self.push_anim('text', text=damage, display=secondary.damage_display, interval=1)
-        self.push_anim('text_change', text=secondary.health, display=secondary.health_display).next_anim()
-        self.push_anim('none', pet=primary, interval=0.5).next_anim()
+        self.animate_number(secondary, -damage)
         self.push_anim('position', data=rev_data2, display=primary.sprite_display).next_anim()
         self.push_anim('position', data=rev_data1, display=primary.sprite_display).next_anim()
 
-        if secondary.health == 0:
-            self.done = True
-            raise Exception("Battle Finish!!!")
+    def animate_number(self, pet, number):
+        self.push_anim('text', text="+" + str(number) if number>0 else number, color=(255, 0, 0) if number < 0 else (0, 255, 0), display=pet.number_display, interval=1)
+        self.push_anim('text_change', text=pet.health, display=pet.health_display).next_anim()
+        self.push_anim('none', interval=0.5).next_anim()
 
-    def postaction(self, primary, secondary):
-        pass
+    def animate_heal(self, pet, heal):
+        pos_data1, rev_data1 = self.get_position_data([
+            (.0, (0, 0)),
+            (.2, (0, -3)),
+            (.4, (0, -7)),
+            (.6, (0, -15)),
+        ], pet.is_self)
+        self.push_anim('position', data=pos_data1, display=pet.sprite_display).next_anim()
+        self.animate_number(pet, heal)
+        self.push_anim('position', data=rev_data1, display=pet.sprite_display).next_anim()
 
     def push_anim(self, name, **kwargs):
         self.temp_anim.append(BattleAnimation.get(name, **kwargs))
@@ -133,7 +166,7 @@ class BattleSystem:
         self.temp_anim = []
 
     def get_position_data(self, data, inversed):
-        position_data = list(map(lambda x: (x[0], (-x[1][0], -x[1][1])) if inversed else x, data))
+        position_data = list(map(lambda x: (x[0], (-x[1][0], x[1][1])) if inversed else x, data))
         reversed_data = list(zip(
             list(reversed([position_data[-1][0] - position_data[i][0] for i in range(len(position_data))])), 
             list(reversed(list(zip(*position_data))[1]))

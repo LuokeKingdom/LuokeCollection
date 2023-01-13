@@ -14,20 +14,24 @@ class BaseBattleAnimation:
 
 
 class NoAnimation(BaseBattleAnimation):
-    def __init__(self, pet, interval):
+    def __init__(self, interval):
         super(NoAnimation, self).__init__()
         self.interval = interval
 
 class TextDisplayAnimation(BaseBattleAnimation):
-    def __init__(self, text, display, interval):
+    def __init__(self, text, display, color=None, interval=1):
         super(TextDisplayAnimation, self).__init__()
         self.interval = interval
         self.display = display
         self.text = text
+        self.color = color
+        if color is None:
+            self.color = display.color
+
 
     def update(self, delta_time):
         if self.timer==0:
-            self.display.change_text(str(self.text))
+            self.display.change_text(str(self.text), self.color)
         if not super(TextDisplayAnimation, self).update(delta_time):
             self.display.change_text("")
 
@@ -54,7 +58,7 @@ class KeyframePosition(BaseBattleAnimation):
         self.interval = self.data[-1][0]
         
     def update(self, delta_time):
-        if self.index != self.end and self.data[self.index + 1][0] < self.timer:
+        while self.index != self.end and self.data[self.index + 1][0] < self.timer:
             self.index+=1
         if not super(KeyframePosition, self).update(delta_time):
             self.display.set_pos(self.opx + self.data[self.end][1][0], self.opy + self.data[self.end][1][1])
