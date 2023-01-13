@@ -43,7 +43,8 @@ class TextChange(BaseBattleAnimation):
         self.text = text
 
     def update(self, delta_time):
-        if self.done: return
+        if self.done:
+            return
         self.done = True
         self.display.change_text(str(self.text))
 
@@ -79,6 +80,7 @@ class KeyframePosition(BaseBattleAnimation):
                 self.opx + x1 + x2 * progress, self.opy + y1 + y2 * progress
             )
 
+
 class LogChange(BaseBattleAnimation):
     def __init__(self, on_update, text):
         super(LogChange, self).__init__()
@@ -86,9 +88,11 @@ class LogChange(BaseBattleAnimation):
         self.text = text
 
     def update(self, delta_time):
-        if self.done: return
+        if self.done:
+            return
         self.done = True
         self.on_update(self.text)
+
 
 # exposure
 class BattleAnimation:

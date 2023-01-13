@@ -237,7 +237,7 @@ class BattleScene(Scene):
                 y=-1000,
                 animation="opacity",
                 opacity=0.2,
-                parameter={ "factor": 0.3 },
+                parameter={"factor": 0.3},
                 on_click=get_click_function(x),
                 can_hover=get_hover_function(),
             ),
@@ -314,9 +314,11 @@ class BattleScene(Scene):
 
     def init_battle_log(self):
         log_components = {
-            f"log_line_{i}": Text("", size=15, x=9, y=691+i*17) for i in range(7)
+            f"log_line_{i}": Text("", size=15, x=9, y=691 + i * 17) for i in range(7)
         }
-        log_components["log_background"] = Sprite(image=IMAGE("light_blue.png"),width=250, height=120, x=130, y=750)
+        log_components["log_background"] = Sprite(
+            image=IMAGE("light_blue.png"), width=250, height=120, x=130, y=750
+        )
 
         for name, comp in log_components.items():
             if isinstance(comp, Button):
@@ -333,5 +335,3 @@ class BattleScene(Scene):
             content = self.logs[-7:-1]
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
-            
-

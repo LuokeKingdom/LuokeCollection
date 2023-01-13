@@ -40,7 +40,8 @@ class Container(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.original_image = self.image.copy()
         self.original_rect = self.original_image.get_rect()
-        if opacity!=1: self.image.set_alpha(opacity*255)
+        if opacity != 1:
+            self.image.set_alpha(opacity * 255)
         return self
 
     def set_pos(self, x, y=None):

@@ -365,7 +365,8 @@ class TrainingScene(Scene):
     def pop_up_effect(self, index, show):
         if index > 3 and self.current_slots[index - 4] < 0:
             return
-        if self.skills[index] is None: return
+        if self.skills[index] is None:
+            return
         if show:
             self.TEXTS[f"skill_{index}_name"].hide()
             self.OTHERS[f"skill_{index}_element"].set_image(EMPTY)
