@@ -6,7 +6,9 @@ from LuokeCollection.settings.dev import WIDTH, HEIGHT, IMAGE
 
 
 class Scene:
-    def __init__(self, screen, model, bg_file="place_holder.png", width=None, height=None):
+    def __init__(
+        self, screen, model, bg_file="place_holder.png", width=None, height=None
+    ):
         bg = IMAGE(bg_file)
         if (width is None) or (height is None):
             self.background = Background(bg)
@@ -24,11 +26,11 @@ class Scene:
         self.GROUPS = [pygame.sprite.Group() for i in range(self.layer_number)]
 
     def __getattr__(self, name):
-        if name=="BUTTONS":
+        if name == "BUTTONS":
             return self.LAYERS[1]
-        if name=="OTHERS":
+        if name == "OTHERS":
             return self.LAYERS[2]
-        if name=="TEXTS":
+        if name == "TEXTS":
             return self.LAYERS[3]
         else:
             raise Exception("ATTRIBUTE NOT FOUND")

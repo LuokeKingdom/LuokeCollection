@@ -22,7 +22,7 @@ clock = pygame.time.Clock()
 clicked = False
 mouse_pos = vec(0, 0)
 pressing = False
-delta_time = .016
+delta_time = 0.016
 
 # draw loop
 running = True

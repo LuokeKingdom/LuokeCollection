@@ -16,7 +16,9 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class BattlePrepScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(BattlePrepScene, self).__init__(screen, model, 'light_orange.png', *args, **kwargs)
+        super(BattlePrepScene, self).__init__(
+            screen, model, "light_orange.png", *args, **kwargs
+        )
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
         self.talent_map = {
             "level": 1,
@@ -30,7 +32,9 @@ class BattlePrepScene(Scene):
         self.stat_map = None
         self.skill_pos_dict = {}
         self.skills = [None] * 4
-        self.BUTTONS["pop"] = Button(text="X", x=1100, y=100, on_click=lambda: model.close())
+        self.BUTTONS["pop"] = Button(
+            text="X", x=1100, y=100, on_click=lambda: model.close()
+        )
         self.BUTTONS["train"] = Button(
             image=IMAGE("edit.png"),
             x=1000,

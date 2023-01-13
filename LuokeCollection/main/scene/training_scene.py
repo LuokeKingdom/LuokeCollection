@@ -16,7 +16,9 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class TrainingScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(TrainingScene, self).__init__(screen, model, 'training.png', *args, **kwargs)
+        super(TrainingScene, self).__init__(
+            screen, model, "training.png", *args, **kwargs
+        )
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
         self.skill_pos_dict = {}
         self.talent_map = {
@@ -37,7 +39,8 @@ class TrainingScene(Scene):
             image=IMAGE("close.png"),
             x=1100,
             y=70,
-            on_click=lambda: self.model.close() or self.model.set_battle_prep(self.model.battle_prep_offset),
+            on_click=lambda: self.model.close()
+            or self.model.set_battle_prep(self.model.battle_prep_offset),
             animation="opacity",
             parameter={"factor": 0.2},
             width=120,

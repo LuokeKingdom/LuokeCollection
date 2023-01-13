@@ -14,11 +14,16 @@ from ..components.text import Text
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
+
 class BattleScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        super(BattleScene, self).__init__(screen, model, 'skill_temp.png', *args, **kwargs)
+        super(BattleScene, self).__init__(
+            screen, model, "skill_temp.png", *args, **kwargs
+        )
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
-        self.BUTTONS["pop"] = Button(text="X", x=1000, y=100, on_click=lambda: model.close())
+        self.BUTTONS["pop"] = Button(
+            text="X", x=1000, y=100, on_click=lambda: model.close()
+        )
 
         self.skill_pos_dict = {}
         self.skills = [None] * 4
@@ -37,20 +42,20 @@ class BattleScene(Scene):
         self.done = False
         self.system = self.model.get_battle_system()
         self.system.set_number_display(
-            self.TEXTS["pet_battle_damage_1"],
-            self.TEXTS["pet_battle_damage_2"]
+            self.TEXTS["pet_battle_damage_1"], self.TEXTS["pet_battle_damage_2"]
         )
-        self.system.set_health_display(
-            self.TEXTS["pet_HP_1"],
-            self.TEXTS["pet_HP_2"]
-        )
+        self.system.set_health_display(self.TEXTS["pet_HP_1"], self.TEXTS["pet_HP_2"])
         self.system.set_sprite_display(
             self.OTHERS["pet_image_1"],
             self.OTHERS["pet_image_2"],
         )
         self.display_pets()
-        self.system.push_anim("text", text="战斗开始", display=self.TEXTS["hint_display"], interval=1).next_anim()
-        self.system.push_anim("text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1).next_anim()
+        self.system.push_anim(
+            "text", text="战斗开始", display=self.TEXTS["hint_display"], interval=1
+        ).next_anim()
+        self.system.push_anim(
+            "text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1
+        ).next_anim()
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
@@ -61,7 +66,9 @@ class BattleScene(Scene):
             return
         if self.system.done:
             text = "胜利" if self.system.win else "失败"
-            self.system.push_anim("text_change", text=text, display=self.TEXTS["hint_display"]).next_anim()
+            self.system.push_anim(
+                "text_change", text=text, display=self.TEXTS["hint_display"]
+            ).next_anim()
             self.done = True
             return
         if self.is_preparing:
@@ -87,8 +94,9 @@ class BattleScene(Scene):
             self.system.prepare(i, 0)
             self.system.act()
             if not self.system.done:
-                self.system.push_anim("text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1).next_anim()
-
+                self.system.push_anim(
+                    "text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1
+                ).next_anim()
 
     def display_pets(self):
         pet1, pet2 = self.system.get_pets()
@@ -97,7 +105,10 @@ class BattleScene(Scene):
             if pet1.skill_indices[i] == -1:
                 self.set_skill(i, None)
             else:
-                self.set_skill(i, pet1.info.skills[pet1.skill_indices[i]],)
+                self.set_skill(
+                    i,
+                    pet1.info.skills[pet1.skill_indices[i]],
+                )
 
     def init_info(self):
         info_components = {
@@ -108,7 +119,9 @@ class BattleScene(Scene):
             "talent_icon_HP_1": Sprite(EMPTY, width=36),
             "pet_HP_1": Text("", x=160, y=186, size=26),
             "pet_level_label_1": Text("", x=390, y=130, size=26),
-            "pet_battle_damage_1": Text("", x=400, y=200, size=50, color=(255,255,255), align_mode="CENTER"),
+            "pet_battle_damage_1": Text(
+                "", x=400, y=200, size=50, color=(255, 255, 255), align_mode="CENTER"
+            ),
             "pet_name_2": Text("", x=1179, y=100, size=32),
             "pet_image_2": Sprite(EMPTY),
             "pet_element_2": Sprite(EMPTY),
@@ -116,7 +129,9 @@ class BattleScene(Scene):
             "talent_icon_HP_2": Sprite(EMPTY, width=36),
             "pet_HP_2": Text("", x=1079, y=186, size=26),
             "pet_level_label_2": Text("", x=849, y=130, size=26),
-            "pet_battle_damage_2": Text("", x=829, y=200, size=50, color=(255,255,255), align_mode="CENTER"),
+            "pet_battle_damage_2": Text(
+                "", x=829, y=200, size=50, color=(255, 255, 255), align_mode="CENTER"
+            ),
             "hint_display": Text("", align_mode="CENTER", x=620, y=413, size=60),
             "timer_display": Text("", align_mode="CENTER", x=620, y=313, size=60),
         }
@@ -132,7 +147,11 @@ class BattleScene(Scene):
     def update_info(self, pet1, pet2):
         # 1
         self.TEXTS["pet_name_1"].change_text(pet1.info.name)
-        pet_image = pygame.transform.flip(IMAGE(os.path.join("assets/data/", pet1.info.path, "display.png"), False), True, False)
+        pet_image = pygame.transform.flip(
+            IMAGE(os.path.join("assets/data/", pet1.info.path, "display.png"), False),
+            True,
+            False,
+        )
         max_width, max_height = 400, 600
         w, h = pet_image.get_size()
         if h / max_height < w / max_width:
@@ -161,7 +180,9 @@ class BattleScene(Scene):
 
         # 2
         self.TEXTS["pet_name_2"].change_text(pet2.info.name)
-        pet_image = IMAGE(os.path.join("assets/data/", pet2.info.path, "display.png"), False)
+        pet_image = IMAGE(
+            os.path.join("assets/data/", pet2.info.path, "display.png"), False
+        )
         max_width, max_height = 400, 600
         w, h = pet_image.get_size()
         if h / max_height < w / max_width:
@@ -188,7 +209,6 @@ class BattleScene(Scene):
         self.TEXTS["pet_level_label_2"].change_text(f"等级：{pet2.level}")
         self.TEXTS["pet_HP_2"].change_text(str(pet2.health))
 
-
     def init_skills(self):
         for i in range(4):
             y, x = 750, 350 + i * 190
@@ -202,7 +222,7 @@ class BattleScene(Scene):
             # self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y=y - 32, size=18)
             # self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
             # self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
-        
+
         def get_click_function(i):
             return lambda: self.choose_action(i)
 
@@ -289,4 +309,3 @@ class BattleScene(Scene):
         # self.TEXTS[f"skill_{index}_effect_1"].hide()
         # self.TEXTS[f"skill_{index}_effect_2"].hide()
         # self.TEXTS[f"skill_{index}_effect_3"].hide()
-

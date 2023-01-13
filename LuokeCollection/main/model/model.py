@@ -64,7 +64,8 @@ class Model:
 
     def load_pets(self):
         for i in range(201):
-            if i==100: continue
+            if i == 100:
+                continue
             try:
                 info_path = os.path.join(str(i).zfill(4), "info.json")
                 skill_path = os.path.join(str(i).zfill(4), "skills.json")
@@ -284,14 +285,25 @@ class Model:
             if battle_pet is None:
                 pet_array_1.append(None)
                 continue
-            pet_array_1.append((self.PETS[battle_pet["number"]], battle_pet["talent_map"], battle_pet["skills"]))
+            pet_array_1.append(
+                (
+                    self.PETS[battle_pet["number"]],
+                    battle_pet["talent_map"],
+                    battle_pet["skills"],
+                )
+            )
         pet_array_2 = []
         for i in range(6):
             battle_pet = self.get_battle_pet(i)
             if battle_pet is None:
                 pet_array_1.append(None)
                 continue
-            pet_array_2.append((self.PETS[battle_pet["number"]], battle_pet["talent_map"], battle_pet["skills"]))
+            pet_array_2.append(
+                (
+                    self.PETS[battle_pet["number"]],
+                    battle_pet["talent_map"],
+                    battle_pet["skills"],
+                )
+            )
 
         return BattleSystem(pet_array_1, pet_array_2)
-        

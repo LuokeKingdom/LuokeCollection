@@ -4,6 +4,7 @@ import queue
 import random
 from .action_solver import ActionSolver
 
+
 class BattleSystem:
     def __init__(self, pet_array_1, pet_array_2):
         self.done = False
@@ -12,20 +13,24 @@ class BattleSystem:
         self.temp_anim = []
         self.curr_anim = [None]
 
-        self.team1 = [None if args is None else BattlePet(*args) for args in pet_array_1]
+        self.team1 = [
+            None if args is None else BattlePet(*args) for args in pet_array_1
+        ]
         self.choice1 = None
         self.log1 = []
         for i in self.team1:
             if i is not None:
                 i.is_self = True
 
-        self.team2 = [None if args is None else BattlePet(*args) for args in pet_array_2]
+        self.team2 = [
+            None if args is None else BattlePet(*args) for args in pet_array_2
+        ]
         self.choice2 = None
         self.log2 = []
 
     def get_pets(self):
         return self.team1[0], self.team2[0]
-    
+
     def set_number_display(self, display1, display2):
         for i in self.team1:
             if i is not None:
@@ -49,9 +54,11 @@ class BattleSystem:
         for i in self.team2:
             if i is not None:
                 i.sprite_display = display2
-    
+
     def has_animation(self):
-        return not all([i is None for i in self.curr_anim]) or not self.anim_queue.empty()
+        return (
+            not all([i is None for i in self.curr_anim]) or not self.anim_queue.empty()
+        )
 
     def update_animation(self, delta_time):
         if all([i is None for i in self.curr_anim]):
@@ -79,17 +86,16 @@ class BattleSystem:
             pet1, pet2 = pet2, pet1
             choice1, choice2 = choice2, choice1
         try:
-            if (self.preaction(pet1, pet2)):
+            if self.preaction(pet1, pet2):
                 self.action(pet1, pet2, choice1)
             self.postaction(pet1, pet2)
-            if (self.preaction(pet2, pet1)):
+            if self.preaction(pet2, pet1):
                 self.action(pet2, pet1, choice2)
             self.postaction(pet2, pet1)
         except Exception as e:
             print(e)
             pet1, pet2 = self.get_pets()
-            self.win = pet1.health!=0
-
+            self.win = pet1.health != 0
 
     def preaction(self, primary, secondary):
         return True
@@ -111,51 +117,73 @@ class BattleSystem:
             secondary.change_health(heal_taker)
             self.animate_heal(secondary, heal_taker)
 
-
-        
-
-
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")
-
 
     def postaction(self, primary, secondary):
         pass
 
     def animate_attack(self, primary, secondary, damage):
 
-        pos_data1, rev_data1 = self.get_position_data([
-            (0, (0, 0)),
-            (.6, (200, 0)),
-            (.7, (265, 0)),
-        ], not primary.is_self)
-        pos_data2, rev_data2 = self.get_position_data([
-            (.1, (310, 0)),
-            (.2, (300, 0)),
-        ], not primary.is_self)
+        pos_data1, rev_data1 = self.get_position_data(
+            [
+                (0, (0, 0)),
+                (0.6, (200, 0)),
+                (0.7, (265, 0)),
+            ],
+            not primary.is_self,
+        )
+        pos_data2, rev_data2 = self.get_position_data(
+            [
+                (0.1, (310, 0)),
+                (0.2, (300, 0)),
+            ],
+            not primary.is_self,
+        )
 
-        self.push_anim('position', data=pos_data1, display=primary.sprite_display).next_anim()
-        self.push_anim('position', data=pos_data2, display=primary.sprite_display)
+        self.push_anim(
+            "position", data=pos_data1, display=primary.sprite_display
+        ).next_anim()
+        self.push_anim("position", data=pos_data2, display=primary.sprite_display)
         self.animate_number(secondary, -damage)
-        self.push_anim('position', data=rev_data2, display=primary.sprite_display).next_anim()
-        self.push_anim('position', data=rev_data1, display=primary.sprite_display).next_anim()
+        self.push_anim(
+            "position", data=rev_data2, display=primary.sprite_display
+        ).next_anim()
+        self.push_anim(
+            "position", data=rev_data1, display=primary.sprite_display
+        ).next_anim()
 
     def animate_number(self, pet, number):
-        self.push_anim('text', text="+" + str(number) if number>0 else number, color=(255, 0, 0) if number < 0 else (0, 255, 0), display=pet.number_display, interval=1)
-        self.push_anim('text_change', text=pet.health, display=pet.health_display).next_anim()
-        self.push_anim('none', interval=0.5).next_anim()
+        self.push_anim(
+            "text",
+            text="+" + str(number) if number > 0 else number,
+            color=(255, 0, 0) if number < 0 else (0, 255, 0),
+            display=pet.number_display,
+            interval=1,
+        )
+        self.push_anim(
+            "text_change", text=pet.health, display=pet.health_display
+        ).next_anim()
+        self.push_anim("none", interval=0.5).next_anim()
 
     def animate_heal(self, pet, heal):
-        pos_data1, rev_data1 = self.get_position_data([
-            (.0, (0, 0)),
-            (.2, (0, -3)),
-            (.4, (0, -7)),
-            (.6, (0, -15)),
-        ], pet.is_self)
-        self.push_anim('position', data=pos_data1, display=pet.sprite_display).next_anim()
+        pos_data1, rev_data1 = self.get_position_data(
+            [
+                (0.0, (0, 0)),
+                (0.2, (0, -3)),
+                (0.4, (0, -7)),
+                (0.6, (0, -15)),
+            ],
+            pet.is_self,
+        )
+        self.push_anim(
+            "position", data=pos_data1, display=pet.sprite_display
+        ).next_anim()
         self.animate_number(pet, heal)
-        self.push_anim('position', data=rev_data1, display=pet.sprite_display).next_anim()
+        self.push_anim(
+            "position", data=rev_data1, display=pet.sprite_display
+        ).next_anim()
 
     def push_anim(self, name, **kwargs):
         self.temp_anim.append(BattleAnimation.get(name, **kwargs))
@@ -166,11 +194,21 @@ class BattleSystem:
         self.temp_anim = []
 
     def get_position_data(self, data, inversed):
-        position_data = list(map(lambda x: (x[0], (-x[1][0], x[1][1])) if inversed else x, data))
-        reversed_data = list(zip(
-            list(reversed([position_data[-1][0] - position_data[i][0] for i in range(len(position_data))])), 
-            list(reversed(list(zip(*position_data))[1]))
-        ))
+        position_data = list(
+            map(lambda x: (x[0], (-x[1][0], x[1][1])) if inversed else x, data)
+        )
+        reversed_data = list(
+            zip(
+                list(
+                    reversed(
+                        [
+                            position_data[-1][0] - position_data[i][0]
+                            for i in range(len(position_data))
+                        ]
+                    )
+                ),
+                list(reversed(list(zip(*position_data))[1])),
+            )
+        )
         print(position_data, reversed_data)
         return position_data, reversed_data
-
