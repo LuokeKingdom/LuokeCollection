@@ -20,4 +20,5 @@ This project aims to recreate a PET index of the game Roco Kingdom
 * To check code quality: `make lint`
 * To bump the version of the project: `make versoin major/minor/patch` 
 * To build the project: `make build`
+    * make sure you add pyinstaller's path to system path
     * executable is at `dist/index.exe`

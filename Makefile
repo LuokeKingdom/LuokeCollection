@@ -17,8 +17,8 @@ version:
 	poetry version $(RUN_ARGS)
 
 build:
-	pip install pyinstaller
-	pyinstaller --noconsole --onefile index.py
+	pip install pyinstaller pygame
+	pyinstaller --noconsole --onefile index.py 
 	pyinstaller index.spec
 	python build_utils.py
 
