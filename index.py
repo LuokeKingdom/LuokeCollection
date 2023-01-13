@@ -22,6 +22,7 @@ clock = pygame.time.Clock()
 clicked = False
 mouse_pos = vec(0, 0)
 pressing = False
+delta_time = 0.016
 
 # draw loop
 running = True
@@ -37,13 +38,14 @@ while running:
                 pressing = False
                 # development purpose
                 if clicked == 1:
-                    print(str(mouse_pos) + " is clicked!")
+                    pass
+                    # print(str(mouse_pos) + " is clicked!")
         if event.type == pygame.MOUSEBUTTONDOWN:
             pressing = True
 
-    app.update(mouse_pos, clicked, pressing)
+    app.update(delta_time, mouse_pos, clicked, pressing)
     app.display(mouse_pos, clicked)
-    clock.tick(60)
+    delta_time = clock.tick(60) / 1000
     pygame.display.flip()
 
 # app exit

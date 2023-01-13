@@ -13,36 +13,22 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class SelectRectScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = pygame.Surface([1, 1])
-        kwargs["bg"].fill((200, 200, 245))
-        super(SelectRectScene, self).__init__(screen, model, *args, **kwargs)
+        super(SelectRectScene, self).__init__(
+            screen, model, "light_blue.png", *args, **kwargs
+        )
         self.background_music = SOUND("sky_gym.wav", Channel.BACKGROUND)
-        self.BUTTONS = {
-            "close": Button(
-                x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
-            ),
-            "save": Button(
-                x=1100,
-                y=700,
-                on_click=lambda: self.save_rect(),
-                text="保存",
-            ),
-        }
-        self.OTHERS = {
-            "image": Container(
-                image=EMPTY,
-                align_mode="TOPLEFT",
-            )
-        }
+        self.BUTTONS["close"] = Button(
+            x=1100, y=70, on_click=lambda: model.close(), text="X", text_fontsize=80
+        )
+        self.BUTTONS["save"] = Button(
+            x=1100,
+            y=700,
+            on_click=lambda: self.save_rect(),
+            text="保存",
+        )
+        self.OTHERS["image"] = Container(image=EMPTY, align_mode="TOPLEFT")
 
-        self.TEXTS = {
-            "warning": Text(
-                x=1100,
-                y=600,
-                align_mode="CENTER",
-                text="",
-            ),
-        }
+        self.TEXTS["warning"] = Text(x=1100, y=600, align_mode="CENTER", text="")
         self.rect_side = 200
         self.rate = 1
         self.shrink_rate = False
@@ -124,8 +110,8 @@ class SelectRectScene(Scene):
                 2,
             )
 
-    def update(self, mouse_pos, clicked, pressed):
-        super().update(mouse_pos, clicked, pressed)
+    def update(self, delta_time, mouse_pos, clicked, pressed):
+        super().update(delta_time, mouse_pos, clicked, pressed)
         if clicked == 5:
             self.rect_side = max(50, self.rect_side - self.rate)
             self.rate += 1

@@ -16,38 +16,35 @@ EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class CollectionScene(Scene):
     def __init__(self, screen, model, *args, **kwargs):
-        kwargs["bg"] = IMAGE("bg.png")
-        super(CollectionScene, self).__init__(screen, model, *args, **kwargs)
+        super(CollectionScene, self).__init__(screen, model, "bg.png", *args, **kwargs)
         self.background_music = SOUND("peter_ave.wav", Channel.BACKGROUND)
-        self.BUTTONS = {
-            "close": Button(
-                image=IMAGE("close.png"),
-                x=1100,
-                y=70,
-                on_click=lambda: model.close(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=120,
-            ),
-            "next_page": Button(
-                image=pygame.transform.flip(IMAGE("previous.png"), True, False),
-                x=421,
-                y=649,
-                on_click=lambda: model.next_page(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-            "previous_page": Button(
-                image=IMAGE("previous.png"),
-                x=308,
-                y=649,
-                on_click=lambda: model.previous_page(),
-                animation="opacity",
-                parameter={"factor": 0.2},
-                width=48,
-            ),
-        }
+        self.BUTTONS["close"] = Button(
+            image=IMAGE("close.png"),
+            x=1100,
+            y=70,
+            on_click=lambda: model.close(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=120,
+        )
+        self.BUTTONS["next_page"] = Button(
+            image=pygame.transform.flip(IMAGE("previous.png"), True, False),
+            x=421,
+            y=649,
+            on_click=lambda: model.next_page(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
+        self.BUTTONS["previous_page"] = Button(
+            image=IMAGE("previous.png"),
+            x=308,
+            y=649,
+            on_click=lambda: model.previous_page(),
+            animation="opacity",
+            parameter={"factor": 0.2},
+            width=48,
+        )
         self.init_info()
         self.init_page()
 
@@ -228,8 +225,8 @@ class CollectionScene(Scene):
             self.BUTTONS[f"slot_{i+1}"].image = EMPTY
         self.TEXTS["page_number"].change_text(str(self.model.pet_page_number))
 
-    def update(self, mouse_pos, clicked, pressed):
-        super().update(mouse_pos, clicked, pressed)
+    def update(self, delta_time, mouse_pos, clicked, pressed):
+        super().update(delta_time, mouse_pos, clicked, pressed)
         for index in range(9):
             pet_number = (self.model.pet_page_number - 1) * 9 + index + 1
             pet_image = self.model.pet_rects.get(pet_number)

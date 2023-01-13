@@ -1,4 +1,5 @@
 import copy
+from LuokeCollection.main.battle.battle_system import BattleSystem
 
 from LuokeCollection.main.scene.collection_scene import CollectionScene
 from LuokeCollection.main.scene.battle_prep_scene import BattlePrepScene
@@ -63,6 +64,8 @@ class Model:
 
     def load_pets(self):
         for i in range(201):
+            if i == 100:
+                continue
             try:
                 info_path = os.path.join(str(i).zfill(4), "info.json")
                 skill_path = os.path.join(str(i).zfill(4), "skills.json")
@@ -76,8 +79,8 @@ class Model:
                 info["secondary_element"] = info.get("secondary_element")
                 info["path"] = str(i).zfill(4)
                 self.PETS[info["number"]] = PetInfo(**info)
-            except Exception:
-                # print(e)
+            except Exception as e:
+                print(e)
                 continue
 
     def load_current_data(self):
@@ -178,7 +181,8 @@ class Model:
                 scene.set_skill(
                     i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
                 )
-            except Exception:
+            except Exception as e:
+                print(e)
                 scene.set_skill(i, None)
         for i in range(4):
             if saved_skills[i] >= 0:
@@ -201,7 +205,8 @@ class Model:
                 scene.set_skill(
                     i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
                 )
-            except Exception:
+            except Exception as e:
+                print(e)
                 scene.set_skill(i, None)
 
     def next_skill_page(self):
@@ -216,7 +221,8 @@ class Model:
                 scene.set_skill(
                     i, pet_info.skills[(self.skill_page_number - 1) * 4 + i]
                 )
-            except Exception:
+            except Exception as e:
+                print(e)
                 scene.set_skill(i, None)
 
     def save_pet_content(self, talent_map, skills):
@@ -271,3 +277,33 @@ class Model:
         if os.path.exists(pet_path):
             return JSON(pet_path, False)
         return None
+
+    def get_battle_system(self):
+        pet_array_1 = []
+        for i in range(6):
+            battle_pet = self.get_battle_pet(i)
+            if battle_pet is None:
+                pet_array_1.append(None)
+                continue
+            pet_array_1.append(
+                (
+                    self.PETS[battle_pet["number"]],
+                    battle_pet["talent_map"],
+                    battle_pet["skills"],
+                )
+            )
+        pet_array_2 = []
+        for i in range(6):
+            battle_pet = self.get_battle_pet(i)
+            if battle_pet is None:
+                pet_array_1.append(None)
+                continue
+            pet_array_2.append(
+                (
+                    self.PETS[battle_pet["number"]],
+                    battle_pet["talent_map"],
+                    battle_pet["skills"],
+                )
+            )
+
+        return BattleSystem(pet_array_1, pet_array_2)
