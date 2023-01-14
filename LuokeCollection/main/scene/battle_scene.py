@@ -34,7 +34,6 @@ class BattleScene(Scene):
         self.init_skills()
         self.init_battle_log()
         self.init_menu()
-        self.fight_menu()
 
         self.is_preparing = False
         self.timer = 0
@@ -44,6 +43,9 @@ class BattleScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.done = False
+        self.logs = []
+        self.timer = 0
+        self.is_preparing = False
         self.system = self.model.get_battle_system()
         self.system.set_number_display(
             self.TEXTS["pet_battle_damage_1"], self.TEXTS["pet_battle_damage_2"]
@@ -54,7 +56,7 @@ class BattleScene(Scene):
             self.OTHERS["pet_image_2"],
         )
         self.system.on_log_update = self.append_battle_log
-        self.display_pets()
+        self.fight_menu()
         self.system.push_anim(
             "text", text="战斗开始", display=self.TEXTS["hint_display"], interval=1
         ).next_anim()
@@ -91,7 +93,7 @@ class BattleScene(Scene):
             else:
                 self.is_preparing = True
                 self.timer = 0
-                # self.display_pets()
+                self.display_pets()
 
     def choose_action(self, i):
         if self.is_preparing and not self.system.done:
@@ -369,6 +371,7 @@ class BattleScene(Scene):
         self.LAYERS[4]["option_background"].hide()
         for i in range(6):
             self.LAYERS[5][f"option_{i}"].hide()
+        self.display_pets()
 
     def pets_menu(self):
         for i in range(4):

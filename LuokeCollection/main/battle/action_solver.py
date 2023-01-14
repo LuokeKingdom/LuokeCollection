@@ -1,105 +1,45 @@
-from LuokeCollection.main.battle.battle_animation import BattleAnimation
 from LuokeCollection.main.utils import type2element
 from .pet_status import PetStatus
-from random import choice
+from .skill_dictionary import skill_dictionary, SkillEffect
 
 
 class ActionSolver:
+    labels2function = {
+        'a': 'attack',
+        'p': 'potion',
+    }
     def __init__(self, action_index, user, taker):
         self.primary = user
         self.secondary = taker
         self.user_status_change = PetStatus()
         self.taker_status_change = PetStatus()
-        self.damage_user = None
-        self.damage_taker = None
-        self.heal_user = 10
-        self.heal_taker = None
-        self.skill = None
-        self.user_pet_index = None
         self.system = None
+        self.action_index = action_index
+        self.skill_effects = {k:SkillEffect.__dict__.get(v) for k,v in self.labels2function.items()}
 
-        if action_index < 4:
-            self.use_skill(action_index, user, taker)
-        elif action_index - 10 < 6:
-            self.user_pet_index = action_index - 10
-        elif action_index - 100 < 6:
-            self.use_potion(action_index - 100, user)
-            pass
+    def solve(self, system):
+        self.system = system
+        index = self.action_index
+        if index < 4:
+            self.use_skill(index)
+        elif index - 10 < 6:
+            self.animate_change_pet(index-10)
+        elif index - 100 < 6:
+            self.skill_effects.get('p')(self, None, str(index-100))
 
-
-
-    def use_skill(self, skill_index, user, taker):
-        skill = user.skills[skill_index]
-        self.skill = skill
+    def use_skill(self, skill_index):
+        skill = self.primary.skills[skill_index]
+        self.append_log(f"使用了<{skill.name}>", self.primary.is_self)
         self.user_status_change.skill_PPs[skill_index][0] = -1
         skill_element = type2element(skill.type)
         if skill_element:
             pass
-        element_ratio = 1
-        critical = 1
+        labels = skill_dictionary.get(skill.name, 'a').split(' ')
+        for label in labels:
+            identifier = label[0]
+            args = label[1:]
+            self.skill_effects.get(identifier)(self, skill, args)
 
-        skill_type = skill.type[2:]
-        if skill_type == "变化":
-            pass
-        elif skill_type == "物理":
-            self.damage_taker = int(
-                (
-                    (user.level * 0.4 + 2) * int(skill.power) * user.AD / taker.DF / 50
-                    + 2
-                )
-                * element_ratio
-                * choice(range(217, 256))
-                * critical
-                / 255
-            )
-        elif skill_type == "魔法":
-            self.damage_taker = int(
-                (
-                    (user.level * 0.4 + 2) * int(skill.power) * user.AP / taker.MD / 50
-                    + 2
-                )
-                * element_ratio
-                * choice(range(217, 256))
-                * critical
-                / 255
-            )
-
-    def get_damage(self):
-        return self.damage_taker, self.damage_user
-
-    def get_heal(self):
-        return self.heal_taker, self.heal_user
-
-    def use_potion(self, potion_index, user):
-        self.heal_user = (potion_index+1) * 50
-
-    def solve(self, system):
-        self.system = system
-        primary, secondary = self.primary, self.secondary
-        if self.skill is not None:
-            self.append_log(
-                f"对{secondary.info.name}使用了<{self.skill.name}>", primary.is_self
-            )
-        if self.damage_taker is not None:
-            secondary.change_health(-self.damage_taker)
-            self.animate_attack(primary, secondary, self.damage_taker)
-        if self.damage_user is not None:
-            primary.change_health(-self.damage_user)
-            self.animate_number(primary, -self.damage_user)
-        if self.heal_user is not None:
-            primary.change_health(self.heal_user)
-            self.animate_heal(primary, self.heal_user)
-        if self.heal_taker is not None:
-            secondary.change_health(self.heal_taker)
-            self.animate_heal(secondary, self.heal_taker)
-
-        if self.user_pet_index is not None:
-            if primary.is_self:
-                self.animate_change_pet(primary, system.team1[self.user_pet_index])
-                system.current_pet1 = self.user_pet_index
-            else:
-                self.animate_change_pet(secondary, system.team1[self.user_pet_index])
-                system.current_pet2 = self.user_pet_index
 
     def append_log(self, text, is_self):
         self.push_anim(
@@ -109,7 +49,6 @@ class ActionSolver:
         ).next_anim()
 
     def animate_attack(self, primary, secondary, damage):
-
         pos_data1, rev_data1 = self.get_position_data(
             [
                 (0, (0, 0)),
@@ -170,7 +109,9 @@ class ActionSolver:
             "position", data=rev_data1, display=pet.sprite_display
         ).next_anim()
 
-    def animate_change_pet(self, pet, new_pet):
+    def animate_change_pet(self, new_pet_index):
+        pet = self.primary
+        new_pet = (self.system.team1 if pet.is_self else self.system.team2)[new_pet_index]
         scale_data, rev_data = self.get_scale_data([
             (0, 0),
             (1, -1),
@@ -180,7 +121,27 @@ class ActionSolver:
         image_pos = display.get_pos()
         self.push_anim('stuff_change', on_update=lambda x: display.set_image(x).set_pos(*image_pos), stuff=new_pet.image)
         self.push_anim('scale', data=rev_data, display=display).next_anim()
-        pass
+        def change_function(pet_index):
+            if pet.is_self:
+                self.system.current_pet1 = pet_index
+            else:
+                self.system.current_pet2 = pet_index
+        self.push_anim('stuff_change', on_update=lambda x: change_function(x), stuff=new_pet_index)
+        self.append_log(f'将<{pet.info.name}>换成了<{new_pet.info.name}>', pet.is_self)
+
+    def animate_potion(self, heal):
+        pet = self.primary
+        scale_data, rev_data = self.get_scale_data([
+            (0, 0),
+            (.3, .1),
+        ])
+        display = pet.sprite_display
+        # potion animation
+        self.append_log("使用了药剂", pet.is_self)
+        self.push_anim('scale', data=scale_data, display=display).next_anim()
+        self.animate_number(pet, heal)
+        self.push_anim('scale', data=rev_data, display=display).next_anim()
+
 
     def push_anim(self, name, **kwargs):
         self.system.push_anim(name, **kwargs)
