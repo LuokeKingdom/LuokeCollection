@@ -90,8 +90,8 @@ class LogChange(BaseBattleAnimation):
     def update(self, delta_time):
         if self.done:
             return
-        self.done = True
         self.on_update(self.text)
+        self.done = True
 
 
 # exposure

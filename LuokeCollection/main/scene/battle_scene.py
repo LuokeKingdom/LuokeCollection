@@ -91,7 +91,7 @@ class BattleScene(Scene):
             else:
                 self.is_preparing = True
                 self.timer = 0
-                self.display_pets()
+                # self.display_pets()
 
     def choose_action(self, i):
         if self.is_preparing and not self.system.done:
@@ -329,9 +329,9 @@ class BattleScene(Scene):
     def append_battle_log(self, log):
         self.logs.append(log)
         content = self.logs
-        if len(self.logs) > 7:
-            content = self.logs[-8:-1]
-            print(content)
+        if len(content) > 7:
+            content = self.logs[-7:]
+        print(len(content))
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
 
