@@ -331,7 +331,6 @@ class BattleScene(Scene):
         content = self.logs
         if len(content) > 7:
             content = self.logs[-7:]
-        print(len(content))
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
 

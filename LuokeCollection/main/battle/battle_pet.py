@@ -1,4 +1,8 @@
+from LuokeCollection.settings.dev import IMAGE
 from .pet_status import PetStatus
+import os
+import pygame
+from pygame.locals import *  # noqa
 
 
 class BattlePet:
@@ -8,6 +12,7 @@ class BattlePet:
         self.status = PetStatus()
         self.talent_map = talent_map
         self.info = info
+        self.image = None
         self.skill_indices = skill_indices
         self.number_display = None
         self.health_display = None
@@ -48,6 +53,23 @@ class BattlePet:
 
     def change_health(self, change):
         self.health = min(self.max_health, max(0, self.health + change))
+
+    def get_image(self):
+        image = pygame.transform.flip(
+            IMAGE(os.path.join("assets/data/", self.info.path, "display.png"), False),
+            self.is_self,
+            False,
+        )
+        max_width, max_height = 400, 600
+        width, height = image.get_size()
+        if height / max_height < width / max_width:
+            return pygame.transform.smoothscale(
+                image, (max_width, int(height * max_width / width))
+            )
+        else:
+            return pygame.transform.smoothscale(
+                image, (int(width * max_height / height, max_height))
+            )
 
     def __getattr__(self, name):
         return self.current_stat_map.get(name)

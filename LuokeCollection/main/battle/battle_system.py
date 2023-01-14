@@ -23,6 +23,7 @@ class BattleSystem:
         for i in self.team1:
             if i is not None:
                 i.is_self = True
+                i.image = i.get_image()
 
         self.team2 = [
             None if args is None else BattlePet(*args) for args in pet_array_2
@@ -30,6 +31,9 @@ class BattleSystem:
         self.current_pet2 = 0
         self.choice2 = None
         self.log2 = []
+        for i in self.team2:
+            if i is not None:
+                i.image = i.get_image()
 
     def get_pets(self):
         return self.team1[self.current_pet1], self.team2[self.current_pet2]
@@ -108,108 +112,13 @@ class BattleSystem:
         return True
 
     def action(self, primary, secondary, choice):
-        result = ActionSolver(choice, primary, secondary)
-        damage_taker, damage_user = result.get_damage()
-        heal_taker, heal_user = result.get_heal()
-        if result.skill is not None:
-            self.append_log(
-                f"对{secondary.info.name}使用了<{result.skill.name}>", primary.is_self
-            )
-        if damage_taker is not None:
-            secondary.change_health(-damage_taker)
-            self.animate_attack(primary, secondary, damage_taker)
-        if damage_user is not None:
-            primary.change_health(-damage_user)
-            self.animate_number(primary, -damage_user)
-        if heal_user is not None:
-            primary.change_health(heal_user)
-            self.animate_heal(primary, heal_user)
-        if heal_taker is not None:
-            secondary.change_health(heal_taker)
-            self.animate_heal(secondary, heal_taker)
-
-        if result.user_pet_index is not None:
-            # self.animate_change_pet()
-            if primary.is_self:
-                self.current_pet1 = result.user_pet_index
-            else:
-                self.current_pet2 = result.user_pet_index
-
+        ActionSolver(choice, primary, secondary).solve(self)
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")
 
     def postaction(self, primary, secondary):
         pass
-
-    def append_log(self, text, is_self):
-        self.push_anim(
-            "log",
-            on_update=self.on_log_update,
-            text=f"{'你' if is_self else '对手'}" + text,
-        ).next_anim()
-
-    def animate_attack(self, primary, secondary, damage):
-
-        pos_data1, rev_data1 = self.get_position_data(
-            [
-                (0, (0, 0)),
-                (0.6, (200, 0)),
-                (0.7, (265, 0)),
-            ],
-            not primary.is_self,
-        )
-        pos_data2, rev_data2 = self.get_position_data(
-            [
-                (0.1, (310, 0)),
-                (0.2, (300, 0)),
-            ],
-            not primary.is_self,
-        )
-
-        self.push_anim(
-            "position", data=pos_data1, display=primary.sprite_display
-        ).next_anim()
-        self.push_anim("position", data=pos_data2, display=primary.sprite_display)
-        self.animate_number(secondary, -damage)
-        self.push_anim(
-            "position", data=rev_data2, display=primary.sprite_display
-        ).next_anim()
-        self.push_anim(
-            "position", data=rev_data1, display=primary.sprite_display
-        ).next_anim()
-
-    def animate_number(self, pet, number):
-        self.push_anim(
-            "text",
-            text="+" + str(number) if number > 0 else number,
-            color=(255, 0, 0) if number < 0 else (0, 255, 0),
-            display=pet.number_display,
-            interval=1,
-        )
-        self.push_anim(
-            "text_change", text=pet.health, display=pet.health_display
-        ).next_anim()
-        self.push_anim("none", interval=0.5).next_anim()
-
-    def animate_heal(self, pet, heal):
-        self.append_log("回复了体力", pet.is_self)
-        pos_data1, rev_data1 = self.get_position_data(
-            [
-                (0.0, (0, 0)),
-                (0.2, (0, -3)),
-                (0.4, (0, -7)),
-                (0.6, (0, -15)),
-            ],
-            pet.is_self,
-        )
-        self.push_anim(
-            "position", data=pos_data1, display=pet.sprite_display
-        ).next_anim()
-        self.animate_number(pet, heal)
-        self.push_anim(
-            "position", data=rev_data1, display=pet.sprite_display
-        ).next_anim()
 
     def push_anim(self, name, **kwargs):
         self.temp_anim.append(BattleAnimation.get(name, **kwargs))
@@ -218,22 +127,4 @@ class BattleSystem:
     def next_anim(self):
         self.anim_queue.put(self.temp_anim)
         self.temp_anim = []
-
-    def get_position_data(self, data, inversed):
-        position_data = list(
-            map(lambda x: (x[0], (-x[1][0], x[1][1])) if inversed else x, data)
-        )
-        reversed_data = list(
-            zip(
-                list(
-                    reversed(
-                        [
-                            position_data[-1][0] - position_data[i][0]
-                            for i in range(len(position_data))
-                        ]
-                    )
-                ),
-                list(reversed(list(zip(*position_data))[1])),
-            )
-        )
-        return position_data, reversed_data
+    

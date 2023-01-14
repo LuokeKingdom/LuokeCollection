@@ -25,6 +25,14 @@ class Container(pygame.sprite.Sprite):
         self.hidden = False
 
     def set_image(self, image, width=None, height=None, ratio=1, opacity=1):
+        self.set_temp_image(image, width, height, ratio, opacity)
+        self.original_image = self.image.copy()
+        self.original_rect = self.original_image.get_rect()
+        if opacity != 1:
+            self.image.set_alpha(opacity * 255)
+        return self
+
+    def set_temp_image(self, image, width=None, height=None, ratio=1, opacity=1):
         if width and height:
             self.image = pygame.transform.smoothscale(image, (width, height))
         elif width:
@@ -40,15 +48,7 @@ class Container(pygame.sprite.Sprite):
                 image, (int(image.get_width() * ratio), int(image.get_height() * ratio))
             )
         self.rect = self.image.get_rect()
-        self.original_image = self.image.copy()
-        self.original_rect = self.original_image.get_rect()
-        if opacity != 1:
-            self.image.set_alpha(opacity * 255)
         return self
-
-    def set_temp_image(self, image):
-        self.image = image
-        self.rect = image.get_rect()
 
     def reset_image(self):
         self.image = self.original_image
