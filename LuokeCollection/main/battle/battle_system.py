@@ -17,6 +17,7 @@ class BattleSystem:
         self.team1 = [
             None if args is None else BattlePet(*args) for args in pet_array_1
         ]
+        self.current_pet1 = 0
         self.choice1 = None
         self.log1 = []
         for i in self.team1:
@@ -26,11 +27,16 @@ class BattleSystem:
         self.team2 = [
             None if args is None else BattlePet(*args) for args in pet_array_2
         ]
+        self.current_pet2 = 0
         self.choice2 = None
         self.log2 = []
 
     def get_pets(self):
-        return self.team1[0], self.team2[0]
+        return self.team1[self.current_pet1], self.team2[self.current_pet2]
+
+    def set_pets(self, next1, next2):
+        self.current_pet1 = next1
+        self.current_pet2 = next2
 
     def set_number_display(self, display1, display2):
         for i in self.team1:
@@ -105,9 +111,10 @@ class BattleSystem:
         result = ActionSolver(choice, primary, secondary)
         damage_taker, damage_user = result.get_damage()
         heal_taker, heal_user = result.get_heal()
-        self.append_log(
-            f"对{secondary.info.name}使用了<{result.skill.name}>", primary.is_self
-        )
+        if result.skill is not None:
+            self.append_log(
+                f"对{secondary.info.name}使用了<{result.skill.name}>", primary.is_self
+            )
         if damage_taker is not None:
             secondary.change_health(-damage_taker)
             self.animate_attack(primary, secondary, damage_taker)
@@ -121,6 +128,13 @@ class BattleSystem:
             secondary.change_health(heal_taker)
             self.animate_heal(secondary, heal_taker)
 
+        if result.user_pet_index is not None:
+            # self.animate_change_pet()
+            if primary.is_self:
+                self.current_pet1 = result.user_pet_index
+            else:
+                self.current_pet2 = result.user_pet_index
+
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")
@@ -132,7 +146,7 @@ class BattleSystem:
         self.push_anim(
             "log",
             on_update=self.on_log_update,
-            text=f"你的{'宠物' if is_self else '对手'}" + text,
+            text=f"{'你' if is_self else '对手'}" + text,
         )
 
     def animate_attack(self, primary, secondary, damage):

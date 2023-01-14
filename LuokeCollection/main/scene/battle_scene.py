@@ -228,12 +228,6 @@ class BattleScene(Scene):
             # self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
             # self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
 
-        def get_click_function(i):
-            return lambda: self.choose_action(i)
-
-        def get_hover_function():
-            return lambda: self.is_preparing
-
         buttons = map(
             lambda x: Button(
                 image=EMPTY,
@@ -242,8 +236,8 @@ class BattleScene(Scene):
                 animation="opacity",
                 opacity=0.2,
                 parameter={"factor": 0.3},
-                on_click=get_click_function(x),
-                can_hover=get_hover_function(),
+                on_click=(lambda a: lambda:self.choose_action(a))(x),
+                can_hover=lambda: self.is_preparing
             ),
             range(4),
         )
@@ -358,7 +352,7 @@ class BattleScene(Scene):
         for i in range(6):
             x, y = 334+i*120, 750
             self.options_pos_dict[i] = (x, y)
-            self.LAYERS[5][f"option_{i}"] = Button(text=str(i), x=x, y=y)
+            self.LAYERS[5][f"option_{i}"] = Button(text=str(i), x=x, y=y, can_hover=lambda: self.is_preparing)
             self.LAYERS[5][f"option_{i}"].hide()
 
         for name, comp in log_components.items():
@@ -384,6 +378,7 @@ class BattleScene(Scene):
             x, y = self.options_pos_dict[i]
             self.LAYERS[5][f"option_{i}"].show()
             self.LAYERS[5][f"option_{i}"].set_image(IMAGE("white.png"), width=100, height=100).set_pos(x, y)
+            self.LAYERS[5][f"option_{i}"].on_click = (lambda a: lambda: self.choose_action(a))(i+10)
 
     def potion_menu(self):
         for i in range(4):
@@ -393,4 +388,5 @@ class BattleScene(Scene):
             x, y = self.options_pos_dict[i]
             self.LAYERS[5][f"option_{i}"].show()
             self.LAYERS[5][f"option_{i}"].set_image(IMAGE("light_orange.png"), width=100, height=100).set_pos(x, y)
+            self.LAYERS[5][f"option_{i}"].on_click = (lambda a: lambda: self.choose_action(a))(i+100)
             

@@ -12,11 +12,17 @@ class ActionSolver:
         self.heal_user = 10
         self.heal_taker = None
         self.skill = None
+        self.user_pet_index = None
 
         if action_index < 4:
             self.use_skill(action_index, user, taker)
-        else:
+        elif action_index - 10 < 6:
+            self.user_pet_index = action_index - 10
+        elif action_index - 100 < 6:
+            self.use_potion(action_index - 100, user)
             pass
+
+
 
     def use_skill(self, skill_index, user, taker):
         skill = user.skills[skill_index]
@@ -59,3 +65,6 @@ class ActionSolver:
 
     def get_heal(self):
         return self.heal_taker, self.heal_user
+
+    def use_potion(self, potion_index, user):
+        self.heal_user = (potion_index+1) * 50
