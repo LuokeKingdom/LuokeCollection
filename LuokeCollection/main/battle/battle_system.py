@@ -222,5 +222,4 @@ class BattleSystem:
                 list(reversed(list(zip(*position_data))[1])),
             )
         )
-        print(position_data, reversed_data)
         return position_data, reversed_data

@@ -28,9 +28,13 @@ class BattleScene(Scene):
         self.skills = [None] * 4
         self.system = None
 
+        self.options_pos_dict = {}
+
         self.init_info()
         self.init_skills()
         self.init_battle_log()
+        self.init_menu()
+        self.fight_menu()
 
         self.is_preparing = False
         self.timer = 0
@@ -335,3 +339,58 @@ class BattleScene(Scene):
             content = self.logs[-7:-1]
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
+
+    def init_menu(self):
+        log_components = {
+            "fight": Button(text="战斗", x=1124, y=683,
+            on_click=lambda: self.fight_menu()
+            ),
+            "pets": Button(text="换宠", x=1063,y=769,
+            on_click=lambda: self.pets_menu()
+            ),
+            "potion": Button(text="恢复", x=1189, y=769,
+            on_click=lambda: self.potion_menu()
+            ),
+        }
+
+        self.LAYERS[4]["option_background"] = Sprite(image=IMAGE("light_blue.png"), x=635, y=750, width=750, height=120)
+        self.LAYERS[4]["option_background"].hide()
+        for i in range(6):
+            x, y = 334+i*120, 750
+            self.options_pos_dict[i] = (x, y)
+            self.LAYERS[5][f"option_{i}"] = Button(text=str(i), x=x, y=y)
+            self.LAYERS[5][f"option_{i}"].hide()
+
+        for name, comp in log_components.items():
+            if isinstance(comp, Button):
+                self.BUTTONS[name] = comp
+            elif isinstance(comp, Text):
+                self.TEXTS[name] = comp
+            else:
+                self.OTHERS[name] = comp
+
+    def fight_menu(self):
+        for i in range(4):
+            self.BUTTONS[f"skill_{i}_background"].show()
+        self.LAYERS[4]["option_background"].hide()
+        for i in range(6):
+            self.LAYERS[5][f"option_{i}"].hide()
+
+    def pets_menu(self):
+        for i in range(4):
+            self.BUTTONS[f"skill_{i}_background"].hide()
+        self.LAYERS[4]["option_background"].show()
+        for i in range(6):
+            x, y = self.options_pos_dict[i]
+            self.LAYERS[5][f"option_{i}"].show()
+            self.LAYERS[5][f"option_{i}"].set_image(IMAGE("white.png"), width=100, height=100).set_pos(x, y)
+
+    def potion_menu(self):
+        for i in range(4):
+            self.BUTTONS[f"skill_{i}_background"].hide()
+        self.LAYERS[4]["option_background"].show()
+        for i in range(6):
+            x, y = self.options_pos_dict[i]
+            self.LAYERS[5][f"option_{i}"].show()
+            self.LAYERS[5][f"option_{i}"].set_image(IMAGE("light_orange.png"), width=100, height=100).set_pos(x, y)
+            

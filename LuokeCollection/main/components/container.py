@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *  # noqa
 from ..utils import vec
 
+EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
 class Container(pygame.sprite.Sprite):
     def __init__(
@@ -21,6 +22,7 @@ class Container(pygame.sprite.Sprite):
         self.opacity = opacity
         self.set_pos(x, y)
         self.check_collide_original_rect = False
+        self.hidden = False
 
     def set_image(self, image, width=None, height=None, ratio=1, opacity=1):
         if width and height:
@@ -43,6 +45,14 @@ class Container(pygame.sprite.Sprite):
         if opacity != 1:
             self.image.set_alpha(opacity * 255)
         return self
+
+    def set_temp_image(self, image):
+        self.image = image
+        self.rect = image.get_rect()
+
+    def reset_image(self):
+        self.image = self.original_image
+        self.rect = self.original_rect
 
     def set_pos(self, x, y=None):
         pos = None
@@ -67,5 +77,15 @@ class Container(pygame.sprite.Sprite):
         else:
             raise Exception("align_mode not found")
 
-    def update(self):
-        pass
+    def update(self, pos, clicked, pressed):
+        if self.hidden:
+            self.set_temp_image(EMPTY)
+            return False
+        return True
+
+    def hide(self):
+        self.hidden = True
+
+    def show(self):
+        self.hidden = False
+        self.reset_image()

@@ -84,6 +84,7 @@ class Button(Container):
             raise NotImplementedError("Function: <on_click> not implemented!!")
 
     def update(self, mouse_pos, clicked, pressed):
+        if not super(Button, self).update(mouse_pos, clicked, pressed): return
         current_time = time.time()
         if self.check_collide(mouse_pos):
             self.hovered = True
@@ -99,3 +100,4 @@ class Button(Container):
         else:
             self.animation.stop()
         self.animation.update(current_time)
+
