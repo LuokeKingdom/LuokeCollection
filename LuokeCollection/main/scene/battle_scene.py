@@ -330,7 +330,8 @@ class BattleScene(Scene):
         self.logs.append(log)
         content = self.logs
         if len(self.logs) > 7:
-            content = self.logs[-7:-1]
+            content = self.logs[-8:-1]
+            print(content)
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
 

@@ -147,7 +147,7 @@ class BattleSystem:
             "log",
             on_update=self.on_log_update,
             text=f"{'你' if is_self else '对手'}" + text,
-        )
+        ).next_anim()
 
     def animate_attack(self, primary, secondary, damage):
 
