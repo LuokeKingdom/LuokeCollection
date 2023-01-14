@@ -12,7 +12,7 @@ This project aims to recreate a PET index of the game Roco Kingdom
 ## In-game Screenshot
 ![In-game Screenshot](https://user-images.githubusercontent.com/55712285/178428547-2d43b702-726f-4df1-aa74-60519304d84b.png)
 ## Instructions
-* pre-req: poetry
+* pre-req: poetry make
 * find `assets` folder in releases
 * extract the `assets` folder to `./assets`
 * To run: `make` or `make run`
