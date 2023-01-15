@@ -51,7 +51,9 @@ class BattlePet:
             if k != "HP"
         }
 
-    def change_health(self, change):
+    def change_health(self, change=None, fraction=None):
+        if change is None:
+            change = int(self.max_health * fraction[0] / fraction[1])
         self.health = min(self.max_health, max(0, self.health + change))
 
     def get_image(self):

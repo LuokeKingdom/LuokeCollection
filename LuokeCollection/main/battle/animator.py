@@ -101,6 +101,10 @@ class Animator:
         self.animate_number(pet, heal)
         self.push_anim('scale', data=rev_data, display=display).next_anim()
 
+    def animate_burn(self, pet):
+        self.push_anim("none", interval=0.5).next_anim()
+        self.append_log(f"<{pet.info.name}>烧伤了")
+
 
     def push_anim(self, name, **kwargs):
         self.system.push_anim(name, **kwargs)
