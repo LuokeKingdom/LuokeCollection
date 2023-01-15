@@ -1,5 +1,5 @@
 from LuokeCollection.main.utils import SkillInfo
-from random import choice
+import random
 from .skill_effect import SkillEffect
 from .animator import Animator
 from .battle_pet import BattlePet
@@ -17,7 +17,8 @@ class SkillOutcome:
         skill_element = Element(skill.type[:2])
         defender_e1, defender_e2 = Element(secondary.info.element), Element(secondary.info.secondary_element)
         element_ratio = skill_element.attack(defender_e1, defender_e2)
-        critical = 1
+        critical_chance = 0.5 * primary.status.CR.factor
+        critical = 2 if random.random() < critical_chance else 1
         skill_type = skill.type[2:]
         if skill_type == "变化":
             print("Wrong label")
@@ -29,7 +30,7 @@ class SkillOutcome:
                     + 2
                 )
                 * element_ratio
-                * choice(range(217, 256))
+                * random.choice(range(217, 256))
                 * critical
                 / 255
             )
@@ -40,13 +41,16 @@ class SkillOutcome:
                     + 2
                 )
                 * element_ratio
-                * choice(range(217, 256))
+                * random.choice(range(217, 256))
                 * critical
                 / 255
             )
 
         secondary.change_health(-damage)
         anim.animate_attack(primary, secondary, damage)
+        if critical==2:
+            print(critical_chance)
+            anim.append_log("暴击了！！！", primary.is_self)
 
     def potion(primary: BattlePet, secondary: BattlePet, skill: SkillInfo, args: str, anim: Animator):
         heal_amount = (1+int(args)) * 50
