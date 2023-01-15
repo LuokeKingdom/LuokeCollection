@@ -127,6 +127,9 @@ class Element:
             f += element_table[secondary_element.index][self.index]
         return f + 1 if f >= 0 else 1 / (1 - f)
 
+    def __str__(self):
+        return f'<{self.element}: {str(self.index)}>'
+
 
 
 def add_average_color(image_map):

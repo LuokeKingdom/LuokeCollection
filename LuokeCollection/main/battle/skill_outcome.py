@@ -15,8 +15,9 @@ class SkillOutcome:
 
     def attack(primary: BattlePet, secondary: BattlePet, skill: SkillInfo, args: str, anim: Animator):
         skill_element = Element(skill.type[:2])
-        defender_e1, defender_e2 = Element(primary.info.element), Element(primary.info.secondary_element)
+        defender_e1, defender_e2 = Element(secondary.info.element), Element(secondary.info.secondary_element)
         element_ratio = skill_element.attack(defender_e1, defender_e2)
+        print(skill_element, defender_e1, defender_e2)
         print(element_ratio)
         critical = 1
         skill_type = skill.type[2:]
