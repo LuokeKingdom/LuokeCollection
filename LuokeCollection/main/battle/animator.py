@@ -71,35 +71,48 @@ class Animator:
         ).next_anim()
 
     def animate_change_pet(self, pet, new_pet_index):
-        new_pet = (self.system.team1 if pet.is_self else self.system.team2)[new_pet_index]
-        scale_data, rev_data = self.get_scale_data([
-            (0, 0),
-            (1, -1),
-        ])
+        new_pet = (self.system.team1 if pet.is_self else self.system.team2)[
+            new_pet_index
+        ]
+        scale_data, rev_data = self.get_scale_data(
+            [
+                (0, 0),
+                (1, -1),
+            ]
+        )
         display = pet.sprite_display
-        self.push_anim('scale', data=scale_data, display=display).next_anim()
+        self.push_anim("scale", data=scale_data, display=display).next_anim()
         image_pos = display.get_pos()
-        self.push_anim('stuff_change', on_update=lambda x: display.set_image(x).set_pos(*image_pos), stuff=new_pet.image)
-        self.push_anim('scale', data=rev_data, display=display).next_anim()
-        self.push_anim('stuff_change', on_update=lambda x: self.system.display_function(), stuff=None)
-        self.append_log(f'将<{pet.info.name}>换成了<{new_pet.info.name}>', pet.is_self)
+        self.push_anim(
+            "stuff_change",
+            on_update=lambda x: display.set_image(x).set_pos(*image_pos),
+            stuff=new_pet.image,
+        )
+        self.push_anim("scale", data=rev_data, display=display).next_anim()
+        self.push_anim(
+            "stuff_change",
+            on_update=lambda x: self.system.display_function(),
+            stuff=None,
+        )
+        self.append_log(f"将<{pet.info.name}>换成了<{new_pet.info.name}>", pet.is_self)
 
     def animate_potion(self, pet, heal):
-        scale_data, rev_data = self.get_scale_data([
-            (0, 0),
-            (.3, .1),
-        ])
+        scale_data, rev_data = self.get_scale_data(
+            [
+                (0, 0),
+                (0.3, 0.1),
+            ]
+        )
         display = pet.sprite_display
         # potion animation
         self.append_log("使用了药剂", pet.is_self)
-        self.push_anim('scale', data=scale_data, display=display).next_anim()
+        self.push_anim("scale", data=scale_data, display=display).next_anim()
         self.animate_number(pet, heal)
-        self.push_anim('scale', data=rev_data, display=display).next_anim()
+        self.push_anim("scale", data=rev_data, display=display).next_anim()
 
     def animate_burn(self, pet):
         self.push_anim("none", interval=0.5).next_anim()
         self.append_log(f"<{pet.info.name}>烧伤了", pet.is_self)
-
 
     def push_anim(self, name, **kwargs):
         self.system.push_anim(name, **kwargs)
@@ -135,15 +148,8 @@ class Animator:
 
     def reverse_data(self, data):
         return list(
-                zip(
-                    list(
-                        reversed(
-                            [
-                                data[-1][0] - data[i][0]
-                                for i in range(len(data))
-                            ]
-                        )
-                    ),
-                    list(reversed(list(zip(*data))[1])),
-                )
+            zip(
+                list(reversed([data[-1][0] - data[i][0] for i in range(len(data))])),
+                list(reversed(list(zip(*data))[1])),
             )
+        )

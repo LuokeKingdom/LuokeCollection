@@ -9,7 +9,10 @@ class ActionSolver:
         self.primary = user
         self.secondary = taker
         self.action_index = action_index
-        self.skill_outcomes = {k:SkillOutcome.__dict__.get(v) for k,v in SkillOutcome.labels2function.items()}
+        self.skill_outcomes = {
+            k: SkillOutcome.__dict__.get(v)
+            for k, v in SkillOutcome.labels2function.items()
+        }
         self.anim = None
 
     def solve(self, animator: Animator):
@@ -22,10 +25,11 @@ class ActionSolver:
                 animator.system.current_pet1 = index - 10
             else:
                 animator.system.current_pet2 = index - 10
-            self.anim.animate_change_pet(self.primary, index-10)
+            self.anim.animate_change_pet(self.primary, index - 10)
         elif index - 100 < 6:
-            self.skill_outcomes.get('.')(self.primary, self.secondary, None, str(index-100), animator)
-
+            self.skill_outcomes.get(".")(
+                self.primary, self.secondary, None, str(index - 100), animator
+            )
 
     def use_skill(self, skill_index):
         skill = self.primary.skills[skill_index]
@@ -34,8 +38,10 @@ class ActionSolver:
         skill_element = str2element(skill.type)
         if skill_element:
             pass
-        labels = skill_dictionary.get(skill.name, 'a').split(' ')
+        labels = skill_dictionary.get(skill.name, "a").split(" ")
         for label in labels:
             identifier = label[0]
             args = label[1:]
-            self.skill_outcomes.get(identifier)(self.primary, self.secondary, skill, args, self.anim)
+            self.skill_outcomes.get(identifier)(
+                self.primary, self.secondary, skill, args, self.anim
+            )

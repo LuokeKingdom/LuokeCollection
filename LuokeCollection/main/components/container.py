@@ -4,6 +4,7 @@ from ..utils import vec
 
 EMPTY = pygame.Surface([1, 1], pygame.SRCALPHA)
 
+
 class Container(pygame.sprite.Sprite):
     def __init__(
         self,

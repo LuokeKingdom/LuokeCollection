@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *  # noqa
 from LuokeCollection.settings.dev import IMAGE
 from collections import namedtuple
+from .element_table import element_table
 import os
 
 
@@ -105,14 +106,15 @@ ELEMENT2INDEX = {
     "神水": 20,
 }
 
+
 def str2element(t):
-    if len(t)==1:
+    if len(t) == 1:
         return t
-    if t[1]=='系':
+    if t[1] == "系":
         return t[0]
     return t[:2]
 
-from .element_table import element_table
+
 class Element:
     def __init__(self, element):
         self.element = None
@@ -128,8 +130,7 @@ class Element:
         return f + 1 if f >= 0 else 1 / (1 - f)
 
     def __str__(self):
-        return f'<{self.element}: {str(self.index)}>'
-
+        return f"<{self.element}: {str(self.index)}>"
 
 
 def add_average_color(image_map):
@@ -159,7 +160,6 @@ def add_average_color(image_map):
 ELEMENT_MAP = {
     key: ELEMENT(IMAGE(val), ELEMENT2COLOR[key]) for key, val in ELEMENT_FILES.items()
 }
-
 
 
 class vec(list):

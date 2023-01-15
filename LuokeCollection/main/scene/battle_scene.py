@@ -43,7 +43,7 @@ class BattleScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.done = False
-        self.append_battle_log(log='', clear=True)
+        self.append_battle_log(log="", clear=True)
         self.timer = 0
         self.is_preparing = False
         self.system = self.model.get_battle_system()
@@ -238,8 +238,8 @@ class BattleScene(Scene):
                 animation="opacity",
                 opacity=0.2,
                 parameter={"factor": 0.3},
-                on_click=(lambda a: lambda:self.choose_action(a))(x),
-                can_hover=lambda: self.is_preparing
+                on_click=(lambda a: lambda: self.choose_action(a))(x),
+                can_hover=lambda: self.is_preparing,
             ),
             range(4),
         )
@@ -338,30 +338,32 @@ class BattleScene(Scene):
             content = self.logs[-7:]
         else:
             for i in range(len(content), 7):
-                self.TEXTS[f"log_line_{i}"].change_text('')
+                self.TEXTS[f"log_line_{i}"].change_text("")
 
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
 
     def init_menu(self):
         log_components = {
-            "fight": Button(text="战斗", x=1124, y=683,
-            on_click=lambda: self.fight_menu()
+            "fight": Button(
+                text="战斗", x=1124, y=683, on_click=lambda: self.fight_menu()
             ),
-            "pets": Button(text="换宠", x=1063,y=769,
-            on_click=lambda: self.pets_menu()
-            ),
-            "potion": Button(text="恢复", x=1189, y=769,
-            on_click=lambda: self.potion_menu()
+            "pets": Button(text="换宠", x=1063, y=769, on_click=lambda: self.pets_menu()),
+            "potion": Button(
+                text="恢复", x=1189, y=769, on_click=lambda: self.potion_menu()
             ),
         }
 
-        self.LAYERS[4]["option_background"] = Sprite(image=IMAGE("light_blue.png"), x=635, y=750, width=750, height=120)
+        self.LAYERS[4]["option_background"] = Sprite(
+            image=IMAGE("light_blue.png"), x=635, y=750, width=750, height=120
+        )
         self.LAYERS[4]["option_background"].hide()
         for i in range(6):
-            x, y = 334+i*120, 750
+            x, y = 334 + i * 120, 750
             self.options_pos_dict[i] = (x, y)
-            self.LAYERS[5][f"option_{i}"] = Button(text=str(i), x=x, y=y, can_hover=lambda: self.is_preparing)
+            self.LAYERS[5][f"option_{i}"] = Button(
+                text=str(i), x=x, y=y, can_hover=lambda: self.is_preparing
+            )
             self.LAYERS[5][f"option_{i}"].hide()
 
         for name, comp in log_components.items():
@@ -387,8 +389,12 @@ class BattleScene(Scene):
         for i in range(6):
             x, y = self.options_pos_dict[i]
             self.LAYERS[5][f"option_{i}"].show()
-            self.LAYERS[5][f"option_{i}"].set_image(IMAGE("white.png"), width=100, height=100).set_pos(x, y)
-            self.LAYERS[5][f"option_{i}"].on_click = (lambda a: lambda: self.choose_action(a))(i+10)
+            self.LAYERS[5][f"option_{i}"].set_image(
+                IMAGE("white.png"), width=100, height=100
+            ).set_pos(x, y)
+            self.LAYERS[5][f"option_{i}"].on_click = (
+                lambda a: lambda: self.choose_action(a)
+            )(i + 10)
 
     def potion_menu(self):
         for i in range(4):
@@ -397,6 +403,9 @@ class BattleScene(Scene):
         for i in range(6):
             x, y = self.options_pos_dict[i]
             self.LAYERS[5][f"option_{i}"].show()
-            self.LAYERS[5][f"option_{i}"].set_image(IMAGE("light_orange.png"), width=100, height=100).set_pos(x, y)
-            self.LAYERS[5][f"option_{i}"].on_click = (lambda a: lambda: self.choose_action(a))(i+100)
-            
+            self.LAYERS[5][f"option_{i}"].set_image(
+                IMAGE("light_orange.png"), width=100, height=100
+            ).set_pos(x, y)
+            self.LAYERS[5][f"option_{i}"].on_click = (
+                lambda a: lambda: self.choose_action(a)
+            )(i + 100)

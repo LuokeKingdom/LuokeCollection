@@ -80,12 +80,13 @@ class KeyframeBase(BaseBattleAnimation):
 
     def end_change(self):
         raise Exception("<end_change> not implemented")
-    
+
+
 class Position(KeyframeBase):
     def __init__(self, data, display):
         super(Position, self).__init__(data, display)
         self.original = self.display.get_pos()
-    
+
     def set_change(self):
         cx = self.interpolate(lambda x: x[0])
         cy = self.interpolate(lambda x: x[1])
@@ -99,22 +100,26 @@ class Position(KeyframeBase):
             oy + self.data[self.end][1][1],
         )
 
+
 class Scale(KeyframeBase):
     def __init__(self, data, display):
         super(Scale, self).__init__(data, display)
         self.original = 1
         self.display = display
         self.ox, self.oy = display.get_pos()
-    
+
     def set_change(self):
         cx = self.interpolate(lambda x: x)
         ox = self.original
         oi = self.display.original_image
-        self.display.set_temp_image(oi, ratio=ox+cx).set_pos(self.ox, self.oy)
+        self.display.set_temp_image(oi, ratio=ox + cx).set_pos(self.ox, self.oy)
 
     def end_change(self):
         oi = self.display.original_image
-        self.display.set_temp_image(oi, ratio=self.original+self.data[-1][1]).set_pos(self.ox, self.oy)
+        self.display.set_temp_image(oi, ratio=self.original + self.data[-1][1]).set_pos(
+            self.ox, self.oy
+        )
+
 
 class StuffChange(BaseBattleAnimation):
     def __init__(self, on_update, stuff):

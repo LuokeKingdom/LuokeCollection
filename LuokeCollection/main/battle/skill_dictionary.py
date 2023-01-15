@@ -1,2 +1,1 @@
-skill_dictionary = {
-}
+skill_dictionary = {}

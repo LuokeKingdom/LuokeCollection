@@ -95,6 +95,7 @@ class BattleSystem:
         pet1_first = pet1.SP > pet2.SP
         if pet1.SP == pet2.SP:
             pet1_first = random.choice([True, False])
+
         def get_args():
             pet1, pet2 = self.get_pets()
             choice1, choice2 = self.choice1, self.choice2
@@ -102,6 +103,7 @@ class BattleSystem:
                 pet1, pet2 = pet2, pet1
                 choice1, choice2 = choice2, choice1
             return pet1, pet2, choice1, choice2
+
         try:
             p1, p2, c1, c2 = get_args()
             if self.preaction(p1, p2):
@@ -139,4 +141,3 @@ class BattleSystem:
     def next_anim(self):
         self.anim_queue.put(self.temp_anim)
         self.temp_anim = []
-    

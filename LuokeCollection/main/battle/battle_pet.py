@@ -31,7 +31,8 @@ class BattlePet:
                 (self.init_stat_map[k] * 2 + v) * self.level // 100
                 + ((self.level + 10) if k == "HP" else 5)
             )
-            for k, v in self.talent_map.items() if k!='level'
+            for k, v in self.talent_map.items()
+            if k != "level"
         }
         self.max_health = self.final_stat_map["HP"]
         self.health = self.max_health
