@@ -8,7 +8,8 @@ from .battle_pet import BattlePet
 class SkillOutcome:
     labels2function = {
         'a': 'attack',
-        'p': 'potion',
+        '.': 'potion',
+        'e': 'effect',
     }
 
     def attack(primary: BattlePet, secondary: BattlePet, skill: SkillInfo, args: str, anim: Animator):
@@ -48,3 +49,9 @@ class SkillOutcome:
         heal_amount = (1+int(args)) * 50
         primary.change_health(heal_amount)
         anim.animate_potion(primary, heal_amount)
+
+    def effect(primary: BattlePet, secondary: BattlePet, skill: SkillInfo, args: str, anim: Animator):
+        effect_label = args[0]
+        primary.add_effect(effect_label, SkillEffect.get(effect_label, args[1:]))
+        anim.append_log("有异常状态！！！")
+        

@@ -103,7 +103,7 @@ class Animator:
 
     def animate_burn(self, pet):
         self.push_anim("none", interval=0.5).next_anim()
-        self.append_log(f"<{pet.info.name}>烧伤了")
+        self.append_log(f"<{pet.info.name}>烧伤了", pet.is_self)
 
 
     def push_anim(self, name, **kwargs):

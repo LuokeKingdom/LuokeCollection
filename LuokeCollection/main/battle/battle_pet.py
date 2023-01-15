@@ -73,5 +73,8 @@ class BattlePet:
                 image, (int(width * max_height / height, max_height))
             )
 
+    def add_effect(self, label, effect):
+        self.status.effects[label] = effect
+
     def __getattr__(self, name):
         return self.current_stat_map.get(name)
