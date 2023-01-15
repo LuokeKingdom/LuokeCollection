@@ -3,6 +3,7 @@ from .battle_animation import BattleAnimation
 import queue
 import random
 from .action_solver import ActionSolver
+from .animator import Animator
 
 
 class BattleSystem:
@@ -13,6 +14,7 @@ class BattleSystem:
         self.temp_anim = []
         self.curr_anim = [None]
         self.on_log_update = None
+        self.animator = Animator(self)
 
         self.team1 = [
             None if args is None else BattlePet(*args) for args in pet_array_1
@@ -112,7 +114,7 @@ class BattleSystem:
         return True
 
     def action(self, primary, secondary, choice):
-        ActionSolver(choice, primary, secondary).solve(self)
+        ActionSolver(choice, primary, secondary).solve(self.animator)
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")

@@ -43,7 +43,7 @@ class BattleScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.done = False
-        self.logs = []
+        self.append_battle_log(log='', clear=True)
         self.timer = 0
         self.is_preparing = False
         self.system = self.model.get_battle_system()
@@ -328,11 +328,18 @@ class BattleScene(Scene):
             else:
                 self.OTHERS[name] = comp
 
-    def append_battle_log(self, log):
-        self.logs.append(log)
+    def append_battle_log(self, log, clear=False):
+        if clear:
+            self.logs.clear()
+        else:
+            self.logs.append(log)
         content = self.logs
         if len(content) > 7:
             content = self.logs[-7:]
+        else:
+            for i in range(len(content), 7):
+                self.TEXTS[f"log_line_{i}"].change_text('')
+
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
 
