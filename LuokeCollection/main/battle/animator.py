@@ -81,12 +81,7 @@ class Animator:
         image_pos = display.get_pos()
         self.push_anim('stuff_change', on_update=lambda x: display.set_image(x).set_pos(*image_pos), stuff=new_pet.image)
         self.push_anim('scale', data=rev_data, display=display).next_anim()
-        def change_function(pet_index):
-            if pet.is_self:
-                self.system.current_pet1 = pet_index
-            else:
-                self.system.current_pet2 = pet_index
-        self.push_anim('stuff_change', on_update=lambda x: change_function(x), stuff=new_pet_index)
+        self.push_anim('stuff_change', on_update=lambda x: self.system.display_function(), stuff=None)
         self.append_log(f'将<{pet.info.name}>换成了<{new_pet.info.name}>', pet.is_self)
 
     def animate_potion(self, pet, heal):

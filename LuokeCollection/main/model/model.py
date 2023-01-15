@@ -305,5 +305,6 @@ class Model:
                     battle_pet["skills"],
                 )
             )
+        scene = self.get_scene()
 
-        return BattleSystem(pet_array_1, pet_array_2)
+        return BattleSystem(pet_array_1, pet_array_2, scene.display_pets)

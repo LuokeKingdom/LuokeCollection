@@ -2,7 +2,7 @@ import os
 import pygame
 from pygame.locals import *  # noqa
 from ..model.sound import Channel
-from ...main.utils import ELEMENT_MAP, type2element
+from ...main.utils import ELEMENT_MAP, str2element
 from ...settings.dev import SOUND, IMAGE
 
 from ..components.button import Button
@@ -261,7 +261,7 @@ class BattleScene(Scene):
             x, y = self.skill_pos_dict[index]
             self.TEXTS[f"skill_{index}_name"].show()
             self.OTHERS[f"skill_{index}_element"].set_image(
-                image=ELEMENT_MAP.get(type2element(self.skills[index].type)).image,
+                image=ELEMENT_MAP.get(str2element(self.skills[index].type)).image,
                 width=56,
             ).set_pos(x - 65, y - 26)
             self.OTHERS[f"skill_{index}_damage_icon"].set_image(
@@ -295,7 +295,7 @@ class BattleScene(Scene):
             skill_bg, width=180, height=100
         ).set_pos(x, y)
         self.OTHERS[f"skill_{index}_element"].set_image(
-            image=ELEMENT_MAP.get(type2element(skill_info.type)).image, width=56
+            image=ELEMENT_MAP.get(str2element(skill_info.type)).image, width=56
         ).set_pos(x - 65, y - 26)
         self.OTHERS[f"skill_{index}_damage_icon"].set_image(
             IMAGE("damage.png"), width=30

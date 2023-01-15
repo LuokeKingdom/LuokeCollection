@@ -7,7 +7,7 @@ from .animator import Animator
 
 
 class BattleSystem:
-    def __init__(self, pet_array_1, pet_array_2):
+    def __init__(self, pet_array_1, pet_array_2, display_function):
         self.done = False
         self.win = None
         self.anim_queue = queue.Queue()
@@ -15,6 +15,7 @@ class BattleSystem:
         self.curr_anim = [None]
         self.on_log_update = None
         self.animator = Animator(self)
+        self.display_function = display_function
 
         self.team1 = [
             None if args is None else BattlePet(*args) for args in pet_array_1
@@ -91,20 +92,29 @@ class BattleSystem:
 
     def act(self):
         pet1, pet2 = self.get_pets()
-        choice1, choice2 = self.choice1, self.choice2
         pet1_first = pet1.SP > pet2.SP
         if pet1.SP == pet2.SP:
             pet1_first = random.choice([True, False])
-        if not pet1_first:
-            pet1, pet2 = pet2, pet1
-            choice1, choice2 = choice2, choice1
+        def get_args():
+            pet1, pet2 = self.get_pets()
+            choice1, choice2 = self.choice1, self.choice2
+            if not pet1_first:
+                pet1, pet2 = pet2, pet1
+                choice1, choice2 = choice2, choice1
+            return pet1, pet2, choice1, choice2
         try:
-            if self.preaction(pet1, pet2):
-                self.action(pet1, pet2, choice1)
-            self.postaction(pet1, pet2)
-            if self.preaction(pet2, pet1):
-                self.action(pet2, pet1, choice2)
-            self.postaction(pet2, pet1)
+            p1, p2, c1, c2 = get_args()
+            if self.preaction(p1, p2):
+                p1, p2, c1, c2 = get_args()
+                self.action(p1, p2, c1)
+            p1, p2, c1, c2 = get_args()
+            self.postaction(p1, p2)
+            p1, p2, c1, c2 = get_args()
+            if self.preaction(p2, p1):
+                p1, p2, c1, c2 = get_args()
+                self.action(p2, p1, c2)
+            p1, p2, c1, c2 = get_args()
+            self.postaction(p2, p1)
         except Exception as e:
             print(e)
             pet1, pet2 = self.get_pets()
