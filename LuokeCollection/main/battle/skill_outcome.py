@@ -3,6 +3,7 @@ from random import choice
 from .skill_effect import SkillEffect
 from .animator import Animator
 from .battle_pet import BattlePet
+from ..utils import Element
 
 
 class SkillOutcome:
@@ -13,11 +14,13 @@ class SkillOutcome:
     }
 
     def attack(primary: BattlePet, secondary: BattlePet, skill: SkillInfo, args: str, anim: Animator):
-        element_ratio = 1
+        skill_element = Element(skill.type[:2])
+        defender_e1, defender_e2 = Element(primary.info.element), Element(primary.info.secondary_element)
+        element_ratio = skill_element.attack(defender_e1, defender_e2)
         critical = 1
         skill_type = skill.type[2:]
         if skill_type == "变化":
-            print("skill not found")
+            print("Wrong label")
             # raise Exception("Wrong label")
         elif skill_type == "物理":
             damage = int(

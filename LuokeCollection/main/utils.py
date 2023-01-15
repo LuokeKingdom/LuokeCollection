@@ -35,51 +35,98 @@ PetInfo = namedtuple(
 ELEMENT = namedtuple("ELEMENT", ["image", "color"])
 
 ELEMENT_FILES = {
-    "草": "elements/grass.png",
-    "火": "elements/fire.png",
-    "翼": "elements/air.png",
-    "虫": "elements/bug.png",
+    "草系": "elements/grass.png",
+    "火系": "elements/fire.png",
+    "翼系": "elements/air.png",
+    "虫系": "elements/bug.png",
     "恶魔": "elements/demon.png",
-    "土": "elements/dirt.png",
-    "龙": "elements/dragon.png",
-    "武": "elements/fight.png",
+    "土系": "elements/dirt.png",
+    "龙系": "elements/dragon.png",
+    "武系": "elements/fight.png",
     "幽灵": "elements/ghost.png",
     "神火": "elements/godfire.png",
     "神草": "elements/godgrass.png",
     "神水": "elements/godwater.png",
-    "萌": "elements/heart.png",
-    "冰": "elements/ice.png",
-    "光": "elements/light.png",
-    "电": "elements/lightening.png",
+    "萌系": "elements/heart.png",
+    "冰系": "elements/ice.png",
+    "光系": "elements/light.png",
+    "电系": "elements/lightening.png",
     "机械": "elements/mech.png",
-    "毒": "elements/poison.png",
+    "毒系": "elements/poison.png",
     "普通": "elements/regular.png",
-    "石": "elements/rock.png",
-    "水": "elements/water.png",
+    "石系": "elements/rock.png",
+    "水系": "elements/water.png",
 }
 ELEMENT2COLOR = {
     "幽灵": (172, 140, 140),
-    "草": (130, 182, 64),
-    "火": (246, 102, 18),
-    "翼": (165, 156, 223),
-    "虫": (189, 218, 126),
+    "草系": (130, 182, 64),
+    "火系": (246, 102, 18),
+    "翼系": (165, 156, 223),
+    "虫系": (189, 218, 126),
     "恶魔": (214, 111, 110),
-    "土": (169, 133, 106),
-    "龙": (231, 179, 91),
-    "武": (219, 108, 45),
+    "土系": (169, 133, 106),
+    "龙系": (231, 179, 91),
+    "武系": (219, 108, 45),
     "神火": (241, 167, 82),
     "神草": (165, 225, 114),
     "神水": (130, 208, 245),
-    "萌": (244, 77, 149),
-    "冰": (200, 234, 243),
-    "光": (225, 128, 12),
-    "电": (247, 165, 1),
+    "萌系": (244, 77, 149),
+    "冰系": (200, 234, 243),
+    "光系": (225, 128, 12),
+    "电系": (247, 165, 1),
     "机械": (176, 177, 182),
-    "毒": (130, 150, 158),
+    "毒系": (130, 150, 158),
     "普通": (251, 217, 42),
-    "石": (166, 156, 120),
-    "水": (108, 206, 246),
+    "石系": (166, 156, 120),
+    "水系": (108, 206, 246),
 }
+
+ELEMENT2INDEX = {
+    "普通": 0,
+    "火系": 1,
+    "水系": 2,
+    "电系": 3,
+    "草系": 4,
+    "冰系": 5,
+    "武系": 6,
+    "毒系": 7,
+    "土系": 8,
+    "翼系": 9,
+    "萌系": 10,
+    "虫系": 11,
+    "石系": 12,
+    "幽灵": 13,
+    "龙系": 14,
+    "恶魔": 15,
+    "机械": 16,
+    "光系": 17,
+    "神火": 18,
+    "神草": 19,
+    "神水": 20,
+}
+
+def type2element(t):
+    if len(t)==1:
+        return t
+    if t[1] == "系":
+        return t[0]
+    return t[:2]
+
+from .element_table import element_table
+class Element:
+    def __init__(self, element):
+        self.element = None
+        self.index = None
+        if element is not None:
+            self.element = type2element(element)
+            self.index = ELEMENT2INDEX[self.element]
+
+    def attack(self, primary_element, secondary_element):
+        f = element_table[primary_element.index][self.index]
+        if secondary_element.index is not None:
+            f += element_table[secondary_element.index][self.index]
+        return f + 1 if f >= 0 else 1 / (1 - f)
+
 
 
 def add_average_color(image_map):
@@ -111,10 +158,6 @@ ELEMENT_MAP = {
 }
 
 
-def type2element(t):
-    if t[1] == "系":
-        return t[0]
-    return t[:2]
 
 
 class vec(list):

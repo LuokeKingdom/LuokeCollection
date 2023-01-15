@@ -39,14 +39,7 @@ class BattlePet:
 
     def get_current_stats(self):
         return {
-            k: int(
-                v
-                * (
-                    1 + 0.5 * self.status.stat_buffs[k]
-                    if self.status.stat_buffs[k] >= 0
-                    else 1 / (1 + self.status.stat_buffs[k])
-                )
-            )
+            k: int(v * self.status.stat_buffs[k].factor)
             for k, v in self.final_stat_map.items()
             if k != "HP"
         }
