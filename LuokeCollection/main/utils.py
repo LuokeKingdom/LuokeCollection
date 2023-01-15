@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *  # noqa
 from LuokeCollection.settings.dev import IMAGE
 from collections import namedtuple
+from .element_table import element_table
 import os
 
 
@@ -81,6 +82,56 @@ ELEMENT2COLOR = {
     "水": (108, 206, 246),
 }
 
+ELEMENT2INDEX = {
+    "普通": 0,
+    "火": 1,
+    "水": 2,
+    "电": 3,
+    "草": 4,
+    "冰": 5,
+    "武": 6,
+    "毒": 7,
+    "土": 8,
+    "翼": 9,
+    "萌": 10,
+    "虫": 11,
+    "石": 12,
+    "幽灵": 13,
+    "龙": 14,
+    "恶魔": 15,
+    "机械": 16,
+    "光": 17,
+    "神火": 18,
+    "神草": 19,
+    "神水": 20,
+}
+
+
+def str2element(t):
+    if len(t) == 1:
+        return t
+    if t[1] == "系":
+        return t[0]
+    return t[:2]
+
+
+class Element:
+    def __init__(self, element):
+        self.element = None
+        self.index = None
+        if element is not None:
+            self.element = str2element(element)
+            self.index = ELEMENT2INDEX[self.element]
+
+    def attack(self, primary_element, secondary_element):
+        f = element_table[primary_element.index][self.index]
+        if secondary_element.index is not None:
+            f += element_table[secondary_element.index][self.index]
+        return f + 1 if f >= 0 else 1 / (1 - f)
+
+    def __str__(self):
+        return f"<{self.element}: {str(self.index)}>"
+
 
 def add_average_color(image_map):
     def get_color(img):
@@ -109,12 +160,6 @@ def add_average_color(image_map):
 ELEMENT_MAP = {
     key: ELEMENT(IMAGE(val), ELEMENT2COLOR[key]) for key, val in ELEMENT_FILES.items()
 }
-
-
-def type2element(t):
-    if t[1] == "系":
-        return t[0]
-    return t[:2]
 
 
 class vec(list):

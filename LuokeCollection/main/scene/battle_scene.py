@@ -2,7 +2,7 @@ import os
 import pygame
 from pygame.locals import *  # noqa
 from ..model.sound import Channel
-from ...main.utils import ELEMENT_MAP, type2element
+from ...main.utils import ELEMENT_MAP, str2element
 from ...settings.dev import SOUND, IMAGE
 
 from ..components.button import Button
@@ -28,9 +28,12 @@ class BattleScene(Scene):
         self.skills = [None] * 4
         self.system = None
 
+        self.options_pos_dict = {}
+
         self.init_info()
         self.init_skills()
         self.init_battle_log()
+        self.init_menu()
 
         self.is_preparing = False
         self.timer = 0
@@ -40,6 +43,9 @@ class BattleScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.done = False
+        self.append_battle_log(log="", clear=True)
+        self.timer = 0
+        self.is_preparing = False
         self.system = self.model.get_battle_system()
         self.system.set_number_display(
             self.TEXTS["pet_battle_damage_1"], self.TEXTS["pet_battle_damage_2"]
@@ -50,7 +56,7 @@ class BattleScene(Scene):
             self.OTHERS["pet_image_2"],
         )
         self.system.on_log_update = self.append_battle_log
-        self.display_pets()
+        self.fight_menu()
         self.system.push_anim(
             "text", text="战斗开始", display=self.TEXTS["hint_display"], interval=1
         ).next_anim()
@@ -224,12 +230,6 @@ class BattleScene(Scene):
             # self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
             # self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
 
-        def get_click_function(i):
-            return lambda: self.choose_action(i)
-
-        def get_hover_function():
-            return lambda: self.is_preparing
-
         buttons = map(
             lambda x: Button(
                 image=EMPTY,
@@ -238,8 +238,8 @@ class BattleScene(Scene):
                 animation="opacity",
                 opacity=0.2,
                 parameter={"factor": 0.3},
-                on_click=get_click_function(x),
-                can_hover=get_hover_function(),
+                on_click=(lambda a: lambda: self.choose_action(a))(x),
+                can_hover=lambda: self.is_preparing,
             ),
             range(4),
         )
@@ -261,7 +261,7 @@ class BattleScene(Scene):
             x, y = self.skill_pos_dict[index]
             self.TEXTS[f"skill_{index}_name"].show()
             self.OTHERS[f"skill_{index}_element"].set_image(
-                image=ELEMENT_MAP.get(type2element(self.skills[index].type)).image,
+                image=ELEMENT_MAP.get(str2element(self.skills[index].type)).image,
                 width=56,
             ).set_pos(x - 65, y - 26)
             self.OTHERS[f"skill_{index}_damage_icon"].set_image(
@@ -295,7 +295,7 @@ class BattleScene(Scene):
             skill_bg, width=180, height=100
         ).set_pos(x, y)
         self.OTHERS[f"skill_{index}_element"].set_image(
-            image=ELEMENT_MAP.get(type2element(skill_info.type)).image, width=56
+            image=ELEMENT_MAP.get(str2element(skill_info.type)).image, width=56
         ).set_pos(x - 65, y - 26)
         self.OTHERS[f"skill_{index}_damage_icon"].set_image(
             IMAGE("damage.png"), width=30
@@ -328,10 +328,84 @@ class BattleScene(Scene):
             else:
                 self.OTHERS[name] = comp
 
-    def append_battle_log(self, log):
-        self.logs.append(log)
+    def append_battle_log(self, log, clear=False):
+        if clear:
+            self.logs.clear()
+        else:
+            self.logs.append(log)
         content = self.logs
-        if len(self.logs) > 7:
-            content = self.logs[-7:-1]
+        if len(content) > 7:
+            content = self.logs[-7:]
+        else:
+            for i in range(len(content), 7):
+                self.TEXTS[f"log_line_{i}"].change_text("")
+
         for i, v in enumerate(content):
             self.TEXTS[f"log_line_{i}"].change_text(v)
+
+    def init_menu(self):
+        log_components = {
+            "fight": Button(
+                text="战斗", x=1124, y=683, on_click=lambda: self.fight_menu()
+            ),
+            "pets": Button(text="换宠", x=1063, y=769, on_click=lambda: self.pets_menu()),
+            "potion": Button(
+                text="恢复", x=1189, y=769, on_click=lambda: self.potion_menu()
+            ),
+        }
+
+        self.LAYERS[4]["option_background"] = Sprite(
+            image=IMAGE("light_blue.png"), x=635, y=750, width=750, height=120
+        )
+        self.LAYERS[4]["option_background"].hide()
+        for i in range(6):
+            x, y = 334 + i * 120, 750
+            self.options_pos_dict[i] = (x, y)
+            self.LAYERS[5][f"option_{i}"] = Button(
+                text=str(i), x=x, y=y, can_hover=lambda: self.is_preparing
+            )
+            self.LAYERS[5][f"option_{i}"].hide()
+
+        for name, comp in log_components.items():
+            if isinstance(comp, Button):
+                self.BUTTONS[name] = comp
+            elif isinstance(comp, Text):
+                self.TEXTS[name] = comp
+            else:
+                self.OTHERS[name] = comp
+
+    def fight_menu(self):
+        for i in range(4):
+            self.BUTTONS[f"skill_{i}_background"].show()
+        self.LAYERS[4]["option_background"].hide()
+        for i in range(6):
+            self.LAYERS[5][f"option_{i}"].hide()
+        self.display_pets()
+
+    def pets_menu(self):
+        for i in range(4):
+            self.BUTTONS[f"skill_{i}_background"].hide()
+        self.LAYERS[4]["option_background"].show()
+        for i in range(6):
+            x, y = self.options_pos_dict[i]
+            self.LAYERS[5][f"option_{i}"].show()
+            self.LAYERS[5][f"option_{i}"].set_image(
+                IMAGE("white.png"), width=100, height=100
+            ).set_pos(x, y)
+            self.LAYERS[5][f"option_{i}"].on_click = (
+                lambda a: lambda: self.choose_action(a)
+            )(i + 10)
+
+    def potion_menu(self):
+        for i in range(4):
+            self.BUTTONS[f"skill_{i}_background"].hide()
+        self.LAYERS[4]["option_background"].show()
+        for i in range(6):
+            x, y = self.options_pos_dict[i]
+            self.LAYERS[5][f"option_{i}"].show()
+            self.LAYERS[5][f"option_{i}"].set_image(
+                IMAGE("light_orange.png"), width=100, height=100
+            ).set_pos(x, y)
+            self.LAYERS[5][f"option_{i}"].on_click = (
+                lambda a: lambda: self.choose_action(a)
+            )(i + 100)

@@ -42,17 +42,17 @@ class Scene:
         Mouse.draw(self.screen, mouse_pos, self.is_pointer)
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
-        btns = self.BUTTONS.values()
-        others = self.OTHERS.values()
+        btns = list(self.BUTTONS.values()) + list(self.LAYERS[5].values())
+        others = list(self.OTHERS.values()) + list(self.LAYERS[4].values())
         self.is_pointer = False
         for button in btns:
             button.hovered = False
         for button in btns:
             button.update(mouse_pos, clicked, pressed)
-            if button.hovered:
+            if button.hovered and not button.hidden:
                 self.is_pointer = True
         for other in others:
-            other.update()
+            other.update(mouse_pos, clicked, pressed)
 
     def load_items(self):
         for i in range(self.layer_number):

@@ -1,61 +1,47 @@
-from LuokeCollection.main.utils import type2element
-from .pet_status import PetStatus
-from random import choice
+from LuokeCollection.main.utils import str2element
+from .skill_dictionary import skill_dictionary
+from .skill_outcome import SkillOutcome
+from .animator import Animator
 
 
 class ActionSolver:
     def __init__(self, action_index, user, taker):
-        self.user_status_change = PetStatus()
-        self.taker_status_change = PetStatus()
-        self.damage_user = None
-        self.damage_taker = None
-        self.heal_user = 10
-        self.heal_taker = None
-        self.skill = None
+        self.primary = user
+        self.secondary = taker
+        self.action_index = action_index
+        self.skill_outcomes = {
+            k: SkillOutcome.__dict__.get(v)
+            for k, v in SkillOutcome.labels2function.items()
+        }
+        self.anim = None
 
-        if action_index < 4:
-            self.use_skill(action_index, user, taker)
-        else:
-            pass
+    def solve(self, animator: Animator):
+        self.anim = animator
+        index = self.action_index
+        if index < 4:
+            self.use_skill(index)
+        elif index - 10 < 6:
+            if self.primary.is_self:
+                animator.system.current_pet1 = index - 10
+            else:
+                animator.system.current_pet2 = index - 10
+            self.anim.animate_change_pet(self.primary, index - 10)
+        elif index - 100 < 6:
+            self.skill_outcomes.get(".")(
+                self.primary, self.secondary, None, str(index - 100), animator
+            )
 
-    def use_skill(self, skill_index, user, taker):
-        skill = user.skills[skill_index]
-        self.skill = skill
-        self.user_status_change.skill_PPs[skill_index][0] = -1
-        skill_element = type2element(skill.type)
+    def use_skill(self, skill_index):
+        skill = self.primary.skills[skill_index]
+        self.anim.append_log(f"使用了<{skill.name}>", self.primary.is_self)
+        # self.user_status_change.skill_PPs[skill_index][0] = -1
+        skill_element = str2element(skill.type)
         if skill_element:
             pass
-        element_ratio = 1
-        critical = 1
-
-        skill_type = skill.type[2:]
-        if skill_type == "变化":
-            pass
-        elif skill_type == "物理":
-            self.damage_taker = int(
-                (
-                    (user.level * 0.4 + 2) * int(skill.power) * user.AD / taker.DF / 50
-                    + 2
-                )
-                * element_ratio
-                * choice(range(217, 256))
-                * critical
-                / 255
+        labels = skill_dictionary.get(skill.name, "a").split(" ")
+        for label in labels:
+            identifier = label[0]
+            args = label[1:]
+            self.skill_outcomes.get(identifier)(
+                self.primary, self.secondary, skill, args, self.anim
             )
-        elif skill_type == "魔法":
-            self.damage_taker = int(
-                (
-                    (user.level * 0.4 + 2) * int(skill.power) * user.AP / taker.MD / 50
-                    + 2
-                )
-                * element_ratio
-                * choice(range(217, 256))
-                * critical
-                / 255
-            )
-
-    def get_damage(self):
-        return self.damage_taker, self.damage_user
-
-    def get_heal(self):
-        return self.heal_taker, self.heal_user

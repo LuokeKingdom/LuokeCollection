@@ -49,12 +49,11 @@ class TextChange(BaseBattleAnimation):
         self.display.change_text(str(self.text))
 
 
-class KeyframePosition(BaseBattleAnimation):
+class KeyframeBase(BaseBattleAnimation):
     def __init__(self, data, display):
-        super(KeyframePosition, self).__init__()
+        super(KeyframeBase, self).__init__()
         self.display = display
-        self.opx, self.opy = display.get_pos()
-
+        self.original = None
         self.data = data
         self.data.sort()
         self.index = 0
@@ -64,34 +63,75 @@ class KeyframePosition(BaseBattleAnimation):
     def update(self, delta_time):
         while self.index != self.end and self.data[self.index + 1][0] < self.timer:
             self.index += 1
-        if not super(KeyframePosition, self).update(delta_time):
-            self.display.set_pos(
-                self.opx + self.data[self.end][1][0],
-                self.opy + self.data[self.end][1][1],
-            )
+        if super(KeyframeBase, self).update(delta_time):
+            self.set_change()
         else:
-            t1, t2 = self.data[self.index][0], self.data[self.index + 1][0]
-            progress = (self.timer - t1) / (t2 - t1)
-            x1 = self.data[self.index][1][0]
-            x2 = self.data[self.index + 1][1][0] - x1
-            y1 = self.data[self.index][1][1]
-            y2 = self.data[self.index + 1][1][1] - y1
-            self.display.set_pos(
-                self.opx + x1 + x2 * progress, self.opy + y1 + y2 * progress
-            )
+            self.end_change()
+
+    def interpolate(self, get_val):
+        t1, t2 = self.data[self.index][0], self.data[self.index + 1][0]
+        progress = (self.timer - t1) / (t2 - t1)
+        x1 = get_val(self.data[self.index][1])
+        x2 = get_val(self.data[self.index + 1][1]) - x1
+        return x1 + x2 * progress
+
+    def set_change(self):
+        raise Exception("<set_change> not implemented")
+
+    def end_change(self):
+        raise Exception("<end_change> not implemented")
 
 
-class LogChange(BaseBattleAnimation):
-    def __init__(self, on_update, text):
-        super(LogChange, self).__init__()
+class Position(KeyframeBase):
+    def __init__(self, data, display):
+        super(Position, self).__init__(data, display)
+        self.original = self.display.get_pos()
+
+    def set_change(self):
+        cx = self.interpolate(lambda x: x[0])
+        cy = self.interpolate(lambda x: x[1])
+        ox, oy = self.original
+        self.display.set_pos(ox + cx, oy + cy)
+
+    def end_change(self):
+        ox, oy = self.original
+        self.display.set_pos(
+            ox + self.data[self.end][1][0],
+            oy + self.data[self.end][1][1],
+        )
+
+
+class Scale(KeyframeBase):
+    def __init__(self, data, display):
+        super(Scale, self).__init__(data, display)
+        self.original = 1
+        self.display = display
+        self.ox, self.oy = display.get_pos()
+
+    def set_change(self):
+        cx = self.interpolate(lambda x: x)
+        ox = self.original
+        oi = self.display.original_image
+        self.display.set_temp_image(oi, ratio=ox + cx).set_pos(self.ox, self.oy)
+
+    def end_change(self):
+        oi = self.display.original_image
+        self.display.set_temp_image(oi, ratio=self.original + self.data[-1][1]).set_pos(
+            self.ox, self.oy
+        )
+
+
+class StuffChange(BaseBattleAnimation):
+    def __init__(self, on_update, stuff):
+        super(StuffChange, self).__init__()
         self.on_update = on_update
-        self.text = text
+        self.stuff = stuff
 
     def update(self, delta_time):
         if self.done:
             return
+        self.on_update(self.stuff)
         self.done = True
-        self.on_update(self.text)
 
 
 # exposure
@@ -100,8 +140,9 @@ class BattleAnimation:
         "none": NoAnimation,
         "text": TextDisplay,
         "text_change": TextChange,
-        "position": KeyframePosition,
-        "log": LogChange,
+        "position": Position,
+        "scale": Scale,
+        "stuff_change": StuffChange,
     }
 
     def get(name, **kwargs):
