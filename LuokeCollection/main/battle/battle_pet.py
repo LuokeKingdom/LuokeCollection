@@ -74,7 +74,17 @@ class BattlePet:
             )
 
     def add_effect(self, label, effect):
-        self.status.effects[label] = effect
+        if effect.is_post_effect:
+            self.status.post_effects[label] = effect
+        else:
+            self.status.pre_effects[label] = effect
+
+    def trigger_pre_effects(self):
+        return all([v.solve() for k, v in self.status.pre_effects.items()])
+
+    def trigger_post_effects(self):
+        for k, v in self.status.post_effects.items():
+            v.solve()
 
     def __getattr__(self, name):
         return self.current_stat_map.get(name)

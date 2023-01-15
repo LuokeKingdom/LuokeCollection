@@ -10,7 +10,8 @@ class PetStatus:
             "ER": 0,
         }
         self.skill_PPs = skill_PPs
-        self.effects = {}
+        self.pre_effects = {}
+        self.post_effects = {}
 
     def __getattr__(self, name):
         return self.stat_buffs.get(name)

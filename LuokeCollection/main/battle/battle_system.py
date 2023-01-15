@@ -111,7 +111,7 @@ class BattleSystem:
             self.win = pet1.health != 0
 
     def preaction(self, primary, secondary):
-        return True
+        return primary.trigger_pre_effects()
 
     def action(self, primary, secondary, choice):
         ActionSolver(choice, primary, secondary).solve(self.animator)
@@ -120,7 +120,7 @@ class BattleSystem:
             raise Exception("Battle Finish!!!")
 
     def postaction(self, primary, secondary):
-        pass
+        primary.trigger_post_effects()
 
     def push_anim(self, name, **kwargs):
         self.temp_anim.append(BattleAnimation.get(name, **kwargs))

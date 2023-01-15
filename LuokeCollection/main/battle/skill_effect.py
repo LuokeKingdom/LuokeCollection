@@ -7,6 +7,7 @@ class EffectBase:
         self.turns = 0
         self.pet = pet
         self.anim = animator
+        self.is_post_effect = True
 
     def solve(self): 
         raise Exception("<solve> not implemented")
@@ -18,6 +19,7 @@ class Burn(EffectBase):
     def solve(self):
         self.anim.animate_burn(self.pet)
         self.pet.change_health(fraction=(1, 8))
+        return True
 
 
 class SkillEffect:
