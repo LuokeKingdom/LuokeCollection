@@ -87,5 +87,5 @@ class SkillOutcome:
         anim: Animator,
     ):
         effect_label = args[0]
-        primary.add_effect(effect_label, SkillEffect.get(effect_label, args[1:]))
-        anim.append_log("有异常状态！！！")
+        secondary.add_effect(effect_label, SkillEffect.get(effect_label)(secondary, anim, args))
+        anim.append_log("有异常状态！！！", secondary.is_self)
