@@ -49,6 +49,7 @@ class BattlePet:
         if change is None:
             change = int(self.max_health * fraction[0] / fraction[1])
         self.health = min(self.max_health, max(0, self.health + change))
+        return change
 
     def get_image(self):
         image = pygame.transform.flip(

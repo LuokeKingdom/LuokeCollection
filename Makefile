@@ -24,3 +24,8 @@ build:
 
 lint:
 	poetry run flake8 --ignore=E501,W503 ./LuokeCollection
+
+server:
+	poetry run python -B ./LuokeCollection/main/network/server.py
+client:
+	poetry run python -B ./LuokeCollection/main/network/client.py

@@ -14,12 +14,14 @@ class EffectBase:
 
 
 class Burn(EffectBase):
-    def __init__(self, pet, animator):
-        super().__init__(pet, animator)
+    def __init__(self, pet, animator, args):
+        super(Burn, self).__init__(pet, animator)
 
     def solve(self):
         self.anim.animate_burn(self.pet)
-        self.pet.change_health(fraction=(1, 8))
+        damage = self.pet.change_health(fraction=(-1, 8))
+        self.anim.animate_number(self.pet, damage)
+
         return True
 
 

@@ -1,9 +1,9 @@
 from LuokeCollection.main.utils import SkillInfo
-import random
 from .skill_effect import SkillEffect
 from .animator import Animator
 from .battle_pet import BattlePet
 from ..utils import Element
+from .rng import rng
 
 
 class SkillOutcome:
@@ -19,6 +19,7 @@ class SkillOutcome:
         skill: SkillInfo,
         args: str,
         anim: Animator,
+        rng: rng,
     ):
         skill_element = Element(skill.type[:2])
         defender_e1, defender_e2 = Element(secondary.info.element), Element(
@@ -26,7 +27,7 @@ class SkillOutcome:
         )
         element_ratio = skill_element.attack(defender_e1, defender_e2)
         critical_chance = 0.5 * primary.status.CR.factor
-        critical = 2 if random.random() < critical_chance else 1
+        critical = 2 if rng.get() < critical_chance else 1
         skill_type = skill.type[2:]
         if skill_type == "变化":
             print("Wrong label")
@@ -42,7 +43,7 @@ class SkillOutcome:
                     + 2
                 )
                 * element_ratio
-                * random.choice(range(217, 256))
+                * (int(rng.get() * (256 - 217)) + 217)
                 * critical
                 / 255
             )
@@ -57,7 +58,7 @@ class SkillOutcome:
                     + 2
                 )
                 * element_ratio
-                * random.choice(range(217, 256))
+                * (int(rng.get() * (256 - 217)) + 217)
                 * critical
                 / 255
             )
@@ -74,6 +75,7 @@ class SkillOutcome:
         skill: SkillInfo,
         args: str,
         anim: Animator,
+        rng: rng,
     ):
         heal_amount = (1 + int(args)) * 50
         primary.change_health(heal_amount)
@@ -85,7 +87,10 @@ class SkillOutcome:
         skill: SkillInfo,
         args: str,
         anim: Animator,
+        rng: rng,
     ):
         effect_label = args[0]
-        primary.add_effect(effect_label, SkillEffect.get(effect_label, args[1:]))
-        anim.append_log("有异常状态！！！")
+        secondary.add_effect(
+            effect_label, SkillEffect.get(effect_label)(secondary, anim, args)
+        )
+        anim.append_log("有异常状态！！！", secondary.is_self)
