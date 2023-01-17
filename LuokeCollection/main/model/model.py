@@ -1,6 +1,5 @@
 import copy
 from LuokeCollection.main.battle.battle_system import BattleSystem
-
 from LuokeCollection.main.scene.collection_scene import CollectionScene
 from LuokeCollection.main.scene.battle_prep_scene import BattlePrepScene
 from .sound import Channel
@@ -8,6 +7,7 @@ from ..utils import PetInfo, SkillInfo
 import os
 import json
 import threading
+from _thread import start_new_thread
 from ...settings.dev import IMAGE, JSON, SOUND
 from ..utils import save_file
 from ..network.client import Client
@@ -292,7 +292,6 @@ class Model:
 
     def ready_for_battle(self):
         self.battle_ready = True
-        print("READY")
 
     def get_battle_system(self):
         pet_array_1 = []
@@ -321,6 +320,7 @@ class Model:
                 )
             )
         scene = self.get_scene()
+        print("Before init battle system")
         return BattleSystem(
             pet_array_1,
             pet_array_2,
@@ -331,6 +331,11 @@ class Model:
 
     def client_init(self):
         self.client = Client(self.get_battle_pets())
+        start_new_thread(self.threaded_client, ())
+
+    def threaded_client(self):
+        while 1:
+            self.client_update()
 
     def client_update(self):
         reply_args = None, None, None
@@ -339,7 +344,6 @@ class Model:
             if self.client is None:
                 return
             obj = self.client.receive(2048)
-            # print(obj)
             if not obj:
                 pass
             elif obj.id == 0:
@@ -367,7 +371,6 @@ class Model:
             print(e)
 
     def reset_turn(self):
-        print("RESET")
         scene = self.get_scene()
         self.action_sent = False
         self.self_action_chosen = -1

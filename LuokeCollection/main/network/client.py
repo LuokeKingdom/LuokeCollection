@@ -1,14 +1,14 @@
 import pickle
 import socket
-from .package import Pack, Pets
-from LuokeCollection.settings.dev import IP, PORT
+from LuokeCollection.main.network.package import Pack, Pets
 
 
 class Client:
     def __init__(self, pets):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = IP
-        self.port = PORT
+        # ngrok forwarding
+        self.server = "0.tcp.ngrok.io"
+        self.port = 19173
         self.opponent_pets = None
         self.id, self.seed = self.connect()
 

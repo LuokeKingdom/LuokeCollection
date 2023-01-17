@@ -284,4 +284,4 @@ class BattlePrepScene(Scene):
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
-        self.model.client_update()
+        # self.model.client_update()

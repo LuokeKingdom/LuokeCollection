@@ -39,7 +39,7 @@ while running:
                 # development purpose
                 if clicked == 1:
                     pass
-                    print(str(mouse_pos) + " is clicked!")
+                    # print(str(mouse_pos) + " is clicked!")
         if event.type == pygame.MOUSEBUTTONDOWN:
             pressing = True
 
