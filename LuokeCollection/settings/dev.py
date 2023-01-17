@@ -6,8 +6,7 @@ from ..main.model.sound import Sound
 
 WIDTH = 1239
 HEIGHT = 826
-IP = "192.168.4.62"
-PORT = 5555
+PORT = 5050
 
 
 def IMAGE(name, relative=True):

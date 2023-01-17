@@ -4,11 +4,9 @@ import pickle
 import random
 
 from LuokeCollection.main.network.package import Pack, Pets
-from LuokeCollection.settings.dev import IP, PORT
+from LuokeCollection.settings.dev import PORT
 
-server = "192.168.4.56"
-port = 5555
-server = IP
+server = 'localhost'
 port = PORT
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
