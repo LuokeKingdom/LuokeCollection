@@ -1,0 +1,17 @@
+Fatal Python error: (pygame parachute) Segmentation Fault
+Python runtime state: initialized
+
+Thread 0x0000000170c5f000 (most recent call first):
+  File "/Users/ruoqihuang/Desktop/LuokeCollection/LuokeCollection/main/model/model.py", line 162 in _load_pet_rect
+  File "/Users/ruoqihuang/Desktop/LuokeCollection/LuokeCollection/main/model/model.py", line 48 in load_pet_rects_async
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/threading.py", line 870 in run
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/threading.py", line 932 in _bootstrap_inner
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/threading.py", line 890 in _bootstrap
+
+Current thread 0x0000000100824580 (most recent call first):
+  File "/Users/ruoqihuang/Desktop/LuokeCollection/LuokeCollection/settings/dev.py", line 12 in IMAGE
+  File "/Users/ruoqihuang/Desktop/LuokeCollection/LuokeCollection/main/scene/init_scene.py", line 12 in __init__
+  File "/Users/ruoqihuang/Desktop/LuokeCollection/LuokeCollection/main/scene_factory.py", line 13 in __init__
+  File "/Users/ruoqihuang/Desktop/LuokeCollection/LuokeCollection/main/app.py", line 12 in __init__
+  File "index.py", line 18 in <module>
+make: *** [run] Abort trap: 6

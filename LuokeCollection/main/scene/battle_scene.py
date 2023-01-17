@@ -66,6 +66,7 @@ class BattleScene(Scene):
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
+        self.model.client_update()
         if self.done:
             self.TEXTS["timer_display"].change_text("")
             if self.system.has_animation():
