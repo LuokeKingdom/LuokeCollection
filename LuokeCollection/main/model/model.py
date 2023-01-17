@@ -305,10 +305,9 @@ class Model:
                 )
             )
         pet_array_2 = []
-        opponent_pets = self.client.opponent_pets
-        for i in opponent_pets:
+        for battle_pet in self.opponent_pets:
             if battle_pet is None:
-                pet_array_1.append(None)
+                pet_array_2.append(None)
                 continue
             pet_array_2.append(
                 (
@@ -326,6 +325,7 @@ class Model:
 
     def client_update(self):
         reply_args = None, None, None
+        scene = self.get_scene()
         try:
             if self.client is None:
                 return
@@ -341,9 +341,10 @@ class Model:
                     reply_args = True, False, None
                 if self.opponent_pets is not None and self.battle_ready:
                     reply_args = True, True, None
-                if obj.ready is True:
-                    self.open('battle')
-                    reply_args = True, True, -1
+                if isinstance(scene, BattlePrepScene):
+                    if obj.ready is True:
+                        self.open('battle')
+                        reply_args = True, True, -1
             else:
                 self.opponent_pets = obj.data
             self.client.reply(*reply_args, self.opponent_index)
