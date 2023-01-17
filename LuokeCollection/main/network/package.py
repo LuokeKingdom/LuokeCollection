@@ -3,7 +3,7 @@ class Pack:
         self.id = 0
         self.ready = None
         self.accept = None
-        self.choice = None
+        self.choice = -1
         self.opponent = None
 
     def __str__(self):

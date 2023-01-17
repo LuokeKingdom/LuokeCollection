@@ -39,6 +39,7 @@ class BattleScene(Scene):
         self.timer = 0
         self.max_wait_time = 11
         self.done = False
+        self.turn_begun = False
 
     def side_effect(self):
         super().side_effect()
@@ -67,6 +68,9 @@ class BattleScene(Scene):
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
         self.model.client_update()
+        if self.turn_ready() and not self.turn_begun:
+            self.turn_begun = True
+            self.begin_turn()
         if self.done:
             self.TEXTS["timer_display"].change_text("")
             if self.system.has_animation():
@@ -87,24 +91,34 @@ class BattleScene(Scene):
                 self.TEXTS["timer_display"].change_text(str(self.max_wait_time - curr))
             if self.timer > self.max_wait_time:
                 self.choose_action(0)
+        elif self.waiting_for_opponent():
+            self.TEXTS["timer_display"].change_text("等待对手出招")
         else:
             self.TEXTS["timer_display"].change_text("")
             if self.system.has_animation():
                 self.system.update_animation(delta_time)
-            else:
-                self.is_preparing = True
-                self.timer = 0
-                self.display_pets()
+                if not self.system.has_animation():
+                    self.model.reset_turn()
 
-    def choose_action(self, i):
-        if self.is_preparing and not self.system.done:
-            self.is_preparing = False
-            self.system.prepare(i, 0)
+    
+    def turn_ready(self):
+        return self.model.self_action_chosen > -1 and self.model.oppo_action_chosen > -1
+
+    def waiting_for_opponent(self):
+        return self.model.self_action_chosen > -1 and self.model.oppo_action_chosen < 0
+
+    def begin_turn(self):
+        if not self.system.done:
+            self.system.prepare(self.model.self_action_chosen, self.model.oppo_action_chosen)
             self.system.act()
             if not self.system.done:
                 self.system.push_anim(
                     "text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1
                 ).next_anim()
+
+    def choose_action(self, i):
+        self.is_preparing = False
+        self.model.self_action_chosen = i
 
     def display_pets(self):
         pet1, pet2 = self.system.get_pets()

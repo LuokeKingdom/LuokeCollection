@@ -26,6 +26,9 @@ class Model:
         self.opponent_pets = None
         self.opponent_index = None
         self.battle_ready = False
+        self.self_action_chosen = -1
+        self.oppo_action_chosen = -1
+        self.action_sent = False
 
         self.load_pets()
         self.load_current_data()
@@ -317,7 +320,6 @@ class Model:
                 )
             )
         scene = self.get_scene()
-
         return BattleSystem(pet_array_1, pet_array_2, scene.display_pets)
 
     def client_init(self):
@@ -337,18 +339,34 @@ class Model:
                 if obj.opponent is not None and self.opponent_pets is None:
                     self.opponent_index = obj.opponent
                     reply_args = False, True, None
-                else:
-                    reply_args = True, False, None
+                # else:
+                    # reply_args = True, False, None
                 if self.opponent_pets is not None and self.battle_ready:
                     reply_args = True, True, None
                 if isinstance(scene, BattlePrepScene):
                     if obj.ready is True:
                         self.open('battle')
                         reply_args = True, True, -1
+                else:
+                    if self.self_action_chosen>-1 and not self.action_sent:
+                        reply_args = True, False, self.self_action_chosen
+                        self.action_sent = True
+                    if obj.ready is True and obj.accept is False:
+                        self.oppo_action_chosen = obj.choice
             else:
                 self.opponent_pets = obj.data
             self.client.reply(*reply_args, self.opponent_index)
         except Exception as e:
             print(e)
 
+    def reset_turn(self):
+        print("RESET")
+        scene = self.get_scene()
+        self.action_sent = False
+        self.self_action_chosen = -1
+        self.oppo_action_chosen = -1
+        scene.is_preparing = True
+        scene.timer = 0
+        scene.display_pets()
+        scene.turn_begun = False
 
