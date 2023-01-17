@@ -36,7 +36,7 @@ def threaded_client(conn: socket.socket, index):
     while 1:
         try:
             reply = Pack()
-            data = receive(2048)
+            data = receive(1024)
             if all(sent):
                 sent[0] = False
                 sent[1] = False

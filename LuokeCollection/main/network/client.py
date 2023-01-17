@@ -18,7 +18,7 @@ class Client:
     def connect(self):
         try:
             self.client.connect((self.server, self.port))
-            str_id, str_seed = self.client.recv(2048).decode().split(",")
+            str_id, str_seed = self.client.recv(1024).decode().split(",")
             return int(str_id), int(str_seed)
         except Exception as e:
             print("Connect Fail")

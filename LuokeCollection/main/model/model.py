@@ -320,7 +320,6 @@ class Model:
                 )
             )
         scene = self.get_scene()
-        print("Before init battle system")
         return BattleSystem(
             pet_array_1,
             pet_array_2,
@@ -343,7 +342,7 @@ class Model:
         try:
             if self.client is None:
                 return
-            obj = self.client.receive(2048)
+            obj = self.client.receive(1024)
             if not obj:
                 pass
             elif obj.id == 0:
