@@ -1,6 +1,9 @@
 import random
+
+
 class rng:
     count = 0
+
     def __init__(self, seed):
         if self.count != 0:
             raise Exception("Multiple rng not allowed!")
@@ -11,7 +14,6 @@ class rng:
         random.seed(seed)
         while 1:
             yield random.random()
-    
+
     def get(self):
         return next(self.generator)
-

@@ -19,7 +19,7 @@ class SkillOutcome:
         skill: SkillInfo,
         args: str,
         anim: Animator,
-        rng: rng
+        rng: rng,
     ):
         skill_element = Element(skill.type[:2])
         defender_e1, defender_e2 = Element(secondary.info.element), Element(
@@ -43,7 +43,7 @@ class SkillOutcome:
                     + 2
                 )
                 * element_ratio
-                * (int(rng.get() * (256-217)) + 217)
+                * (int(rng.get() * (256 - 217)) + 217)
                 * critical
                 / 255
             )
@@ -58,7 +58,7 @@ class SkillOutcome:
                     + 2
                 )
                 * element_ratio
-                * (int(rng.get() * (256-217)) + 217)
+                * (int(rng.get() * (256 - 217)) + 217)
                 * critical
                 / 255
             )
@@ -75,7 +75,7 @@ class SkillOutcome:
         skill: SkillInfo,
         args: str,
         anim: Animator,
-        rng: rng
+        rng: rng,
     ):
         heal_amount = (1 + int(args)) * 50
         primary.change_health(heal_amount)
@@ -87,8 +87,10 @@ class SkillOutcome:
         skill: SkillInfo,
         args: str,
         anim: Animator,
-        rng: rng
+        rng: rng,
     ):
         effect_label = args[0]
-        secondary.add_effect(effect_label, SkillEffect.get(effect_label)(secondary, anim, args))
+        secondary.add_effect(
+            effect_label, SkillEffect.get(effect_label)(secondary, anim, args)
+        )
         anim.append_log("有异常状态！！！", secondary.is_self)

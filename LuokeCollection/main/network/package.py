@@ -7,7 +7,8 @@ class Pack:
         self.opponent = None
 
     def __str__(self):
-        return f'ready: <{self.ready}>, accept: <{self.accept}>, choice: <{self.choice}>, oppo: <{self.opponent}>'
+        return f"ready: <{self.ready}>, accept: <{self.accept}>, choice: <{self.choice}>, oppo: <{self.opponent}>"
+
 
 class Pets:
     def __init__(self, pets):

@@ -1,3 +1,1 @@
-skill_dictionary = {
-    "爆击枪": 'a eb'
-}
+skill_dictionary = {"爆击枪": "a eb"}

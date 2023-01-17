@@ -286,6 +286,7 @@ class Model:
         if os.path.exists(pet_path):
             return JSON(pet_path, False)
         return None
+
     def get_battle_pets(self):
         return [self.get_battle_pet(i) for i in range(6)]
 
@@ -320,7 +321,13 @@ class Model:
                 )
             )
         scene = self.get_scene()
-        return BattleSystem(pet_array_1, pet_array_2, scene.display_pets, self.client.id, self.client.seed)
+        return BattleSystem(
+            pet_array_1,
+            pet_array_2,
+            scene.display_pets,
+            self.client.id,
+            self.client.seed,
+        )
 
     def client_init(self):
         self.client = Client(self.get_battle_pets())
@@ -340,15 +347,15 @@ class Model:
                     self.opponent_index = obj.opponent
                     reply_args = False, True, None
                 # else:
-                    # reply_args = True, False, None
+                # reply_args = True, False, None
                 if self.opponent_pets is not None and self.battle_ready:
                     reply_args = True, True, None
                 if isinstance(scene, BattlePrepScene):
                     if obj.ready is True:
-                        self.open('battle')
+                        self.open("battle")
                         reply_args = True, True, -1
                 else:
-                    if self.self_action_chosen>-1 and not self.action_sent:
+                    if self.self_action_chosen > -1 and not self.action_sent:
                         reply_args = True, False, self.self_action_chosen
                         self.action_sent = True
                     if obj.ready is True and obj.accept is False:
@@ -369,4 +376,3 @@ class Model:
         scene.timer = 0
         scene.display_pets()
         scene.turn_begun = False
-

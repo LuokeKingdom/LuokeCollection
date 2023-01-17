@@ -100,7 +100,6 @@ class BattleScene(Scene):
                 if not self.system.has_animation():
                     self.model.reset_turn()
 
-    
     def turn_ready(self):
         return self.model.self_action_chosen > -1 and self.model.oppo_action_chosen > -1
 
@@ -109,7 +108,9 @@ class BattleScene(Scene):
 
     def begin_turn(self):
         if not self.system.done:
-            self.system.prepare(self.model.self_action_chosen, self.model.oppo_action_chosen)
+            self.system.prepare(
+                self.model.self_action_chosen, self.model.oppo_action_chosen
+            )
             self.system.act()
             if not self.system.done:
                 self.system.push_anim(

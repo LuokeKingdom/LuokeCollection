@@ -3,6 +3,7 @@ import socket
 from .package import Pack, Pets
 from LuokeCollection.settings.dev import IP, PORT
 
+
 class Client:
     def __init__(self, pets):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -13,15 +14,15 @@ class Client:
 
         if self.id is not None:
             self.send(Pets(pets))
-                
 
     def connect(self):
         try:
             self.client.connect((self.server, self.port))
-            str_id, str_seed = self.client.recv(2048).decode().split(',')
+            str_id, str_seed = self.client.recv(2048).decode().split(",")
             return int(str_id), int(str_seed)
-        except:
-            print("Fail")
+        except Exception as e:
+            print("Connect Fail")
+            print(e)
             return None
 
     def receive(self, bits):
@@ -31,7 +32,9 @@ class Client:
         try:
             self.client.sendall(pickle.dumps(obj))
             return True
-        except:
+        except Exception as e:
+            print("Send Fail")
+            print(e)
             return False
 
     def reply(self, ready, accept, choice, oppo):
@@ -43,5 +46,7 @@ class Client:
         try:
             self.client.sendall(pickle.dumps(p))
             return True
-        except:
+        except Exception as e:
+            print("Reply Fail")
+            print(e)
             return False

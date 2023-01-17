@@ -1,12 +1,12 @@
 import socket
-from _thread import *
+from _thread import start_new_thread
 import pickle
 import random
 
 from LuokeCollection.main.network.package import Pack, Pets
 from LuokeCollection.settings.dev import IP, PORT
 
-server = '192.168.4.56'
+server = "192.168.4.56"
 port = 5555
 server = IP
 port = PORT
@@ -25,15 +25,16 @@ game_rng_seed = 1
 
 def threaded_client(conn: socket.socket, index):
     global game_rng_seed
-    if index==0:
+    if index == 0:
         game_rng_seed = random.choice(range(1, 10000000))
 
     def receive(bits):
-        data = conn.recv(bits) 
+        data = conn.recv(bits)
         if not data:
             return False
         return pickle.loads(data)
-    conn.send(str.encode(str(index) + ',' + str(game_rng_seed)))
+
+    conn.send(str.encode(str(index) + "," + str(game_rng_seed)))
     while 1:
         try:
             reply = Pack()
@@ -49,19 +50,23 @@ def threaded_client(conn: socket.socket, index):
                 pets[index] = data.data
                 status[index].accept = True
             else:
-                if pets[1-index] is not None:
-                    reply.opponent = 1-index
+                if pets[1 - index] is not None:
+                    reply.opponent = 1 - index
                     if data.ready is False and data.accept is True:
-                        reply = Pets(pets[1-index]) 
+                        reply = Pets(pets[1 - index])
                     elif data.ready and data.accept:
                         status[index].ready = True
-                        reply.ready = not not status[1-index].ready
+                        reply.ready = not not status[1 - index].ready
                     elif data.ready is True and data.accept is False:
                         status[index].choice = data.choice
-                    if status[index].choice>-1 and status[1-index].choice>-1 and not sent[index]:
+                    if (
+                        status[index].choice > -1
+                        and status[1 - index].choice > -1
+                        and not sent[index]
+                    ):
                         reply.ready = True
                         reply.accept = False
-                        reply.choice = status[1-index].choice
+                        reply.choice = status[1 - index].choice
                         conn.sendall(pickle.dumps(reply))
                         sent[index] = True
                         continue
@@ -78,11 +83,9 @@ def threaded_client(conn: socket.socket, index):
     count -= 1
     print("connection lost")
 
+
 while 1:
     conn, addr = s.accept()
     start_new_thread(threaded_client, (conn, count))
     count += 1
     print(f"Client <{addr}> connected")
-
-
-
