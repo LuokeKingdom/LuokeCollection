@@ -292,10 +292,8 @@ class Model:
 
     def ready_for_battle(self):
         self.battle_ready = True
-        print("READY")
 
     def get_battle_system(self):
-        print("Start get")
         pet_array_1 = []
         battle_pets = self.get_battle_pets()
         for battle_pet in battle_pets:
@@ -346,7 +344,6 @@ class Model:
             if self.client is None:
                 return
             obj = self.client.receive(2048)
-            # print(obj)
             if not obj:
                 pass
             elif obj.id == 0:
@@ -374,7 +371,6 @@ class Model:
             print(e)
 
     def reset_turn(self):
-        print("RESET")
         scene = self.get_scene()
         self.action_sent = False
         self.self_action_chosen = -1

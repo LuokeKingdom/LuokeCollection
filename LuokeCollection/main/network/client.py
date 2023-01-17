@@ -1,7 +1,6 @@
 import pickle
 import socket
 from LuokeCollection.main.network.package import Pack, Pets
-from LuokeCollection.settings.dev import PORT
 
 
 class Client:

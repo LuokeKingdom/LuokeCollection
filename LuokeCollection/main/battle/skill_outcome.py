@@ -66,7 +66,7 @@ class SkillOutcome:
         secondary.change_health(-damage)
         anim.animate_attack(primary, secondary, damage)
         if critical == 2:
-            print(critical_chance)
+            # print(critical_chance)
             anim.append_log("暴击了！！！", primary.is_self)
 
     def potion(

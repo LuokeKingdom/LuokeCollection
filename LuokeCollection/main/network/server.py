@@ -6,7 +6,7 @@ import random
 from LuokeCollection.main.network.package import Pack, Pets
 from LuokeCollection.settings.dev import PORT
 
-server = 'localhost'
+server = "localhost"
 port = PORT
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

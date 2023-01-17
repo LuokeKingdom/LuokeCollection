@@ -60,7 +60,6 @@ class App:
         elif self.scene is not None:
             self.scene.update(delta_time, mouse_pos, clicked, pressed)
 
-
     def on_scene_change(self):
         if self.scene.background_music is not None:
             self.scene.background_music.play()
