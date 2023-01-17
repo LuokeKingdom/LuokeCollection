@@ -1,13 +1,14 @@
 from .battle_pet import BattlePet
 from .battle_animation import BattleAnimation
 import queue
-import random
 from .action_solver import ActionSolver
 from .animator import Animator
+from .rng import rng
 
 
 class BattleSystem:
-    def __init__(self, pet_array_1, pet_array_2, display_function):
+    def __init__(self, pet_array_1, pet_array_2, display_function, client_id):
+        self.id = client_id
         self.done = False
         self.win = None
         self.anim_queue = queue.Queue()
@@ -15,6 +16,7 @@ class BattleSystem:
         self.curr_anim = [None]
         self.on_log_update = None
         self.animator = Animator(self)
+        self.rng = rng()
         self.display_function = display_function
 
         self.team1 = [
@@ -94,7 +96,7 @@ class BattleSystem:
         pet1, pet2 = self.get_pets()
         pet1_first = pet1.SP > pet2.SP
         if pet1.SP == pet2.SP:
-            pet1_first = random.choice([True, False])
+            pet1_first = self.id == 0
 
         def get_args():
             pet1, pet2 = self.get_pets()
@@ -126,7 +128,7 @@ class BattleSystem:
         return secondary.trigger_pre_effects()
 
     def action(self, primary, secondary, choice):
-        ActionSolver(choice, primary, secondary).solve(self.animator)
+        ActionSolver(choice, primary, secondary).solve(self.animator, self.rng)
         if secondary.health == 0:
             self.done = True
             raise Exception("Battle Finish!!!")

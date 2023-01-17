@@ -1,26 +1,27 @@
 import pickle
 import socket
 from .package import Pack, Pets
+from LuokeCollection.settings.dev import IP, PORT
 
 class Client:
     def __init__(self, pets):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = '192.168.4.56'
-        self.port = 5555
+        self.server = IP
+        self.port = PORT
         self.opponent_pets = None
+        self.id = self.connect()
 
-        if self.connect():
+        if self.id is not None:
             self.send(Pets(pets))
                 
 
     def connect(self):
         try:
             self.client.connect((self.server, self.port))
-            print(self.client.recv(2048).decode())
-            return True
+            return(int(self.client.recv(2048).decode()))
         except:
             print("Fail")
-            return False
+            return None
 
     def receive(self, bits):
         return pickle.loads(self.client.recv(bits))

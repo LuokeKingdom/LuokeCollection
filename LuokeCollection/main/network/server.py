@@ -3,9 +3,12 @@ from _thread import *
 import pickle
 
 from LuokeCollection.main.network.package import Pack, Pets
+from LuokeCollection.settings.dev import IP, PORT
 
 server = '192.168.4.56'
 port = 5555
+server = IP
+port = PORT
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((server, port))
@@ -24,7 +27,7 @@ def threaded_client(conn: socket.socket, index):
         if not data:
             return False
         return pickle.loads(data)
-    conn.send(str.encode("Connected"))
+    conn.send(str.encode(str(index)))
     while 1:
         try:
             reply = Pack()
