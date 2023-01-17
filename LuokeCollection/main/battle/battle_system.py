@@ -7,7 +7,7 @@ from .rng import rng
 
 
 class BattleSystem:
-    def __init__(self, pet_array_1, pet_array_2, display_function, client_id):
+    def __init__(self, pet_array_1, pet_array_2, display_function, client_id, seed):
         self.id = client_id
         self.done = False
         self.win = None
@@ -16,7 +16,7 @@ class BattleSystem:
         self.curr_anim = [None]
         self.on_log_update = None
         self.animator = Animator(self)
-        self.rng = rng()
+        self.rng = rng(seed)
         self.display_function = display_function
 
         self.team1 = [
@@ -96,7 +96,8 @@ class BattleSystem:
         pet1, pet2 = self.get_pets()
         pet1_first = pet1.SP > pet2.SP
         if pet1.SP == pet2.SP:
-            pet1_first = self.id == 0
+            half = self.rng.get() > 0.5
+            pet1_first = half if self.id == 0 else not half
 
         def get_args():
             pet1, pet2 = self.get_pets()

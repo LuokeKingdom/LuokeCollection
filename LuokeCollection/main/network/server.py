@@ -1,6 +1,7 @@
 import socket
 from _thread import *
 import pickle
+import random
 
 from LuokeCollection.main.network.package import Pack, Pets
 from LuokeCollection.settings.dev import IP, PORT
@@ -19,15 +20,20 @@ status = [Pack(), Pack()]
 sent = [False, False]
 
 count = 0
+game_rng_seed = 1
 
 
 def threaded_client(conn: socket.socket, index):
+    global game_rng_seed
+    if index==0:
+        game_rng_seed = random.choice(range(1, 10000000))
+
     def receive(bits):
         data = conn.recv(bits) 
         if not data:
             return False
         return pickle.loads(data)
-    conn.send(str.encode(str(index)))
+    conn.send(str.encode(str(index) + ',' + str(game_rng_seed)))
     while 1:
         try:
             reply = Pack()

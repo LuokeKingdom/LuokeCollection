@@ -320,7 +320,7 @@ class Model:
                 )
             )
         scene = self.get_scene()
-        return BattleSystem(pet_array_1, pet_array_2, scene.display_pets, self.client.id)
+        return BattleSystem(pet_array_1, pet_array_2, scene.display_pets, self.client.id, self.client.seed)
 
     def client_init(self):
         self.client = Client(self.get_battle_pets())

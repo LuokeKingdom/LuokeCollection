@@ -31,7 +31,7 @@ class ActionSolver:
             self.anim.animate_change_pet(self.primary, index - 10)
         elif index - 100 < 6:
             self.skill_outcomes.get(".")(
-                self.primary, self.secondary, None, str(index - 100), animator
+                self.primary, self.secondary, None, str(index - 100), animator, rng
             )
 
     def use_skill(self, skill_index):

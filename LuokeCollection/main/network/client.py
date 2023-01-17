@@ -9,7 +9,7 @@ class Client:
         self.server = IP
         self.port = PORT
         self.opponent_pets = None
-        self.id = self.connect()
+        self.id, self.seed = self.connect()
 
         if self.id is not None:
             self.send(Pets(pets))
@@ -18,7 +18,8 @@ class Client:
     def connect(self):
         try:
             self.client.connect((self.server, self.port))
-            return(int(self.client.recv(2048).decode()))
+            str_id, str_seed = self.client.recv(2048).decode().split(',')
+            return int(str_id), int(str_seed)
         except:
             print("Fail")
             return None
