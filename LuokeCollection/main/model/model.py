@@ -1,6 +1,5 @@
 import copy
 from LuokeCollection.main.battle.battle_system import BattleSystem
-
 from LuokeCollection.main.scene.collection_scene import CollectionScene
 from LuokeCollection.main.scene.battle_prep_scene import BattlePrepScene
 from .sound import Channel
@@ -8,6 +7,7 @@ from ..utils import PetInfo, SkillInfo
 import os
 import json
 import threading
+from _thread import start_new_thread
 from ...settings.dev import IMAGE, JSON, SOUND
 from ..utils import save_file
 from ..network.client import Client
@@ -295,6 +295,7 @@ class Model:
         print("READY")
 
     def get_battle_system(self):
+        print("Start get")
         pet_array_1 = []
         battle_pets = self.get_battle_pets()
         for battle_pet in battle_pets:
@@ -321,6 +322,7 @@ class Model:
                 )
             )
         scene = self.get_scene()
+        print("Before init battle system")
         return BattleSystem(
             pet_array_1,
             pet_array_2,
@@ -331,6 +333,11 @@ class Model:
 
     def client_init(self):
         self.client = Client(self.get_battle_pets())
+        start_new_thread(self.threaded_client, ())
+
+    def threaded_client(self):
+        while 1:
+            self.client_update()
 
     def client_update(self):
         reply_args = None, None, None
