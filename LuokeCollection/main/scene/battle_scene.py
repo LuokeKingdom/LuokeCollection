@@ -84,13 +84,17 @@ class BattleScene(Scene):
             self.done = True
             return
         if self.is_preparing:
+            pet1, pet2 = self.system.get_pets()
             prev = int(self.timer)
             self.timer += delta_time
             curr = int(self.timer)
             if curr > prev:
                 self.TEXTS["timer_display"].change_text(str(self.max_wait_time - curr))
             if self.timer > self.max_wait_time:
-                self.choose_action(0)
+                if pet1.health == 0:
+                    self.choose_action(12)
+                else:
+                    self.choose_action(0)
         elif self.waiting_for_opponent():
             self.TEXTS["timer_display"].change_text("等待对手出招")
         else:
@@ -245,7 +249,6 @@ class BattleScene(Scene):
             # self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y=y - 32, size=18)
             # self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
             # self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
-
         buttons = map(
             lambda x: Button(
                 image=EMPTY,
@@ -255,7 +258,7 @@ class BattleScene(Scene):
                 opacity=0.2,
                 parameter={"factor": 0.3},
                 on_click=(lambda a: lambda: self.choose_action(a))(x),
-                can_hover=(lambda a: self.is_preparing and self.system.team1[a] is not None and self.system.team1[a].health > 0),
+                can_hover=lambda: self.is_preparing and self.system.get_pets()[0].health > 0,
             ),
             range(4),
         )

@@ -109,15 +109,15 @@ class BattleSystem:
 
         try:
             p1, p2, c1, c2 = get_args()
-            if self.preaction(p1, p2):
-                p1, p2, c1, c2 = get_args()
-                self.action(p1, p2, c1)
+            self.preaction(p1, p2)
+            p1, p2, c1, c2 = get_args()
+            self.action(p1, p2, c1)
             p1, p2, c1, c2 = get_args()
             self.postaction(p1, p2)
             p1, p2, c1, c2 = get_args()
-            if self.preaction(p2, p1):
-                p1, p2, c1, c2 = get_args()
-                self.action(p2, p1, c2)
+            self.preaction(p2, p1)
+            p1, p2, c1, c2 = get_args()
+            self.action(p2, p1, c2)
             p1, p2, c1, c2 = get_args()
             self.postaction(p2, p1)
         except Exception as e:
