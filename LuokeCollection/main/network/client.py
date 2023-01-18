@@ -1,14 +1,13 @@
 import pickle
 import socket
 from LuokeCollection.main.network.package import Pack, Pets
+from assets.IP import address
 
 
 class Client:
     def __init__(self, pets):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # ngrok forwarding
-        self.server = "2.tcp.ngrok.io"
-        self.port = 16079
         self.opponent_pets = None
         self.id, self.seed = self.connect()
 
@@ -17,7 +16,7 @@ class Client:
 
     def connect(self):
         try:
-            self.client.connect((self.server, self.port))
+            self.client.connect(address)
             str_id, str_seed = self.client.recv(1024).decode().split(",")
             return int(str_id), int(str_seed)
         except Exception as e:
