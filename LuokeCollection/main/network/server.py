@@ -11,20 +11,34 @@ port = PORT
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((server, port))
-s.listen(2)
+s.listen()
 print("Server started")
-pets = [None, None]
-status = [Pack(), Pack()]
-sent = [False, False]
-
+games = {}
 count = 0
-game_rng_seed = 1
+
+class Game:
+    def __init__(self, seed):
+        self.pets = [None, None]
+        self.status = [Pack(), Pack()]
+        self.sent = [False, False]
+        self.seed = seed
+        self.started = False
 
 
-def threaded_client(conn: socket.socket, index):
-    global game_rng_seed
+def threaded_client(conn: socket.socket, count):
+    game = None
+    index = 0
+    countId = count
+    for k, v in games.items():
+        if not v.started:
+            v.started = True
+            game = v
+            index = 1
+            countId = k
     if index == 0:
         game_rng_seed = random.choice(range(1, 10000000))
+        game = Game(game_rng_seed)
+        games[count] = game 
 
     def receive(bits):
         data = conn.recv(bits)
@@ -32,54 +46,59 @@ def threaded_client(conn: socket.socket, index):
             return False
         return pickle.loads(data)
 
-    conn.send(str.encode(str(index) + "," + str(game_rng_seed)))
+    conn.send(str.encode(str(index) + "," + str(game.seed)))
+    
     while 1:
         try:
+            if games.get(countId) is None:
+                break
             reply = Pack()
             data = receive(1024)
-            if all(sent):
-                sent[0] = False
-                sent[1] = False
-                status[0].choice = -1
-                status[1].choice = -1
+            if all(game.sent):
+                game.sent[0] = False
+                game.sent[1] = False
+                game.status[0].choice = -1
+                game.status[1].choice = -1
             if not data:
                 break
             if data.id == 1:
-                pets[index] = data.data
-                status[index].accept = True
+                game.pets[index] = data.data
+                game.status[index].accept = True
             else:
-                if pets[1 - index] is not None:
+                if game.pets[1 - index] is not None:
                     reply.opponent = 1 - index
                     if data.ready is False and data.accept is True:
-                        reply = Pets(pets[1 - index])
+                        reply = Pets(game.pets[1 - index])
                     elif data.ready and data.accept:
-                        status[index].ready = True
-                        reply.ready = not not status[1 - index].ready
+                        game.status[index].ready = True
+                        reply.ready = game.status[1 - index].ready
                     elif data.ready is True and data.accept is False:
-                        status[index].choice = data.choice
+                        game.status[index].choice = data.choice
                     if (
-                        status[index].choice > -1
-                        and status[1 - index].choice > -1
-                        and not sent[index]
+                        game.status[index].choice > -1
+                        and game.status[1 - index].choice > -1
+                        and not game.sent[index]
                     ):
                         reply.ready = True
                         reply.accept = False
-                        reply.choice = status[1 - index].choice
+                        reply.choice = game.status[1 - index].choice
                         conn.sendall(pickle.dumps(reply))
-                        sent[index] = True
+                        game.sent[index] = True
                         continue
                 else:
                     pass
-            reply.accept = status[index].accept
+            reply.accept = game.status[index].accept
             conn.sendall(pickle.dumps(reply))
         except Exception as e:
             print(e)
             break
+    if games.get(countId) is not None:
+        del games[countId]
+        print(f"ID <{countId}>: connection lost")
+    else:
+        print(f"ID <{countId}>: opponent disconnected")
+
     conn.close()
-    pets[index] = None
-    global count
-    count -= 1
-    print("connection lost")
 
 
 while 1:
