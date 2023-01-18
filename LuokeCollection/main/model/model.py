@@ -342,7 +342,7 @@ class Model:
             self.client = Client(self.get_battle_pets())
         else:
             self.client = BaseClient()
-        if self.IS_LOCAL or not self.client.success():
+        if self.IS_LOCAL or not self.client.success:
             self.IS_LOCAL = True
         start_new_thread(self.threaded_client, ())
 
@@ -360,8 +360,9 @@ class Model:
                 break
 
     def client_update(self):
+        # blocks client thread so animation thread gets most of the computing time
+        time.sleep(0.2)
         if self.IS_LOCAL:
-            time.sleep(0.5)
             if self.client is None and self.opponent_pets is not None:
                 raise Exception("Closing battle!!!")
             if self.opponent_pets is None:
