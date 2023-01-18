@@ -87,9 +87,10 @@ class Button(Container):
         if not super(Button, self).update(mouse_pos, clicked, pressed):
             return
         current_time = time.time()
+        can_hover = self.can_hover is not None and self.can_hover()
         if self.check_collide(mouse_pos):
             self.hovered = True
-            if clicked:
+            if clicked and can_hover:
                 self.click()
         if self.animation is None:
             return

@@ -255,7 +255,7 @@ class BattleScene(Scene):
                 opacity=0.2,
                 parameter={"factor": 0.3},
                 on_click=(lambda a: lambda: self.choose_action(a))(x),
-                can_hover=lambda: self.is_preparing,
+                can_hover=(lambda a: self.is_preparing and self.system.team1[a] is not None and self.system.team1[a].health > 0),
             ),
             range(4),
         )
