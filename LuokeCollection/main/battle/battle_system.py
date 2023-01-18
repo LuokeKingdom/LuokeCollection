@@ -124,7 +124,7 @@ class BattleSystem:
             print(e)
 
     def preaction(self, primary, secondary):
-        can_move = secondary.trigger_pre_effects()
+        can_move = primary.trigger_pre_effects()
         self.check_done()
         return can_move
 
@@ -145,6 +145,7 @@ class BattleSystem:
             self.done = True
             self.win = True
             raise Exception("Battle Finish!!!")
+        
 
 
     def push_anim(self, name, **kwargs):
