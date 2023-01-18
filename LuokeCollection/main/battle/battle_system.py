@@ -94,10 +94,15 @@ class BattleSystem:
 
     def act(self):
         pet1, pet2 = self.get_pets()
-        pet1_first = pet1.SP > pet2.SP
-        if pet1.SP == pet2.SP:
-            half = self.rng.get() > 0.5
-            pet1_first = half if self.id == 0 else not half
+        if pet1.health == 0:
+            pet1_first = True
+        elif pet2.health == 0:
+            pet1_first = False
+        else:
+            pet1_first = pet1.SP > pet2.SP
+            if pet1.SP == pet2.SP:
+                half = self.rng.get() > 0.5
+                pet1_first = half if self.id == 0 else not half
 
         def get_args():
             pet1, pet2 = self.get_pets()
