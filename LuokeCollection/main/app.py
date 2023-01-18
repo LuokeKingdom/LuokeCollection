@@ -5,6 +5,8 @@ from .model.model import Model
 class App:
     def __init__(self, screen):
         self.scene = None
+        self.next_scene = None
+        self.next_scene_kwargs = None
         self.pop_up = None
         self.stack = []
         self.screen = screen
@@ -21,10 +23,12 @@ class App:
         pass
 
     def push_scene(self, scene_name, **kwargs):
-        self.scene = self.create_scene(scene_name)
-        self.on_scene_change()
-        self.scene.side_effect(**kwargs)
-        self.stack.append(self.scene)
+        self.next_scene = self.create_scene(scene_name)
+        self.next_scene_kwargs = kwargs
+
+    def set_scene(self, scene_name, **kwargs):
+        self.stack.clear()
+        self.push_scene(scene_name, **kwargs)
 
     def pop_scene(self):
         self.stack.pop()
@@ -48,9 +52,16 @@ class App:
             self.scene.display(mouse_pos, clicked)
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
+        if self.next_scene is not None:
+            self.scene = self.next_scene
+            self.on_scene_change()
+            self.scene.side_effect(**self.next_scene_kwargs)
+            self.stack.append(self.scene)
+            self.next_scene = None
+            self.next_scene_kwargs = None
         if self.pop_up is not None:
             self.pop_up.update(delta_time, mouse_pos, clicked, pressed)
-        else:
+        elif self.scene is not None:
             self.scene.update(delta_time, mouse_pos, clicked, pressed)
 
     def on_scene_change(self):

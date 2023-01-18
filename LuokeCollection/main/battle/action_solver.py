@@ -2,6 +2,7 @@ from LuokeCollection.main.utils import str2element
 from .skill_dictionary import skill_dictionary
 from .skill_outcome import SkillOutcome
 from .animator import Animator
+from .rng import rng
 
 
 class ActionSolver:
@@ -14,11 +15,15 @@ class ActionSolver:
             for k, v in SkillOutcome.labels2function.items()
         }
         self.anim = None
+        self.rng = None
 
-    def solve(self, animator: Animator):
+    def solve(self, animator: Animator, rng: rng):
         self.anim = animator
+        self.rng = rng
         index = self.action_index
         if index < 4:
+            if self.primary.health == 0 or self.secondary.health == 0:
+                return
             self.use_skill(index)
         elif index - 10 < 6:
             if self.primary.is_self:
@@ -28,7 +33,7 @@ class ActionSolver:
             self.anim.animate_change_pet(self.primary, index - 10)
         elif index - 100 < 6:
             self.skill_outcomes.get(".")(
-                self.primary, self.secondary, None, str(index - 100), animator
+                self.primary, self.secondary, None, str(index - 100), animator, rng
             )
 
     def use_skill(self, skill_index):
@@ -43,5 +48,5 @@ class ActionSolver:
             identifier = label[0]
             args = label[1:]
             self.skill_outcomes.get(identifier)(
-                self.primary, self.secondary, skill, args, self.anim
+                self.primary, self.secondary, skill, args, self.anim, self.rng
             )

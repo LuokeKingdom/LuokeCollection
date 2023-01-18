@@ -52,7 +52,6 @@ class SelectRectScene(Scene):
 
     def display(self, mouse_pos, clicked):
         super().display(mouse_pos, clicked)
-        print(self.rect)
 
         if mouse_pos.x < self.rect_side // 2:
             if mouse_pos.y < self.rect_side // 2:  # when mouse_pos is at top left
@@ -134,7 +133,6 @@ class SelectRectScene(Scene):
 
     def save_rect(self):
         if self.rect is not None:
-            print(self.rect)
             self.model.save_rect(*self.rect)
             self.model.saved_sound.play()
             self.TEXTS["warning"].color = (100, 200, 100)

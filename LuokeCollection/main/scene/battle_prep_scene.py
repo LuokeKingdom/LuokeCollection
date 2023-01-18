@@ -52,7 +52,7 @@ class BattlePrepScene(Scene):
         )
         self.BUTTONS["battle"] = Button(
             image=IMAGE("battle.png"),
-            on_click=lambda: self.model.open("battle"),
+            on_click=lambda: self.model.ready_for_battle(),
             x=1100,
             y=600,
             width=100,
@@ -66,6 +66,7 @@ class BattlePrepScene(Scene):
     def side_effect(self):
         super().side_effect()
         self.model.set_battle_prep(0)
+        self.model.client_init()
 
     def init_pets(self):
         def get_on_click(i):
@@ -280,3 +281,7 @@ class BattlePrepScene(Scene):
         self.TEXTS[f"skill_{index}_effect_1"].hide()
         self.TEXTS[f"skill_{index}_effect_2"].hide()
         self.TEXTS[f"skill_{index}_effect_3"].hide()
+
+    def update(self, delta_time, mouse_pos, clicked, pressed):
+        super().update(delta_time, mouse_pos, clicked, pressed)
+        # self.model.client_update()

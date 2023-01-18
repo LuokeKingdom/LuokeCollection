@@ -1,6 +1,5 @@
 import copy
 from LuokeCollection.main.battle.battle_system import BattleSystem
-
 from LuokeCollection.main.scene.collection_scene import CollectionScene
 from LuokeCollection.main.scene.battle_prep_scene import BattlePrepScene
 from .sound import Channel
@@ -8,8 +7,11 @@ from ..utils import PetInfo, SkillInfo
 import os
 import json
 import threading
+from _thread import start_new_thread
 from ...settings.dev import IMAGE, JSON, SOUND
 from ..utils import save_file
+from ..network.client import Client, BaseClient
+import time
 
 import pygame
 from pygame.locals import *  # noqa
@@ -18,9 +20,18 @@ from pygame.locals import *  # noqa
 class Model:
     PETS = {}
     DATA = None
+    IS_LOCAL = True
 
     def __init__(self, app):
         self.app = app
+        self.client = None
+        self.opponent_pets = None
+        self.opponent_index = None
+        self.battle_ready = False
+        self.self_action_chosen = -1
+        self.oppo_action_chosen = -1
+        self.action_sent = False
+
         self.load_pets()
         self.load_current_data()
         self.error_sound = SOUND("click-error.wav", Channel.GAME)
@@ -61,6 +72,9 @@ class Model:
 
     def get_scene(self):
         return self.app.scene
+
+    def set_scene(self, name, **kwargs):
+        self.app.set_scene(name, **kwargs)
 
     def load_pets(self):
         for i in range(201):
@@ -278,10 +292,20 @@ class Model:
             return JSON(pet_path, False)
         return None
 
+    def get_battle_pets(self):
+        return [self.get_battle_pet(i) for i in range(6)]
+
+    def ready_for_battle(self):
+        if self.IS_LOCAL:
+            self.client_init()
+            self.open("battle")
+        else:
+            self.battle_ready = True
+
     def get_battle_system(self):
         pet_array_1 = []
-        for i in range(6):
-            battle_pet = self.get_battle_pet(i)
+        battle_pets = self.get_battle_pets()
+        for battle_pet in battle_pets:
             if battle_pet is None:
                 pet_array_1.append(None)
                 continue
@@ -293,10 +317,9 @@ class Model:
                 )
             )
         pet_array_2 = []
-        for i in range(6):
-            battle_pet = self.get_battle_pet(i)
+        for battle_pet in self.opponent_pets:
             if battle_pet is None:
-                pet_array_1.append(None)
+                pet_array_2.append(None)
                 continue
             pet_array_2.append(
                 (
@@ -306,5 +329,81 @@ class Model:
                 )
             )
         scene = self.get_scene()
+        return BattleSystem(
+            pet_array_1,
+            pet_array_2,
+            scene.display_pets,
+            self.client.id,
+            self.client.seed,
+        )
 
-        return BattleSystem(pet_array_1, pet_array_2, scene.display_pets)
+    def client_init(self):
+        if not self.IS_LOCAL:
+            self.client = Client(self.get_battle_pets())
+        else:
+            self.client = BaseClient()
+        if self.IS_LOCAL or not self.client.success:
+            self.IS_LOCAL = True
+        start_new_thread(self.threaded_client, ())
+
+    def threaded_client(self):
+        while 1:
+            try:
+                self.client_update()
+            except Exception as e:
+                print(e)
+                self.client = None
+                self.opponent_pets = None
+                self.opponent_index = None
+                self.battle_ready = False
+                self.set_scene("init")
+                break
+
+    def client_update(self):
+        # blocks client thread so animation thread gets most of the computing time
+        time.sleep(0.2)
+        if self.IS_LOCAL:
+            if self.client is None and self.opponent_pets is not None:
+                raise Exception("Closing battle!!!")
+            if self.opponent_pets is None:
+                self.opponent_pets = self.get_battle_pets()
+            if self.oppo_action_chosen < 0:
+                self.oppo_action_chosen = 101
+            return
+
+        reply_args = None, None, None
+        scene = self.get_scene()
+        if self.client is None:
+            return
+        obj = self.client.receive(1024)
+        if not obj:
+            pass
+        elif obj.id == 0:
+            if obj.opponent is not None and self.opponent_pets is None:
+                self.opponent_index = obj.opponent
+                reply_args = False, True, None
+            if self.opponent_pets is not None and self.battle_ready:
+                reply_args = True, True, None
+            if isinstance(scene, BattlePrepScene):
+                if obj.ready is True:
+                    self.open("battle")
+                    reply_args = True, True, -1
+            else:
+                if self.self_action_chosen > -1 and not self.action_sent:
+                    reply_args = True, False, self.self_action_chosen
+                    self.action_sent = True
+                if obj.ready is True and obj.accept is False:
+                    self.oppo_action_chosen = obj.choice
+        else:
+            self.opponent_pets = obj.data
+        self.client.reply(*reply_args, self.opponent_index)
+
+    def reset_turn(self):
+        scene = self.get_scene()
+        self.action_sent = False
+        self.self_action_chosen = -1
+        self.oppo_action_chosen = -1
+        scene.is_preparing = True
+        scene.timer = 0
+        scene.display_pets()
+        scene.turn_begun = False

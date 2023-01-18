@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "luokecollection"
-version = "2.2.0"
+version = "2.3.3"
 description = ""
 authors = ["Ruoqi Huang <huangruoqi374@gmail.com>"]
 

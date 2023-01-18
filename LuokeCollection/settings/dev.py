@@ -6,6 +6,7 @@ from ..main.model.sound import Sound
 
 WIDTH = 1239
 HEIGHT = 826
+PORT = 5050
 
 
 def IMAGE(name, relative=True):

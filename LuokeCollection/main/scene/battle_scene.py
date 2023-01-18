@@ -19,9 +19,11 @@ class BattleScene(Scene):
             screen, model, "skill_temp.png", *args, **kwargs
         )
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
-        self.BUTTONS["pop"] = Button(
-            text="X", x=1000, y=100, on_click=lambda: model.close()
-        )
+
+        def x_on_click():
+            self.model.client = None
+
+        self.BUTTONS["pop"] = Button(text="X", x=1000, y=100, on_click=x_on_click)
         self.logs = []
 
         self.skill_pos_dict = {}
@@ -39,6 +41,7 @@ class BattleScene(Scene):
         self.timer = 0
         self.max_wait_time = 11
         self.done = False
+        self.turn_begun = False
 
     def side_effect(self):
         super().side_effect()
@@ -66,6 +69,10 @@ class BattleScene(Scene):
 
     def update(self, delta_time, mouse_pos, clicked, pressed):
         super().update(delta_time, mouse_pos, clicked, pressed)
+        # self.model.client_update()
+        if self.turn_ready() and not self.turn_begun:
+            self.turn_begun = True
+            self.begin_turn()
         if self.done:
             self.TEXTS["timer_display"].change_text("")
             if self.system.has_animation():
@@ -79,31 +86,46 @@ class BattleScene(Scene):
             self.done = True
             return
         if self.is_preparing:
+            pet1, pet2 = self.system.get_pets()
             prev = int(self.timer)
             self.timer += delta_time
             curr = int(self.timer)
             if curr > prev:
                 self.TEXTS["timer_display"].change_text(str(self.max_wait_time - curr))
             if self.timer > self.max_wait_time:
-                self.choose_action(0)
+                if pet1.health == 0:
+                    self.choose_action(12)
+                else:
+                    self.choose_action(0)
+        elif self.waiting_for_opponent():
+            self.TEXTS["timer_display"].change_text("等待对手出招")
         else:
             self.TEXTS["timer_display"].change_text("")
             if self.system.has_animation():
                 self.system.update_animation(delta_time)
-            else:
-                self.is_preparing = True
-                self.timer = 0
-                self.display_pets()
+                if not self.system.has_animation():
+                    self.model.reset_turn()
 
-    def choose_action(self, i):
-        if self.is_preparing and not self.system.done:
-            self.is_preparing = False
-            self.system.prepare(i, 0)
+    def turn_ready(self):
+        return self.model.self_action_chosen > -1 and self.model.oppo_action_chosen > -1
+
+    def waiting_for_opponent(self):
+        return self.model.self_action_chosen > -1 and self.model.oppo_action_chosen < 0
+
+    def begin_turn(self):
+        if not self.system.done:
+            self.system.prepare(
+                self.model.self_action_chosen, self.model.oppo_action_chosen
+            )
             self.system.act()
             if not self.system.done:
                 self.system.push_anim(
                     "text", text="准备阶段", display=self.TEXTS["hint_display"], interval=1
                 ).next_anim()
+
+    def choose_action(self, i):
+        self.is_preparing = False
+        self.model.self_action_chosen = i
 
     def display_pets(self):
         pet1, pet2 = self.system.get_pets()
@@ -229,7 +251,6 @@ class BattleScene(Scene):
             # self.TEXTS[f"skill_{i}_effect_1"] = Text("", x=x - 82, y=y - 32, size=18)
             # self.TEXTS[f"skill_{i}_effect_2"] = Text("", x=x - 82, y=y - 8, size=18)
             # self.TEXTS[f"skill_{i}_effect_3"] = Text("", x=x - 82, y=y + 16, size=18)
-
         buttons = map(
             lambda x: Button(
                 image=EMPTY,
@@ -239,7 +260,8 @@ class BattleScene(Scene):
                 opacity=0.2,
                 parameter={"factor": 0.3},
                 on_click=(lambda a: lambda: self.choose_action(a))(x),
-                can_hover=lambda: self.is_preparing,
+                can_hover=lambda: self.is_preparing
+                and self.system.get_pets()[0].health > 0,
             ),
             range(4),
         )
@@ -362,7 +384,10 @@ class BattleScene(Scene):
             x, y = 334 + i * 120, 750
             self.options_pos_dict[i] = (x, y)
             self.LAYERS[5][f"option_{i}"] = Button(
-                text=str(i), x=x, y=y, can_hover=lambda: self.is_preparing
+                text="+" + str(i * 50 + 50),
+                x=x,
+                y=y,
+                can_hover=lambda: self.is_preparing,
             )
             self.LAYERS[5][f"option_{i}"].hide()
 
@@ -389,12 +414,22 @@ class BattleScene(Scene):
         for i in range(6):
             x, y = self.options_pos_dict[i]
             self.LAYERS[5][f"option_{i}"].show()
-            self.LAYERS[5][f"option_{i}"].set_image(
-                IMAGE("white.png"), width=100, height=100
-            ).set_pos(x, y)
-            self.LAYERS[5][f"option_{i}"].on_click = (
-                lambda a: lambda: self.choose_action(a)
-            )(i + 10)
+            pet = self.system.team1[i]
+            if pet is None:
+                self.LAYERS[5][f"option_{i}"].set_image(
+                    EMPTY, width=100, height=100
+                ).set_pos(x, y)
+                self.LAYERS[5][f"option_{i}"].can_hover = lambda: False
+            else:
+                self.LAYERS[5][f"option_{i}"].set_image(
+                    self.model.pet_rects[pet.info.number], width=100, height=100
+                ).set_pos(x, y)
+                self.LAYERS[5][f"option_{i}"].on_click = (
+                    lambda a: lambda: self.choose_action(a)
+                )(i + 10)
+                self.LAYERS[5][f"option_{i}"].can_hover = (
+                    lambda a: lambda: self.system.team1[a].health > 0
+                )(i)
 
     def potion_menu(self):
         for i in range(4):

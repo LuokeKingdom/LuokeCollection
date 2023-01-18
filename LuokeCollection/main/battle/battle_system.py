@@ -1,13 +1,14 @@
 from .battle_pet import BattlePet
 from .battle_animation import BattleAnimation
 import queue
-import random
 from .action_solver import ActionSolver
 from .animator import Animator
+from .rng import rng
 
 
 class BattleSystem:
-    def __init__(self, pet_array_1, pet_array_2, display_function):
+    def __init__(self, pet_array_1, pet_array_2, display_function, client_id, seed):
+        self.id = client_id
         self.done = False
         self.win = None
         self.anim_queue = queue.Queue()
@@ -15,6 +16,7 @@ class BattleSystem:
         self.curr_anim = [None]
         self.on_log_update = None
         self.animator = Animator(self)
+        self.rng = rng(seed)
         self.display_function = display_function
 
         self.team1 = [
@@ -92,9 +94,15 @@ class BattleSystem:
 
     def act(self):
         pet1, pet2 = self.get_pets()
-        pet1_first = pet1.SP > pet2.SP
-        if pet1.SP == pet2.SP:
-            pet1_first = random.choice([True, False])
+        if pet1.health == 0:
+            pet1_first = True
+        elif pet2.health == 0:
+            pet1_first = False
+        else:
+            pet1_first = pet1.SP > pet2.SP
+            if pet1.SP == pet2.SP:
+                half = self.rng.get() > 0.5
+                pet1_first = half if self.id == 0 else not half
 
         def get_args():
             pet1, pet2 = self.get_pets()
@@ -106,33 +114,42 @@ class BattleSystem:
 
         try:
             p1, p2, c1, c2 = get_args()
-            if self.preaction(p1, p2):
-                p1, p2, c1, c2 = get_args()
-                self.action(p1, p2, c1)
+            self.preaction(p1, p2)
+            p1, p2, c1, c2 = get_args()
+            self.action(p1, p2, c1)
             p1, p2, c1, c2 = get_args()
             self.postaction(p1, p2)
             p1, p2, c1, c2 = get_args()
-            if self.preaction(p2, p1):
-                p1, p2, c1, c2 = get_args()
-                self.action(p2, p1, c2)
+            self.preaction(p2, p1)
+            p1, p2, c1, c2 = get_args()
+            self.action(p2, p1, c2)
             p1, p2, c1, c2 = get_args()
             self.postaction(p2, p1)
         except Exception as e:
             print(e)
-            pet1, pet2 = self.get_pets()
-            self.win = pet1.health != 0
 
     def preaction(self, primary, secondary):
-        return secondary.trigger_pre_effects()
+        can_move = primary.trigger_pre_effects()
+        self.check_done()
+        return can_move
 
     def action(self, primary, secondary, choice):
-        ActionSolver(choice, primary, secondary).solve(self.animator)
-        if secondary.health == 0:
-            self.done = True
-            raise Exception("Battle Finish!!!")
+        ActionSolver(choice, primary, secondary).solve(self.animator, self.rng)
+        self.check_done()
 
     def postaction(self, primary, secondary):
         secondary.trigger_post_effects()
+        self.check_done()
+
+    def check_done(self):
+        if all([i is None or i.health == 0 for i in self.team1]):
+            self.done = True
+            self.win = False
+            raise Exception("Battle Finish!!!")
+        if all([i is None or i.health == 0 for i in self.team2]):
+            self.done = True
+            self.win = True
+            raise Exception("Battle Finish!!!")
 
     def push_anim(self, name, **kwargs):
         self.temp_anim.append(BattleAnimation.get(name, **kwargs))
