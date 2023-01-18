@@ -298,7 +298,7 @@ class Model:
     def ready_for_battle(self):
         if self.IS_LOCAL:
             self.client_init()
-            self.open('battle')
+            self.open("battle")
         else:
             self.battle_ready = True
 
@@ -356,7 +356,7 @@ class Model:
                 self.opponent_pets = None
                 self.opponent_index = None
                 self.battle_ready = False
-                self.set_scene('init')
+                self.set_scene("init")
                 break
 
     def client_update(self):
@@ -370,7 +370,6 @@ class Model:
             if self.oppo_action_chosen < 0:
                 self.oppo_action_chosen = 101
             return
-            
 
         reply_args = None, None, None
         scene = self.get_scene()

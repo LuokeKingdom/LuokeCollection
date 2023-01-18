@@ -19,11 +19,11 @@ class BattleScene(Scene):
             screen, model, "skill_temp.png", *args, **kwargs
         )
         self.background_music = SOUND("castle.wav", Channel.BACKGROUND)
+
         def x_on_click():
             self.model.client = None
-        self.BUTTONS["pop"] = Button(
-            text="X", x=1000, y=100, on_click=x_on_click
-        )
+
+        self.BUTTONS["pop"] = Button(text="X", x=1000, y=100, on_click=x_on_click)
         self.logs = []
 
         self.skill_pos_dict = {}

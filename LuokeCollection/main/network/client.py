@@ -3,12 +3,14 @@ import socket
 from LuokeCollection.main.network.package import Pack, Pets
 from assets.IP import address
 
+
 class BaseClient:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # ngrok forwarding
         self.opponent_pets = None
         self.id, self.seed = 0, 10
+
 
 class Client(BaseClient):
     def __init__(self, pets):

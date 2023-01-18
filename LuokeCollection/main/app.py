@@ -25,7 +25,7 @@ class App:
     def push_scene(self, scene_name, **kwargs):
         self.next_scene = self.create_scene(scene_name)
         self.next_scene_kwargs = kwargs
-    
+
     def set_scene(self, scene_name, **kwargs):
         self.stack.clear()
         self.push_scene(scene_name, **kwargs)

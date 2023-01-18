@@ -16,6 +16,7 @@ print("Server started")
 games = {}
 count = 0
 
+
 class Game:
     def __init__(self, seed):
         self.pets = [None, None]
@@ -38,7 +39,7 @@ def threaded_client(conn: socket.socket, count):
     if index == 0:
         game_rng_seed = random.choice(range(1, 10000000))
         game = Game(game_rng_seed)
-        games[count] = game 
+        games[count] = game
 
     def receive(bits):
         data = conn.recv(bits)
@@ -47,7 +48,7 @@ def threaded_client(conn: socket.socket, count):
         return pickle.loads(data)
 
     conn.send(str.encode(str(index) + "," + str(game.seed)))
-    
+
     while 1:
         try:
             if games.get(countId) is None:
