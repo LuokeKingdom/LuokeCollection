@@ -258,7 +258,8 @@ class BattleScene(Scene):
                 opacity=0.2,
                 parameter={"factor": 0.3},
                 on_click=(lambda a: lambda: self.choose_action(a))(x),
-                can_hover=lambda: self.is_preparing and self.system.get_pets()[0].health > 0,
+                can_hover=lambda: self.is_preparing
+                and self.system.get_pets()[0].health > 0,
             ),
             range(4),
         )
@@ -381,7 +382,10 @@ class BattleScene(Scene):
             x, y = 334 + i * 120, 750
             self.options_pos_dict[i] = (x, y)
             self.LAYERS[5][f"option_{i}"] = Button(
-                text="+"+str(i*50+50), x=x, y=y, can_hover=lambda: self.is_preparing
+                text="+" + str(i * 50 + 50),
+                x=x,
+                y=y,
+                can_hover=lambda: self.is_preparing,
             )
             self.LAYERS[5][f"option_{i}"].hide()
 
@@ -421,7 +425,9 @@ class BattleScene(Scene):
                 self.LAYERS[5][f"option_{i}"].on_click = (
                     lambda a: lambda: self.choose_action(a)
                 )(i + 10)
-                self.LAYERS[5][f"option_{i}"].can_hover = (lambda a: lambda:self.system.team1[a].health > 0)(i)
+                self.LAYERS[5][f"option_{i}"].can_hover = (
+                    lambda a: lambda: self.system.team1[a].health > 0
+                )(i)
 
     def potion_menu(self):
         for i in range(4):

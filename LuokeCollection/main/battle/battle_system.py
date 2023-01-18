@@ -145,8 +145,6 @@ class BattleSystem:
             self.done = True
             self.win = True
             raise Exception("Battle Finish!!!")
-        
-
 
     def push_anim(self, name, **kwargs):
         self.temp_anim.append(BattleAnimation.get(name, **kwargs))
