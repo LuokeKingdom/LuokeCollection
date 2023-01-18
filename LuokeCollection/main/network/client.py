@@ -7,8 +7,8 @@ class Client:
     def __init__(self, pets):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # ngrok forwarding
-        self.server = "0.tcp.ngrok.io"
-        self.port = 19173
+        self.server = "2.tcp.ngrok.io"
+        self.port = 16079
         self.opponent_pets = None
         self.id, self.seed = self.connect()
 

@@ -255,7 +255,7 @@ class BattleScene(Scene):
                 opacity=0.2,
                 parameter={"factor": 0.3},
                 on_click=(lambda a: lambda: self.choose_action(a))(x),
-                can_hover=(lambda a: self.is_preparing and self.system.team1[a] is not None and self.system.team1[a].health > 0),
+                can_hover=lambda: self.is_preparing,
             ),
             range(4),
         )
@@ -378,7 +378,7 @@ class BattleScene(Scene):
             x, y = 334 + i * 120, 750
             self.options_pos_dict[i] = (x, y)
             self.LAYERS[5][f"option_{i}"] = Button(
-                text=str(i), x=x, y=y, can_hover=lambda: self.is_preparing
+                text="+"+str(i*50+50), x=x, y=y, can_hover=lambda: self.is_preparing
             )
             self.LAYERS[5][f"option_{i}"].hide()
 
@@ -405,12 +405,20 @@ class BattleScene(Scene):
         for i in range(6):
             x, y = self.options_pos_dict[i]
             self.LAYERS[5][f"option_{i}"].show()
-            self.LAYERS[5][f"option_{i}"].set_image(
-                IMAGE("white.png"), width=100, height=100
-            ).set_pos(x, y)
-            self.LAYERS[5][f"option_{i}"].on_click = (
-                lambda a: lambda: self.choose_action(a)
-            )(i + 10)
+            pet = self.system.team1[i]
+            if pet is None:
+                self.LAYERS[5][f"option_{i}"].set_image(
+                    EMPTY, width=100, height=100
+                ).set_pos(x, y)
+                self.LAYERS[5][f"option_{i}"].can_hover = lambda: False
+            else:
+                self.LAYERS[5][f"option_{i}"].set_image(
+                    self.model.pet_rects[pet.info.number], width=100, height=100
+                ).set_pos(x, y)
+                self.LAYERS[5][f"option_{i}"].on_click = (
+                    lambda a: lambda: self.choose_action(a)
+                )(i + 10)
+                self.LAYERS[5][f"option_{i}"].can_hover = (lambda a: lambda:self.system.team1[a].health > 0)(i)
 
     def potion_menu(self):
         for i in range(4):
