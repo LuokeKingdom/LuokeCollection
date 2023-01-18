@@ -22,6 +22,8 @@ class ActionSolver:
         self.rng = rng
         index = self.action_index
         if index < 4:
+            if self.primary.health == 0 or self.secondary.health == 0:
+                return
             self.use_skill(index)
         elif index - 10 < 6:
             if self.primary.is_self:

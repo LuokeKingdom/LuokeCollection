@@ -109,33 +109,42 @@ class BattleSystem:
 
         try:
             p1, p2, c1, c2 = get_args()
-            if self.preaction(p1, p2):
-                p1, p2, c1, c2 = get_args()
-                self.action(p1, p2, c1)
+            self.preaction(p1, p2)
+            p1, p2, c1, c2 = get_args()
+            self.action(p1, p2, c1)
             p1, p2, c1, c2 = get_args()
             self.postaction(p1, p2)
             p1, p2, c1, c2 = get_args()
-            if self.preaction(p2, p1):
-                p1, p2, c1, c2 = get_args()
-                self.action(p2, p1, c2)
+            self.preaction(p2, p1)
+            p1, p2, c1, c2 = get_args()
+            self.action(p2, p1, c2)
             p1, p2, c1, c2 = get_args()
             self.postaction(p2, p1)
         except Exception as e:
             print(e)
-            pet1, pet2 = self.get_pets()
-            self.win = pet1.health != 0
 
     def preaction(self, primary, secondary):
-        return secondary.trigger_pre_effects()
+        can_move = primary.trigger_pre_effects()
+        self.check_done()
+        return can_move
 
     def action(self, primary, secondary, choice):
         ActionSolver(choice, primary, secondary).solve(self.animator, self.rng)
-        if secondary.health == 0:
-            self.done = True
-            raise Exception("Battle Finish!!!")
+        self.check_done()
 
     def postaction(self, primary, secondary):
         secondary.trigger_post_effects()
+        self.check_done()
+
+    def check_done(self):
+        if all([i is None or i.health == 0 for i in self.team1]):
+            self.done = True
+            self.win = False
+            raise Exception("Battle Finish!!!")
+        if all([i is None or i.health == 0 for i in self.team2]):
+            self.done = True
+            self.win = True
+            raise Exception("Battle Finish!!!")
 
     def push_anim(self, name, **kwargs):
         self.temp_anim.append(BattleAnimation.get(name, **kwargs))
