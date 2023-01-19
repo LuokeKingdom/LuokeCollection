@@ -43,7 +43,9 @@ class ActionSolver:
         skill_element = str2element(skill.type)
         if skill_element:
             pass
-        labels = skill_dictionary.get(skill.name, "a").split(" ")
+        labels = skill_dictionary.get(skill.name,"").split(" ")
+        if len(labels)==0:
+            raise Exception("Skill not found in dictionary")
 
         accuracy_rate = int(labels[0])
         skill_arg = skill

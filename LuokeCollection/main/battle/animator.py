@@ -137,19 +137,22 @@ class Animator:
         self.append_log(f"<{pet.info.name}>睡着了", pet.is_self)
 
     def animate_effect(self, primary, secondary, effect):
-        scale_data, rev_data = self.get_scale_data(
+        pos_data, rev_data = self.get_position_data(
             [
-                (0, 0),
-                (0.1, 0.05),
-                (0.2, 0),
-                (0.3, -0.05),
-                (0.4, 0)
+                (0, (0, 0)),
+                (0.1, (10, 0)),
+                (0.2, (0, 0)),
+                (0.3, (-10, 0)),
+                (0.4, (0, 0)),
+                (0.5, (10, 0)),
+                (0.6, (0, 0)),
+                (0.7, (-10, 0)),
+                (0.8, (0, 0))
             ]
-        )
+        , secondary.is_self)
         display = secondary.sprite_display
         # effect animation
-        self.push_anim("scale", data=scale_data, display=display).next_anim()
-        self.push_anim("scale", data=rev_data, display=display).next_anim()
+        self.push_anim("position", data=pos_data, display=display).next_anim()
         
 
     def animate_buff(self, pet, stat_label):

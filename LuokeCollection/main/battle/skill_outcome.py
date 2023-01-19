@@ -126,13 +126,15 @@ class SkillOutcome:
         accuracy_rate = int(args[1:3])
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
             effect = SkillEffect.get(effect_label)(pet1, anim, args)
+            if skill is not None:
+                anim.animate_move(pet2)
             if effect.immuned:
                 anim.append_log(f"免疫了<{str('异常')}>", pet1.is_self)
             else:
                 anim.animate_effect(pet2, pet1, effect)
                 pet1.add_effect(effect_label, effect)
                 if effect_label=='b':
-                    SkillOutcome.debuff(pet2, pet1, None, 'AD2-', anim, rng)
+                    SkillOutcome.debuff(pet2, pet1, None, '00AD2-', anim, rng, missed)
 
     def buff(
         primary: BattlePet,
@@ -174,7 +176,8 @@ class SkillOutcome:
         pet1 = primary if is_primary else secondary
         pet2 = primary if not is_primary else secondary
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
-            anim.animate_move(pet2)
+            if skill is not None:
+                anim.animate_move(pet2)
             anim.animate_debuff(pet1, stat_label)
             pet1.status.stat_buffs.get(stat_label).change(-change)
             anim.append_log(f"的<{stat_label}>降低了", pet1.is_self)
