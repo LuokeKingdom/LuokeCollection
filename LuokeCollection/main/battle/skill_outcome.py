@@ -25,7 +25,7 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
-        critical_ratio = 0
+        critical_ratio = 1
     ):
         skill_element = Element(skill.type[:2])
         defender_e1, defender_e2 = Element(secondary.info.element), Element(
@@ -33,7 +33,6 @@ class SkillOutcome:
         )
         element_ratio = skill_element.attack(defender_e1, defender_e2)
         critical_chance = 0.5 * primary.status.CR.factor * critical_ratio
-        print(critical_chance)
         critical = 2 if rng.get() < critical_chance else 1
         skill_type = skill.type[2:]
         if skill_type == "变化":
@@ -54,7 +53,6 @@ class SkillOutcome:
                 * critical
                 / 255
             )
-            print("物理")
         elif skill_type == "魔法":
             damage = int(
                 (
@@ -70,12 +68,10 @@ class SkillOutcome:
                 * critical
                 / 255
             )
-            print("魔法")
 
         secondary.change_health(-damage)
         anim.animate_attack(primary, secondary, damage)
         if critical == 2:
-            # print(critical_chance)
             anim.append_log("暴击了！！！", primary.is_self)
 
         return damage
@@ -101,14 +97,19 @@ class SkillOutcome:
         rng: rng,
     ):
         effect_label = args[0]
+        is_primary = args[-1]=='-'
+        pet1 = primary if is_primary else secondary
+        pet2 = primary if not is_primary else secondary
+
         accuracy_rate = int(args[1:3])
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
-            secondary.add_effect(
-                effect_label, SkillEffect.get(effect_label)(secondary, anim, args)
-            )
-            if effect_label=='b':
-                SkillOutcome.debuff(primary, secondary, None, 'AD2-', anim, rng)
-            anim.append_log("有异常状态！！！", secondary.is_self)
+            effect = SkillEffect.get(effect_label)(pet1, anim, args)
+            if effect.immuned:
+                anim.append_log(f"免疫了<{str('异常')}>", pet1.is_self)
+            else:
+                pet1.add_effect(effect_label, effect)
+                if effect_label=='b':
+                    SkillOutcome.debuff(pet2, pet1, None, 'AD2-', anim, rng)
 
     def buff(
         primary: BattlePet,
@@ -165,7 +166,6 @@ class SkillOutcome:
         rng: rng,
     ):
         ratio = int(args)
-        print(ratio)
         SkillOutcome.attack(primary, secondary, skill, args, anim, rng, critical_ratio = ratio)
 
     def heal(

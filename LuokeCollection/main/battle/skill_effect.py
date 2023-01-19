@@ -8,6 +8,7 @@ class EffectBase:
         self.pet = pet
         self.anim = animator
         self.is_post_effect = True
+        self.immuned = False
 
     def solve(self, secondary: BattlePet):
         if self.turns > 0:
@@ -50,6 +51,7 @@ class Sleep(EffectBase):
     def __init__(self, pet, animator, args):
         super(Sleep, self).__init__(pet, animator)
         self.is_post_effect = False
+        self.immuned = self.pet.status.has('w')
 
     def solve(self, secondary: BattlePet):
         self.anim.animate_sleep(self.pet)
@@ -59,11 +61,10 @@ class ImmuneSleep(EffectBase):
     def __init__(self, pet, animator, args):
         super(ImmuneSleep, self).__init__(pet, animator)
         self.is_post_effect = False
-        self.turns = int(args)
+        # self.turns = int(args[4])
 
     def solve(self, secondary: BattlePet):
-        self.anim.animate_sleep(self.pet)
-        return False
+        return True
 
 
 class SkillEffect:
