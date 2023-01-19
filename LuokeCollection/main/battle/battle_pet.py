@@ -77,7 +77,7 @@ class BattlePet:
 
     def trigger_pre_effects(self, secondary):
         if self.health == 0:
-            return False
+            return True
         flag = True
         for k, v in self.status.pre_effects.items():
             flag &= v.solve(secondary)

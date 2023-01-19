@@ -46,11 +46,13 @@ class ActionSolver:
         labels = skill_dictionary.get(skill.name, "a").split(" ")
 
         accuracy_rate = int(labels[0])
+        skill_arg = skill
         for label in labels[1:]:
             identifier = label[0]
             args = label[1:]
             self.skill_outcomes.get(identifier)(
-                self.primary, self.secondary, skill, args, self.anim, self.rng, 
-                accuracy_rate==0 or self.rng.get() * 100 > accuracy_rate
+                self.primary, self.secondary, skill_arg, args, self.anim, self.rng, 
+                accuracy_rate!=0 and self.rng.get() * 100 > accuracy_rate
             )
+            skill_arg = None
 

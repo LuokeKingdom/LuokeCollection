@@ -8,15 +8,15 @@ from .rng import rng
 
 class SkillOutcome:
     labels2function = {
-        "a": "attack",
+        "a": "attack", 
         ".": "potion",
-        "e": "effect",
-        "b": "buff",
-        "d": "debuff",
-        "r": "attack_reflect",
-        "c": "attack_critical",
-        "h": "heal",
-        "f": "fixed_damage",
+        "e": "effect",  # '<AR> e<Effect><AR>[-]'
+        "b": "buff",    # '<AR> b<AR><Level>#[-]'
+        "d": "debuff",  # '<AR> b<AR><Level>#[-]'
+        "r": "attack_reflect",  # '<AR> r#/#'
+        "c": "attack_critical", # '<AR> c<Critical Ratio>
+        "h": "heal",    # '<AR> h'
+        "f": "fixed_damage",    # '<AR> f<Damage>'
     }
 
     def fixed_damage(
@@ -129,6 +129,7 @@ class SkillOutcome:
             if effect.immuned:
                 anim.append_log(f"免疫了<{str('异常')}>", pet1.is_self)
             else:
+                anim.animate_effect(pet2, pet1, effect)
                 pet1.add_effect(effect_label, effect)
                 if effect_label=='b':
                     SkillOutcome.debuff(pet2, pet1, None, 'AD2-', anim, rng)
@@ -144,12 +145,13 @@ class SkillOutcome:
     ):
         if missed:
             return
-        accuracy_rate = args[:2]
+        accuracy_rate = int(args[:2])
         stat_label = args[2:4]
-        change = int(args[2])
+        change = int(args[4])
         is_primary = args[-1]!='-'
         pet = primary if is_primary else secondary
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
+            anim.animate_buff(pet)
             pet.status.stat_buffs.get(stat_label).change(change)
             pet.update_current_stats()
             anim.append_log(f"的<{stat_label}>提升了", pet.is_self)
@@ -165,15 +167,18 @@ class SkillOutcome:
     ):
         if missed:
             return
-        accuracy_rate = args[:2]
+        accuracy_rate = int(args[:2])
         stat_label = args[2:4]
-        change = int(args[2])
+        change = int(args[4])
         is_primary = args[-1]!='-'
-        pet = primary if is_primary else secondary
+        pet1 = primary if is_primary else secondary
+        pet2 = primary if not is_primary else secondary
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
-            pet.status.stat_buffs.get(stat_label).change(-change)
-            pet.update_current_stats()
-            anim.append_log(f"的<{stat_label}>降低了", pet.is_self)
+            anim.animate_move(pet2)
+            anim.animate_debuff(pet1, stat_label)
+            pet1.status.stat_buffs.get(stat_label).change(-change)
+            anim.append_log(f"的<{stat_label}>降低了", pet1.is_self)
+            pet1.update_current_stats()
 
     def attack_reflect(
         primary: BattlePet,

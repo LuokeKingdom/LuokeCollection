@@ -136,6 +136,76 @@ class Animator:
         self.push_anim("none", interval=0.5).next_anim()
         self.append_log(f"<{pet.info.name}>睡着了", pet.is_self)
 
+    def animate_effect(self, primary, secondary, effect):
+        scale_data, rev_data = self.get_scale_data(
+            [
+                (0, 0),
+                (0.1, 0.05),
+                (0.2, 0),
+                (0.3, -0.05),
+                (0.4, 0)
+            ]
+        )
+        display = secondary.sprite_display
+        # effect animation
+        self.push_anim("scale", data=scale_data, display=display).next_anim()
+        self.push_anim("scale", data=rev_data, display=display).next_anim()
+        
+
+    def animate_buff(self, pet, stat_label):
+        scale_data, rev_data = self.get_scale_data(
+            [
+                (0, 0),
+                (0.3, 0.1),
+                (0.4, 0.15)
+            ]
+        )
+        display = pet.sprite_display
+        # effect animation
+        self.push_anim("scale", data=scale_data, display=display).next_anim()
+        self.push_anim("scale", data=rev_data, display=display).next_anim()
+        
+    def animate_debuff(self, pet, stat_label):
+        scale_data, rev_data = self.get_scale_data(
+            [
+                (0, 0),
+                (0.3, -0.1),
+                (0.4, -0.15)
+            ]
+        )
+        display = pet.sprite_display
+        # effect animation
+        self.push_anim("scale", data=scale_data, display=display).next_anim()
+        self.push_anim("scale", data=rev_data, display=display).next_anim()
+        
+    def animate_move(self, pet):
+        pos_data1, rev_data1 = self.get_position_data(
+            [
+                (0.0, (0, 0)),
+                (0.1, (-20, 0)),
+                (0.2, (-30, 0)),
+                (0.3, (-35, 0)),
+                (0.4, (-38, 0)),
+                (0.5, (-35, 0)),
+                (0.6, (-30, 0)),
+                (0.7, (-20, 0)),
+                (0.8, (-10, 0)),
+                (0.9, (0, 0))
+            ],
+            pet.is_self,
+        )
+        self.push_anim(
+            "position", data=pos_data1, display=pet.sprite_display
+        )
+
+
+
+
+
+
+
+
+
     def push_anim(self, name, **kwargs):
         self.system.push_anim(name, **kwargs)
         return self
