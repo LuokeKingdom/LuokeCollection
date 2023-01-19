@@ -46,8 +46,6 @@ class ActionSolver:
         labels = skill_dictionary.get(skill.name, "a").split(" ")
 
         accuracy_rate = int(labels[0])
-        print(accuracy_rate)
-        print(accuracy_rate==0 or self.rng.get() * 100 < accuracy_rate)
         for label in labels[1:]:
             identifier = label[0]
             args = label[1:]

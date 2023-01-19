@@ -16,7 +16,21 @@ class SkillOutcome:
         "r": "attack_reflect",
         "c": "attack_critical",
         "h": "heal",
+        "f": "fixed_damage",
     }
+
+    def fixed_damage(
+        primary: BattlePet,
+        secondary: BattlePet,
+        skill: SkillInfo,
+        args: str,
+        anim: Animator,
+        rng: rng,
+        missed: bool,
+    ):
+        damage = int(args)
+        secondary.change_health(-damage)
+        anim.animate_attack(primary, secondary, damage)
 
     def attack(
         primary: BattlePet,
@@ -130,13 +144,15 @@ class SkillOutcome:
     ):
         if missed:
             return
-        stat_label = args[:2]
+        accuracy_rate = args[:2]
+        stat_label = args[2:4]
         change = int(args[2])
         is_primary = args[-1]!='-'
         pet = primary if is_primary else secondary
-        pet.status.stat_buffs.get(stat_label).change(change)
-        pet.update_current_stats()
-        anim.append_log(f"的<{stat_label}>提升了", pet.is_self)
+        if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
+            pet.status.stat_buffs.get(stat_label).change(change)
+            pet.update_current_stats()
+            anim.append_log(f"的<{stat_label}>提升了", pet.is_self)
 
     def debuff(
         primary: BattlePet,
@@ -149,13 +165,15 @@ class SkillOutcome:
     ):
         if missed:
             return
-        stat_label = args[:2]
+        accuracy_rate = args[:2]
+        stat_label = args[2:4]
         change = int(args[2])
         is_primary = args[-1]!='-'
         pet = primary if is_primary else secondary
-        pet.status.stat_buffs.get(stat_label).change(-change)
-        pet.update_current_stats()
-        anim.append_log(f"的<{stat_label}>降低了", pet.is_self)
+        if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
+            pet.status.stat_buffs.get(stat_label).change(-change)
+            pet.update_current_stats()
+            anim.append_log(f"的<{stat_label}>降低了", pet.is_self)
 
     def attack_reflect(
         primary: BattlePet,
