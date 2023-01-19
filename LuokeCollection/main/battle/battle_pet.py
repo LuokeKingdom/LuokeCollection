@@ -36,10 +36,11 @@ class BattlePet:
         }
         self.max_health = self.final_stat_map["HP"]
         self.health = self.max_health
-        self.current_stat_map = self.get_current_stats()
+        self.current_stat_map = None
+        self.update_current_stats()
 
-    def get_current_stats(self):
-        return {
+    def update_current_stats(self):
+        self.current_stat_map = {
             k: int(v * self.status.stat_buffs[k].factor)
             for k, v in self.final_stat_map.items()
             if k != "HP"
@@ -74,16 +75,23 @@ class BattlePet:
         else:
             self.status.pre_effects[label] = effect
 
-    def trigger_pre_effects(self):
+    def trigger_pre_effects(self, secondary):
         if self.health == 0:
             return False
-        return all([v.solve() for k, v in self.status.pre_effects.items()])
+        flag = True
+        for k, v in self.status.pre_effects.items():
+            flag &= v.solve(secondary)
+            if v.turns == 0:
+                del self.status.pre_effects[k]
+        return flag
 
-    def trigger_post_effects(self):
+    def trigger_post_effects(self, secondary):
         if self.health == 0:
             return
         for k, v in self.status.post_effects.items():
-            v.solve()
+            v.solve(secondary)
+            if v.turns == 0:
+                del self.status.pre_effects[k]
 
     def __getattr__(self, name):
         return self.current_stat_map.get(name)

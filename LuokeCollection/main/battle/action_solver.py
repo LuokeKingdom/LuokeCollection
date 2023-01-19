@@ -44,9 +44,15 @@ class ActionSolver:
         if skill_element:
             pass
         labels = skill_dictionary.get(skill.name, "a").split(" ")
-        for label in labels:
-            identifier = label[0]
-            args = label[1:]
-            self.skill_outcomes.get(identifier)(
-                self.primary, self.secondary, skill, args, self.anim, self.rng
-            )
+
+        accuracy_rate = int(labels[0])
+        if accuracy_rate==0 or self.rng.get() * 100 < accuracy_rate:
+            for label in labels[1:]:
+                identifier = label[0]
+                args = label[1:]
+                self.skill_outcomes.get(identifier)(
+                    self.primary, self.secondary, skill, args, self.anim, self.rng
+                )
+        else: 
+            self.anim.append_log("被闪避了", self.primary.is_self)
+

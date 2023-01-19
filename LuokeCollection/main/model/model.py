@@ -368,7 +368,7 @@ class Model:
             if self.opponent_pets is None:
                 self.opponent_pets = self.get_battle_pets()
             if self.oppo_action_chosen < 0:
-                self.oppo_action_chosen = 101
+                self.oppo_action_chosen = 0
             return
 
         reply_args = None, None, None

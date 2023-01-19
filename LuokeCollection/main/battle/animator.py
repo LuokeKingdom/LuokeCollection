@@ -114,6 +114,18 @@ class Animator:
         self.push_anim("none", interval=0.5).next_anim()
         self.append_log(f"<{pet.info.name}>烧伤了", pet.is_self)
 
+    def animate_jisheng(self, pet):
+        self.push_anim("none", interval=0.5).next_anim()
+        self.append_log(f"<{pet.info.name}>被寄生了", pet.is_self)
+
+    def animate_poison(self, pet):
+        self.push_anim("none", interval=0.5).next_anim()
+        self.append_log(f"<{pet.info.name}>中毒了", pet.is_self)
+
+    def animate_sleep(self, pet):
+        self.push_anim("none", interval=0.5).next_anim()
+        self.append_log(f"<{pet.info.name}>睡着了", pet.is_self)
+
     def push_anim(self, name, **kwargs):
         self.system.push_anim(name, **kwargs)
         return self
