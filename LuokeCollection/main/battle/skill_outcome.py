@@ -25,8 +25,12 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
-        critical_ratio = 1
+        missed: bool,
+        critical_ratio = 1,
     ):
+        if missed:
+            anim.animate_attack(primary, secondary, "miss")
+            return
         skill_element = Element(skill.type[:2])
         defender_e1, defender_e2 = Element(secondary.info.element), Element(
             secondary.info.secondary_element
@@ -71,6 +75,7 @@ class SkillOutcome:
 
         secondary.change_health(-damage)
         anim.animate_attack(primary, secondary, damage)
+
         if critical == 2:
             anim.append_log("暴击了！！！", primary.is_self)
 
@@ -83,6 +88,7 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
+        missed: bool,
     ):
         heal_amount = (1 + int(args)) * 50
         primary.change_health(heal_amount)
@@ -95,7 +101,9 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
+        missed: bool,
     ):
+        if missed: return 
         effect_label = args[0]
         is_primary = args[-1]=='-'
         pet1 = primary if is_primary else secondary
@@ -118,7 +126,10 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
+        missed: bool,
     ):
+        if missed:
+            return
         stat_label = args[:2]
         change = int(args[2])
         is_primary = args[-1]!='-'
@@ -134,7 +145,10 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
+        missed: bool,
     ):
+        if missed:
+            return
         stat_label = args[:2]
         change = int(args[2])
         is_primary = args[-1]!='-'
@@ -150,8 +164,11 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
+        missed: bool,
     ):
-        damage = SkillOutcome.attack(primary, secondary, skill, args, anim, rng)
+        damage = SkillOutcome.attack(primary, secondary, skill, args, anim, rng, missed)
+        if missed:
+            return
         fraction = int(args.split('/')[0]) / int(args.split('/')[1])
         self_damage = int(fraction * damage)
         primary.change_health(-self_damage)
@@ -164,9 +181,12 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
+        missed: bool,
     ):
         ratio = int(args)
-        SkillOutcome.attack(primary, secondary, skill, args, anim, rng, critical_ratio = ratio)
+        SkillOutcome.attack(primary, secondary, skill, args, anim, rng, missed, critical_ratio = ratio)
+        if missed:
+            return
 
     def heal(
         primary: BattlePet,
@@ -175,6 +195,7 @@ class SkillOutcome:
         args: str,
         anim: Animator,
         rng: rng,
+        missed: bool,
     ):
         fraction = int(args.split('/')[0]) / int(args.split('/')[1])
         heal = int(primary.max_health * fraction)

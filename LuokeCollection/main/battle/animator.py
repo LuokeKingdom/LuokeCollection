@@ -30,7 +30,10 @@ class Animator:
             "position", data=pos_data1, display=primary.sprite_display
         ).next_anim()
         self.push_anim("position", data=pos_data2, display=primary.sprite_display)
-        self.animate_number(secondary, -damage)
+        if damage=="miss":
+            self.animate_number(secondary, "miss")
+        else:
+            self.animate_number(secondary, -damage)
         self.push_anim(
             "position", data=rev_data2, display=primary.sprite_display
         ).next_anim()
@@ -39,10 +42,17 @@ class Animator:
         ).next_anim()
 
     def animate_number(self, pet, number):
+        text, color = None, None
+        if number=="miss":
+            text="miss"
+            color=(30, 144, 255)
+        else:
+            text="+" + str(number) if number > 0 else number
+            color=(255, 0, 0) if number < 0 else (0, 255, 0)
         self.push_anim(
             "text",
-            text="+" + str(number) if number > 0 else number,
-            color=(255, 0, 0) if number < 0 else (0, 255, 0),
+            text=text,
+            color=color,
             display=pet.number_display,
             interval=1,
         )
