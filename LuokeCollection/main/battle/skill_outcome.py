@@ -126,7 +126,7 @@ class SkillOutcome:
         accuracy_rate = int(args[1:3])
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
             effect = SkillEffect.get(effect_label)(pet1, anim, args)
-            if skill is not None:
+            if skill is not None and not is_primary:
                 anim.animate_move(pet2)
             if effect.immuned:
                 anim.append_log(f"免疫了<{str('异常')}>", pet1.is_self)
@@ -153,7 +153,7 @@ class SkillOutcome:
         is_primary = args[-1]!='-'
         pet = primary if is_primary else secondary
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
-            anim.animate_buff(pet)
+            anim.animate_buff(pet, stat_label)
             pet.status.stat_buffs.get(stat_label).change(change)
             pet.update_current_stats()
             anim.append_log(f"的<{stat_label}>提升了", pet.is_self)
