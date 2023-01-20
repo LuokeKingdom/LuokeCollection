@@ -18,7 +18,7 @@ class EffectBase:
             self.turns-=1
             if self.turns == 0:
                 self.done = True
-                self.anim.append_log(f"{self.name}状态解除了", self.pet.is_self)
+                self.anim.append_log(f"<{self.name}>状态解除了", self.pet.is_self)
 
 class Burn(EffectBase):
     def __init__(self, pet, animator, rng, args):
