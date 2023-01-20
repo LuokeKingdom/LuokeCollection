@@ -80,7 +80,7 @@ class ImmuneSleep(EffectBase):
         super().solve(secondary)
         return True
 
-class NextTurnAttack(EffectBase):
+class NextTurnAttackInstead(EffectBase):
     def __init__(self, pet, animator, rng, args):
         super().__init__(pet, animator, rng)
         self.is_post_effect = False
@@ -93,6 +93,17 @@ class NextTurnAttack(EffectBase):
         super().solve(secondary)
         return False
 
+class Confused(EffectBase):
+    def __init__(self, pet, animator, rng, args):
+        super().__init__(pet, animator, rng)
+        self.is_post_effect = False
+        self.name = "混乱"
+        self.anim.append_log("混乱了", self.pet.is_self)
+
+    def solve(self, secondary: BattlePet, skill_outcome):
+        super().solve(secondary)
+        return True
+
 class SkillEffect:
     label2effect = {
         "b": Burn,
@@ -100,7 +111,8 @@ class SkillEffect:
         "p": Poison,
         "s": Sleep,
         "w": ImmuneSleep,
-        "n": NextTurnAttack,
+        "n": NextTurnAttackInstead,
+        "c": Confused,
     }
 
     def get(label):

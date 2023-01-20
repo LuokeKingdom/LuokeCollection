@@ -9,7 +9,7 @@ class BaseClient:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # ngrok forwarding
         self.opponent_pets = None
-        self.id, self.seed = 0, 10
+        self.id, self.seed = 0, 100
 
 
 class Client(BaseClient):

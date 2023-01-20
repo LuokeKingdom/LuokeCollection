@@ -39,7 +39,10 @@ class ActionSolver:
     def use_skill(self, skill_index):
         skill = self.primary.skills[skill_index]
         self.anim.append_log(f"使用了<{skill.name}>", self.primary.is_self)
-        # self.user_status_change.skill_PPs[skill_index][0] = -1
+        if self.primary.status.has('c'):
+            if self.rng.get()<0.5:
+                self.anim.append_log("混乱了", self.primary.is_self)
+                self.secondary = self.primary
         skill_element = str2element(skill.type)
         if skill_element:
             pass
@@ -48,13 +51,13 @@ class ActionSolver:
             raise Exception("Skill not found in dictionary")
 
         accuracy_rate = int(labels[0])
+        missed = accuracy_rate!=0 and self.rng.get() * 100 > accuracy_rate
         skill_arg = skill
         for label in labels[1:]:
             identifier = label[0]
             args = label[1:]
             self.skill_outcomes.get(identifier)(
-                self.primary, self.secondary, skill_arg, args, self.anim, self.rng, 
-                accuracy_rate!=0 and self.rng.get() * 100 > accuracy_rate
+                self.primary, self.secondary, skill_arg, args, self.anim, self.rng, missed
             )
             skill_arg = None
 

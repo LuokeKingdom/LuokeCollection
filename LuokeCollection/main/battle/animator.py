@@ -31,7 +31,7 @@ class Animator:
         ).next_anim()
         self.push_anim("position", data=pos_data2, display=primary.sprite_display)
         if damage=="miss":
-            self.animate_number(secondary, "miss")
+            self.animate_miss(secondary)
         else:
             self.animate_number(secondary, -damage)
         self.push_anim(
@@ -60,6 +60,10 @@ class Animator:
             "text_change", text=pet.health, display=pet.health_display
         ).next_anim()
         self.push_anim("none", interval=0.5).next_anim()
+    
+    def animate_miss(self, pet):
+        self.animate_number(pet, "miss")
+        self.append_log("闪避了", pet.is_self)
 
     def animate_heal(self, pet, heal):
         self.append_log("回复了体力", pet.is_self)

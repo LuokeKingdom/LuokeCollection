@@ -117,18 +117,22 @@ class SkillOutcome:
         rng: rng,
         missed: bool,
     ):
-        if missed: return 
-        effect_label = args[2]
         is_primary = args[-1]=='-'
+        effect_label = args[2]
         effect_args = args[3:]
         if is_primary:
             effect_args = effect_args[:-1]
         pet1 = primary if is_primary else secondary
         pet2 = primary if not is_primary else secondary
-
-        accuracy_rate = int(args[0:2])
         if skill is not None and not is_primary:
             anim.animate_move(pet2)
+            if missed:
+                anim.animate_miss(pet1)
+        if missed:
+            return
+
+
+        accuracy_rate = int(args[0:2])
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
             if effect_label=='n':
                 effect_args = skill
@@ -140,8 +144,6 @@ class SkillOutcome:
                 pet1.add_effect(effect_label, effect)
                 if effect_label=='b':
                     SkillOutcome.debuff(pet2, pet1, None, '00AD2-', anim, rng, missed)
-        else:
-            anim.animate_number(pet1, "miss")
 
     def buff(
         primary: BattlePet,
