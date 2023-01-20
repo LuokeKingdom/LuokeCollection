@@ -10,11 +10,11 @@ class SkillOutcome:
     labels2function = {
         "a": "attack", 
         ".": "potion",
-        "e": "effect",  # '<AR> e<Effect><AR>[-]'
+        "e": "effect",  # '<AR> e<AR><Effect><Args>[-]'
         "b": "buff",    # '<AR> b<AR><Level>#[-]'
         "d": "debuff",  # '<AR> b<AR><Level>#[-]'
         "r": "attack_reflect",  # '<AR> r#/#'
-        "c": "attack_critical", # '<AR> c<Critical Ratio>
+        "c": "attack_critical", # '<AR> c<Critical Ratio>'
         "h": "heal",    # '<AR> h'
         "f": "fixed_damage",    # '<AR> f<Damage>'
     }
@@ -118,16 +118,21 @@ class SkillOutcome:
         missed: bool,
     ):
         if missed: return 
-        effect_label = args[0]
+        effect_label = args[2]
         is_primary = args[-1]=='-'
+        effect_args = args[3:]
+        if is_primary:
+            effect_args = effect_args[:-1]
         pet1 = primary if is_primary else secondary
         pet2 = primary if not is_primary else secondary
 
-        accuracy_rate = int(args[1:3])
+        accuracy_rate = int(args[0:2])
+        if skill is not None and not is_primary:
+            anim.animate_move(pet2)
         if accuracy_rate == 0 or rng.get() * 100 < accuracy_rate:
-            effect = SkillEffect.get(effect_label)(pet1, anim, args)
-            if skill is not None and not is_primary:
-                anim.animate_move(pet2)
+            if effect_label=='n':
+                effect_args = skill
+            effect = SkillEffect.get(effect_label)(pet1, anim, rng, effect_args)
             if effect.immuned:
                 anim.append_log(f"免疫了<{str('异常')}>", pet1.is_self)
             else:
@@ -135,6 +140,8 @@ class SkillOutcome:
                 pet1.add_effect(effect_label, effect)
                 if effect_label=='b':
                     SkillOutcome.debuff(pet2, pet1, None, '00AD2-', anim, rng, missed)
+        else:
+            anim.animate_number(pet1, "miss")
 
     def buff(
         primary: BattlePet,

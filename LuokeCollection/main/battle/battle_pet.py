@@ -75,21 +75,21 @@ class BattlePet:
         else:
             self.status.pre_effects[label] = effect
 
-    def trigger_pre_effects(self, secondary):
+    def trigger_pre_effects(self, secondary, skill_outcome):
         flag = True
         if self.health == 0:
             return flag
         for k, v in list(self.status.pre_effects.items()):
-            flag &= v.solve(secondary)
+            flag &= v.solve(secondary, skill_outcome)
             if v.done:
                 del self.status.pre_effects[k]
         return flag
 
-    def trigger_post_effects(self, secondary):
+    def trigger_post_effects(self, secondary, skill_outcome):
         if self.health == 0:
             return
         for k, v in list(self.status.post_effects.items()):
-            v.solve(secondary)
+            v.solve(secondary, skill_outcome)
             if v.done:
                 del self.status.pre_effects[k]
 

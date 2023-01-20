@@ -1,3 +1,4 @@
+from LuokeCollection.main.battle.skill_outcome import SkillOutcome
 from .battle_pet import BattlePet
 from .battle_animation import BattleAnimation
 import queue
@@ -129,7 +130,7 @@ class BattleSystem:
             print(e)
 
     def preaction(self, primary, secondary):
-        can_move = primary.trigger_pre_effects(secondary)
+        can_move = primary.trigger_pre_effects(secondary, SkillOutcome)
         self.check_done()
         return can_move
 
@@ -138,7 +139,7 @@ class BattleSystem:
         self.check_done()
 
     def postaction(self, primary, secondary):
-        secondary.trigger_post_effects(primary)
+        secondary.trigger_post_effects(primary, SkillOutcome)
         self.check_done()
 
     def check_done(self):
