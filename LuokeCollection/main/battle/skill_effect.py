@@ -74,7 +74,10 @@ class ImmuneSleep(EffectBase):
     def __init__(self, pet, animator, rng, args):
         super().__init__(pet, animator, rng)
         self.name = "免疫催眠"
-        self.turns = 5
+        left = int(args[0])
+        right = int(args[2])
+        diff = right - left
+        self.turns = left + int(rng.get() * (diff+1))
 
     def solve(self, secondary: BattlePet, skill_outcome):
         super().solve(secondary)
