@@ -30,7 +30,10 @@ class Animator:
             "position", data=pos_data1, display=primary.sprite_display
         ).next_anim()
         self.push_anim("position", data=pos_data2, display=primary.sprite_display)
-        self.animate_number(secondary, -damage)
+        if damage=="miss":
+            self.animate_miss(secondary)
+        else:
+            self.animate_number(secondary, -damage)
         self.push_anim(
             "position", data=rev_data2, display=primary.sprite_display
         ).next_anim()
@@ -39,10 +42,17 @@ class Animator:
         ).next_anim()
 
     def animate_number(self, pet, number):
+        text, color = None, None
+        if number=="miss":
+            text="miss"
+            color=(30, 144, 255)
+        else:
+            text="+" + str(number) if number > 0 else number
+            color=(255, 0, 0) if number < 0 else (0, 255, 0)
         self.push_anim(
             "text",
-            text="+" + str(number) if number > 0 else number,
-            color=(255, 0, 0) if number < 0 else (0, 255, 0),
+            text=text,
+            color=color,
             display=pet.number_display,
             interval=1,
         )
@@ -50,6 +60,10 @@ class Animator:
             "text_change", text=pet.health, display=pet.health_display
         ).next_anim()
         self.push_anim("none", interval=0.5).next_anim()
+    
+    def animate_miss(self, pet):
+        self.animate_number(pet, "miss")
+        self.append_log("闪避了", pet.is_self)
 
     def animate_heal(self, pet, heal):
         self.append_log("回复了体力", pet.is_self)
@@ -113,6 +127,91 @@ class Animator:
     def animate_burn(self, pet):
         self.push_anim("none", interval=0.5).next_anim()
         self.append_log(f"<{pet.info.name}>烧伤了", pet.is_self)
+
+    def animate_jisheng(self, pet):
+        self.push_anim("none", interval=0.5).next_anim()
+        self.append_log(f"<{pet.info.name}>被寄生了", pet.is_self)
+
+    def animate_poison(self, pet):
+        self.push_anim("none", interval=0.5).next_anim()
+        self.append_log(f"<{pet.info.name}>中毒了", pet.is_self)
+
+    def animate_sleep(self, pet):
+        self.push_anim("none", interval=0.5).next_anim()
+        self.append_log(f"<{pet.info.name}>睡着了", pet.is_self)
+
+    def animate_effect(self, primary, secondary, effect):
+        pos_data, rev_data = self.get_position_data(
+            [
+                (0, (0, 0)),
+                (0.1, (10, 0)),
+                (0.2, (0, 0)),
+                (0.3, (-10, 0)),
+                (0.4, (0, 0)),
+                (0.5, (10, 0)),
+                (0.6, (0, 0)),
+                (0.7, (-10, 0)),
+                (0.8, (0, 0))
+            ]
+        , secondary.is_self)
+        display = secondary.sprite_display
+        # effect animation
+        self.push_anim("position", data=pos_data, display=display).next_anim()
+        
+
+    def animate_buff(self, pet, stat_label):
+        scale_data, rev_data = self.get_scale_data(
+            [
+                (0, 0),
+                (0.3, 0.1),
+                (0.4, 0.15)
+            ]
+        )
+        display = pet.sprite_display
+        # effect animation
+        self.push_anim("scale", data=scale_data, display=display).next_anim()
+        self.push_anim("scale", data=rev_data, display=display).next_anim()
+        
+    def animate_debuff(self, pet, stat_label):
+        scale_data, rev_data = self.get_scale_data(
+            [
+                (0, 0),
+                (0.3, -0.1),
+                (0.4, -0.15)
+            ]
+        )
+        display = pet.sprite_display
+        # effect animation
+        self.push_anim("scale", data=scale_data, display=display).next_anim()
+        self.push_anim("scale", data=rev_data, display=display).next_anim()
+        
+    def animate_move(self, pet):
+        pos_data1, rev_data1 = self.get_position_data(
+            [
+                (0.0, (0, 0)),
+                (0.1, (-20, 0)),
+                (0.2, (-30, 0)),
+                (0.3, (-35, 0)),
+                (0.4, (-38, 0)),
+                (0.5, (-35, 0)),
+                (0.6, (-30, 0)),
+                (0.7, (-20, 0)),
+                (0.8, (-10, 0)),
+                (0.9, (0, 0))
+            ],
+            pet.is_self,
+        )
+        self.push_anim(
+            "position", data=pos_data1, display=pet.sprite_display
+        )
+
+
+
+
+
+
+
+
 
     def push_anim(self, name, **kwargs):
         self.system.push_anim(name, **kwargs)

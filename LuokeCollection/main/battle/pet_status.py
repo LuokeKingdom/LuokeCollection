@@ -19,7 +19,7 @@ class PetStatus:
 
         def change(self, diff):
             self.level = int(
-                max(-self.min_level, min(self.max_level, self.level + diff))
+                max(self.min_level, min(self.max_level, self.level + diff))
             )
 
         def clear(self):
@@ -33,3 +33,6 @@ class PetStatus:
                 return (
                     self.level / 2 + 1 if self.level >= 0 else 1 / (1 - self.level / 2)
                 )
+
+    def has(self, cls):
+        return cls in self.pre_effects.keys() or cls in self.post_effects.keys()

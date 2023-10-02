@@ -361,14 +361,14 @@ class Model:
 
     def client_update(self):
         # blocks client thread so animation thread gets most of the computing time
-        time.sleep(0.2)
+        time.sleep(0.3)
         if self.IS_LOCAL:
             if self.client is None and self.opponent_pets is not None:
                 raise Exception("Closing battle!!!")
             if self.opponent_pets is None:
                 self.opponent_pets = self.get_battle_pets()
             if self.oppo_action_chosen < 0:
-                self.oppo_action_chosen = 101
+                self.oppo_action_chosen = 0
             return
 
         reply_args = None, None, None

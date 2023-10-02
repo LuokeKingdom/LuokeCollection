@@ -1,3 +1,4 @@
+from LuokeCollection.main.battle.skill_outcome import SkillOutcome
 from .battle_pet import BattlePet
 from .battle_animation import BattleAnimation
 import queue
@@ -114,22 +115,22 @@ class BattleSystem:
 
         try:
             p1, p2, c1, c2 = get_args()
-            self.preaction(p1, p2)
+            can_move = self.preaction(p1, p2)
             p1, p2, c1, c2 = get_args()
-            self.action(p1, p2, c1)
+            if can_move: self.action(p1, p2, c1)
             p1, p2, c1, c2 = get_args()
             self.postaction(p1, p2)
             p1, p2, c1, c2 = get_args()
-            self.preaction(p2, p1)
+            can_move = self.preaction(p2, p1)
             p1, p2, c1, c2 = get_args()
-            self.action(p2, p1, c2)
+            if can_move: self.action(p2, p1, c2)
             p1, p2, c1, c2 = get_args()
             self.postaction(p2, p1)
         except Exception as e:
             print(e)
 
     def preaction(self, primary, secondary):
-        can_move = primary.trigger_pre_effects()
+        can_move = primary.trigger_pre_effects(secondary, SkillOutcome)
         self.check_done()
         return can_move
 
@@ -138,7 +139,7 @@ class BattleSystem:
         self.check_done()
 
     def postaction(self, primary, secondary):
-        secondary.trigger_post_effects()
+        secondary.trigger_post_effects(primary, SkillOutcome)
         self.check_done()
 
     def check_done(self):
