@@ -3,8 +3,6 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
-  min-width: 1000px;  // Fixed width
-  min-height: 600px;  // Fixed height
   border: 1px solid #ccc;  // Optional: add a border around the whole container
 `;
 
