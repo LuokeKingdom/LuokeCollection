@@ -6,6 +6,7 @@ import Square from './components/square';
 import Background from './components/background';
 import Position from './components/position';
 import Center from './components/center';
+import Loader from './components/loading';
 
 function App() {
   return (
@@ -13,8 +14,8 @@ function App() {
     <Center>
     <Background width='1200px' height='800px' $image_url='training.png' >
       <SplitBox 
-        left={<Collection3x3 items={new Array(9).fill(0).map(x=><Square />)} />} 
-        right={<Collection3x3 items={new Array(9).fill(0).map(x=><Square />)} start_key={9} />} 
+        left={<Collection3x3 items={new Array(9).fill(0).map(x=><Loader />)} />} 
+        right={<Collection3x3 items={new Array(9).fill(0).map(x=><Loader />)} start_key={9} />} 
       />
     </Background>
     </Center>
