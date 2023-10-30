@@ -24,11 +24,12 @@ const Container = styled.div<ContainerProps>`
 const ImageLayer = styled.div<ImageProps>`
   background-image: url(${props=>props.$image_url});
   flex:1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Background: React.FC<BackgroundProps> = ({ width, height, $image_url, children }) => {

@@ -4,8 +4,8 @@ import styled from 'styled-components';
 const FlexContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 500px;  // Total width of the container
-  height: 500px;  // Total height of the container
+  width: 450px;  // Total width of the container
+  height: 450px;  // Total height of the container
   align-content: flex-start; // Ensures rows are stacked at the top
 `;
 

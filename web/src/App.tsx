@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import SplitBox from './components/split_box';
-import Collection3x3 from './components/collection3x3';
+import SplitBox from './components/collection/split_box';
+import Collection3x3 from './components/collection/collection3x3';
 import Square from './components/square';
 import Background from './components/background';
 

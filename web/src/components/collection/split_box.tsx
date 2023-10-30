@@ -7,9 +7,12 @@ const Container = styled.div`
 `;
 
 const Box = styled.div`
+  display: flex;
   flex: 1;  // This ensures both boxes take up equal width
   padding: 10px;  // Some padding for aesthetics
   box-sizing: border-box;  // This ensures padding and border are included in width and height
+  justify-content: center;
+  align-items: center;
 
   &:first-child {
     border-right: 1px solid #ccc;  // Separator line
