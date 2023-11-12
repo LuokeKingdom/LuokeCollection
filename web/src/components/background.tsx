@@ -25,8 +25,6 @@ const ImageLayer = styled.div<ImageProps>`
   background-image: url(${props=>props.$image_url});
   flex:1;
   display: flex;
-  justify-content: center;
-  align-items: center;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
