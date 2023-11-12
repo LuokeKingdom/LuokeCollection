@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const FlexContainer = styled.div`
+const FlexContainer = styled.div<{width: number, height: number}>`
   display: flex;
   flex-wrap: wrap;
-  width: 450px;  // Total width of the container
-  height: 450px;  // Total height of the container
+  width: ${(props) => props.width}px;  // Total width of the container
+  height: ${(props) => props.height}px;  // Total height of the container
   align-content: flex-start; // Ensures rows are stacked at the top
 `;
 
@@ -23,15 +23,17 @@ const Box = styled.div`
 interface CollectionProps {
   items: React.ReactNode[];
   start_key?: number;
+  width: number;
+  height: number;
 }
 
-const Collection3x3: React.FC<CollectionProps> = ({ items, start_key=0 }) => {
+const Collection3x3: React.FC<CollectionProps> = ({ items, start_key=0, width, height }) => {
   if (items.length !== 9) {
     throw new Error('The items prop must contain exactly 9 objects.');
   }
 
   return (
-    <FlexContainer>
+    <FlexContainer width={width} height={height}>
       {items.map((item, index) => (
         <Box key={index + start_key}>
           {item}

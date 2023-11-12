@@ -11,7 +11,11 @@ const CollectionScene = () => {
         <Center>
         <Background width='1200px' height='800px' $image_url='training.png' >
         <Position x={130} y={180}>
-            <Collection3x3 items={new Array(9).fill(0).map(x=><Loader />)} />
+            <Collection3x3 
+                width={450} 
+                height={450} 
+                items={new Array(9).fill(0).map(x=><Loader />)} 
+            />
         </Position>
         </Background>
         </Center>
