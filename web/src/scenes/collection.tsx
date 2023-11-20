@@ -4,6 +4,7 @@ import Background from '../components/background';
 import Position from '../components/position';
 import Center from '../components/center';
 import Loader from '../components/loading';
+import PetIcon from '../components/PetIcon';
 
 
 const CollectionScene = () => {
@@ -14,7 +15,7 @@ const CollectionScene = () => {
             <Collection3x3 
                 width={450} 
                 height={450} 
-                items={new Array(9).fill(0).map(x=><Loader />)} 
+                items={new Array(9).fill(0).map(x=><PetIcon width={100} height={100} $image_url='display.png'/>)} 
             />
         </Position>
         </Background>
