@@ -7,7 +7,7 @@ authors = ["Ruoqi Huang <huangruoqi374@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.7"
 black = "^22.6.0"
-pygame = "^2.1.2"
+pygame = "^2.6.1"
 typing-extensions = "^4.3.0"
 flake8 = "^5.0.4"
 
